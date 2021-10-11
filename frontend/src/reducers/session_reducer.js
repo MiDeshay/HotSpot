@@ -7,13 +7,16 @@ const initialState = {
   user: {}
 };
 
-export default function(state = initialState, action) {
+const sessionReducer = (state = initialState, action) => {
+  Object.freeze(state);
+  // let nextState = {};
   switch (action.type) {
     case RECEIVE_CURRENT_USER:
       return {
         ...state,
         isAuthenticated: !!action.currentUser,
-        user: action.currentUser
+        user: action.currentUser,
+        isSignedIn: true
       };
     case RECEIVE_USER_LOGOUT:
       return {
@@ -21,11 +24,10 @@ export default function(state = initialState, action) {
         user: undefined
       };
     case RECEIVE_USER_SIGN_IN:
-      return {
-        ...state,
-        isSignedIn: true
-      }
+      return {...state, isSignedIn: true }
     default:
       return state;
   }
 }
+
+export default sessionReducer;

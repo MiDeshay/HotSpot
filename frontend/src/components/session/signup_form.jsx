@@ -6,7 +6,8 @@ class SignupForm extends React.Component {
     super(props);
     this.state = {
       email: '',
-      handle: '',
+      firstName: '',
+      lastName: '',
       password: '',
       password2: '',
       errors: {}
@@ -21,7 +22,7 @@ class SignupForm extends React.Component {
       this.props.history.push('/login');
     }
 
-    this.setState({errors: nextProps.errors})
+    this.setState({errors: nextProps.errors});
   }
 
   update(field) {
@@ -31,10 +32,12 @@ class SignupForm extends React.Component {
   }
 
   handleSubmit(e) {
+    // debugger;
     e.preventDefault();
     let user = {
       email: this.state.email,
-      handle: this.state.handle,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
       password: this.state.password,
       password2: this.state.password2
     };
@@ -56,10 +59,9 @@ class SignupForm extends React.Component {
 
   render() {
     return (
-      <div className="signup-form-container">
+      <div className="auth-form-container">
         <form onSubmit={this.handleSubmit}>
           <div className="signup-form">
-            <br/>
               <input type="text"
                 value={this.state.email}
                 onChange={this.update('email')}
@@ -67,9 +69,15 @@ class SignupForm extends React.Component {
               />
             <br/>
               <input type="text"
-                value={this.state.handle}
-                onChange={this.update('handle')}
-                placeholder="Handle"
+                value={this.state.firstName}
+                onChange={this.update('firstName')}
+                placeholder="First Name"
+              />
+            <br/>
+              <input type="text"
+                value={this.state.lastName}
+                onChange={this.update('lastName')}
+                placeholder="Last Name"
               />
             <br/>
               <input type="password"

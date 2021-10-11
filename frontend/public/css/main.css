@@ -1,0 +1,31 @@
+:root {
+  --color1: #4193BE;
+  --color1dark: #16303f;
+  --color2: #BE4193;
+  --color2dark: #501d3e;
+  --color3: #93BE41;
+  --color3dark: #303f16;
+}
+
+body {
+  background-color: var(--color1);
+}
+
+div#root {
+  display: flex;
+  justify-content: center;
+}
+
+div.app {
+  width: calc(100vw - 10rem);
+}
+
+
+a:link {
+  text-decoration: none;
+  color: inherit;
+}
+a:visited {
+  text-decoration: none;
+  color: inherit;
+}

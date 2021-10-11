@@ -1,7 +1,7 @@
 const Validator = require('validator');
 const validText = require('./valid-text');
 
-module.exports = function validateRegisterInput(data) {
+module.exports = function validateSignupInput(data) {
    let errors = {};
 
    data.firstName = validText(data.firstName) ? data.firstName : '';
@@ -14,6 +14,9 @@ module.exports = function validateRegisterInput(data) {
 
    if (!Validator.isLength(data.firstName, { min: 1, max: 60 })) {
       errors.firstName = 'firstName must be between 1 and 60 characters';
+   }
+   if (!Validator.isLength(data.lastName, { min: 1, max: 60 })) {
+      errors.lastName = 'lastName must be between 1 and 60 characters';
    }
 
    if (Validator.isEmpty(data.firstName)) {
