@@ -22,6 +22,31 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
     });
   })
 
+//   router.get("/:email", (req, res) =>  {
+//       res.json({ user: User.find({email: req.params.email}) })
+//   }
+
+  router.get("/:email", (req, res) => {
+     User.findOne({email: req.params.email}).then( user => {
+         if(user){
+            res.json({
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username,
+                email: user.email
+              })
+         } else {
+             res.json({
+                 msg: "user not found"
+             })
+         }
+     })
+      
+  })
+
+
+
 router.post('/register', (req, res) => {
     const { errors, isValid } = validateRegisterInput(req.body);
 
