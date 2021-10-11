@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 
 // Validations
-const validateSignupInput = require('../../validation/signup');
+const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 
 router.get("/test", (req, res) => res.json({ msg: "This is the users route" }));
@@ -23,8 +23,8 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
     });
   })
 
-router.post('/signup', (req, res) => {
-    const { errors, isValid } = validateSignupInput(req.body);
+router.post('/register', (req, res) => {
+    const { errors, isValid } = validateRegisterInput(req.body);
 
     if (!isValid) {
         return res.status(400).json(errors);

@@ -9,13 +9,14 @@ const initialState = {
 
 const sessionReducer = (state = initialState, action) => {
   Object.freeze(state);
-  let nextState = {};
+  // let nextState = {};
   switch (action.type) {
     case RECEIVE_CURRENT_USER:
       return {
         ...state,
         isAuthenticated: !!action.currentUser,
-        user: action.currentUser
+        user: action.currentUser,
+        isSignedIn: true
       };
     case RECEIVE_USER_LOGOUT:
       return {
@@ -23,8 +24,7 @@ const sessionReducer = (state = initialState, action) => {
         user: undefined
       };
     case RECEIVE_USER_SIGN_IN:
-      nextState = Object.assign({}, state, { isSignedIn: true });
-      return nextState;
+      return {...state, isSignedIn: true }
     default:
       return state;
   }
