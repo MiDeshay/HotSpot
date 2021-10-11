@@ -11,7 +11,7 @@ export const receiveCurrentUser = currentUser => ({
     type: RECEIVE_CURRENT_USER,
     currentUser
 });
-
+ 
 // This will be used to redirect the user to the login page upon signup
 export const receiveUserSignIn = () => ({
     type: RECEIVE_USER_SIGN_IN
