@@ -17,7 +17,8 @@ router.get("/test", (req, res) => res.json({ msg: "This is the users route" }));
 router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
     res.json({
       id: req.user.id,
-      username: req.user.username,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
       email: req.user.email
     });
   })
@@ -36,7 +37,7 @@ router.post('/register', (req, res) => {
             errors.email = 'Email already exists';
             return res.status(400).json(errors);
         } else {
-            // Create new User 
+            // Create new User
             let nickname = req.body.firstName + req.body.lastName[0];
             const newUser = new User({
                firstName: req.body.firstName,
@@ -47,12 +48,13 @@ router.post('/register', (req, res) => {
             })
             // Salt and hash password before saving.
             bcrypt.genSalt(10, (err, salt) => {
+                // debugger;
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if (err) throw err;
                     newUser.password = hash;
                     newUser.save()
                     .then(user => {
-                        const payload = { id: user.id, username: user.username };
+                        const payload = { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName };
 
                         jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
                             res.json({
@@ -64,7 +66,7 @@ router.post('/register', (req, res) => {
                     })
                     .catch(err => res.send(err));
                 })
-            })    
+            })
         }
     })
 })
@@ -84,18 +86,16 @@ router.post('/login', (req, res) =>{
         if (!user) {
             errors.email = 'User not found';
             return res.status(404).json(errors);
-        } 
+        }
 
         bcrypt.compare(password, user.password)
             .then(isMatch => {
                 if (isMatch) {
-                    const payload = {id: user.id, username: user.username};
+                    const payload = {id: user.id, firstName: user.firstName, lastName: user.lastName};
 
                     jwt.sign(
                         payload,
-                        keys.secretOrKey,
-                        // Tell the key to expire in one hour
-                        {expiresIn: 3600},
+                        keys.secretOrKey, {expiresIn: 3600},
                         (err, token) => {
                         res.json({
                             success: true,
