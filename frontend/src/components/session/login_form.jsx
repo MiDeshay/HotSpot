@@ -59,7 +59,7 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="auth-form-container">
         <form onSubmit={this.handleSubmit}>
           <div>
               <input type="text"

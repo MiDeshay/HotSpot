@@ -1,0 +1,14 @@
+.nav-bar-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.nav-bar-container > h1 {
+  font-size: 2rem;
+}
+
+.nav-bar-links {
+  display: flex;
+  flex-direction: column;
+}
