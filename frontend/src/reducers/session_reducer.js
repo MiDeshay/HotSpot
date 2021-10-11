@@ -23,7 +23,7 @@ const sessionReducer = (state = initialState, action) => {
         user: undefined
       };
     case RECEIVE_USER_SIGN_IN:
-      nextState = Object.assign({}, state, { isSignedIn: true })
+      nextState = Object.assign({}, state, { isSignedIn: true });
       return nextState;
     default:
       return state;

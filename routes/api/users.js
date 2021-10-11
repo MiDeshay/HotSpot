@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 
 // Validations
-const validateRegisterInput = require('../../validation/register');
+const validateSignupInput = require('../../validation/signup');
 const validateLoginInput = require('../../validation/login');
 
 router.get("/test", (req, res) => res.json({ msg: "This is the users route" }));
@@ -23,8 +23,8 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
     });
   })
 
-router.post('/register', (req, res) => {
-    const { errors, isValid } = validateRegisterInput(req.body);
+router.post('/signup', (req, res) => {
+    const { errors, isValid } = validateSignupInput(req.body);
 
     if (!isValid) {
         return res.status(400).json(errors);
@@ -48,12 +48,13 @@ router.post('/register', (req, res) => {
             })
             // Salt and hash password before saving.
             bcrypt.genSalt(10, (err, salt) => {
+                // debugger;
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if (err) throw err;
                     newUser.password = hash;
                     newUser.save()
                     .then(user => {
-                        const payload = { id: user.id, firstName: user.firstName, lastName: user.lastName };
+                        const payload = { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName };
 
                         jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
                             res.json({
@@ -94,9 +95,7 @@ router.post('/login', (req, res) =>{
 
                     jwt.sign(
                         payload,
-                        keys.secretOrKey,
-                        // Tell the key to expire in one hour
-                        {expiresIn: 3600},
+                        keys.secretOrKey, {expiresIn: 3600},
                         (err, token) => {
                         res.json({
                             success: true,

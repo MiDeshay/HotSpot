@@ -31,8 +31,11 @@ export const logoutUser = () => ({
 
 // Upon signup, dispatch the approporiate action depending on which type of response we receieve from the backend
 export const signup = user => dispatch => {
+
     return (
     APIUtil.signup(user).then(() => {
+
+    // ADD USER TO THE STATE
        return dispatch(receiveUserSignIn());
     }, err => {
         return (
