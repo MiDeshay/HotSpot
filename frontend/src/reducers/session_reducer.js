@@ -7,7 +7,9 @@ const initialState = {
   user: {}
 };
 
-export default function(state = initialState, action) {
+const sessionReducer = (state = initialState, action) => {
+  Object.freeze(state);
+  let nextState = {};
   switch (action.type) {
     case RECEIVE_CURRENT_USER:
       return {
@@ -21,11 +23,11 @@ export default function(state = initialState, action) {
         user: undefined
       };
     case RECEIVE_USER_SIGN_IN:
-      return {
-        ...state,
-        isSignedIn: true
-      }
+      nextState = Object.assign({}, state, { isSignedIn: true })
+      return nextState;
     default:
       return state;
   }
 }
+
+export default sessionReducer;
