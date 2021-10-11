@@ -1,7 +1,7 @@
 {
-  "name": "twit",
+  "name": "HotSpot",
   "version": "1.0.0",
-  "description": "mern twitter",
+  "description": "HotSpot social app",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

@@ -59,10 +59,9 @@ class SignupForm extends React.Component {
 
   render() {
     return (
-      <div className="signup-form-container">
+      <div className="auth-form-container">
         <form onSubmit={this.handleSubmit}>
           <div className="signup-form">
-            <br/>
               <input type="text"
                 value={this.state.email}
                 onChange={this.update('email')}
