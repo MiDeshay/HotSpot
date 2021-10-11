@@ -17,7 +17,7 @@ router.get("/test", (req, res) => res.json({ msg: "This is the users route" }));
 router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
     res.json({
       id: req.user.id,
-      handle: req.user.handle,
+      username: req.user.username,
       email: req.user.email
     });
   })
@@ -37,10 +37,13 @@ router.post('/register', (req, res) => {
             return res.status(400).json(errors);
         } else {
             // Create new User 
+            let nickname = req.body.firstName + req.body.lastName[0];
             const newUser = new User({
-                handle: req.body.handle,
-                email: req.body.email,
-                password: req.body.password,
+               firstName: req.body.firstName,
+               lastName: req.body.lastName,
+               username: nickname,
+               email: req.body.email,
+               password: req.body.password,
             })
             // Salt and hash password before saving.
             bcrypt.genSalt(10, (err, salt) => {
@@ -49,7 +52,7 @@ router.post('/register', (req, res) => {
                     newUser.password = hash;
                     newUser.save()
                     .then(user => {
-                        const payload = { id: user.id, handle: user.handle };
+                        const payload = { id: user.id, username: user.username };
 
                         jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
                             res.json({
@@ -86,7 +89,7 @@ router.post('/login', (req, res) =>{
         bcrypt.compare(password, user.password)
             .then(isMatch => {
                 if (isMatch) {
-                    const payload = {id: user.id, handle: user.handle};
+                    const payload = {id: user.id, username: user.username};
 
                     jwt.sign(
                         payload,
