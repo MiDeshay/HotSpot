@@ -1,21 +1,26 @@
 import React from "react";
+import { Link, withRouter } from 'react-router-dom';
+
 
 class EditProfileForm extends React.Component {
   constructor(props) {
     super(props);
-    if (this.props.user.firstName) {
-      let {firstName, lastName, username, email} = this.props.user;
-      this.state = {
-        firstName, lastName, username, email
-      }
+    if (this.props.user) {
+      this.state = Object.assign({},this.props.user, {errors: this.props.errors})
     }
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderErrors = this.renderErrors.bind(this);
   }
 
   componentDidMount() {
-    if (!this.props.user.firstName) {
-      this.props.fetchUser(this.props.currentUser.email);
+    // if (!this.props.user) {
+    //   this.props.fetchUser(this.props.currentUser.email).then(res => {
+    //     let nextState = Object.assign({}, res, {errors: this.props.errors})
+    //     this.setState(nextState);
+    //   });
       // this.setState(this.props.user);
-    }
+
+    // }
   }
 
   update(field) {
@@ -31,14 +36,24 @@ class EditProfileForm extends React.Component {
       email: this.state.email,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      password: this.state.password,
-      password2: this.state.password2
+      username: this.state.username
     };
 
-    this.props.signup(user, this.props.history);
+    this.props.updateUser(user);
+    // this.props.history.push("/profile");
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors.length <= 0) {
+      this.props.history.push('/profile');
+    }
+
+    // Set or clear errors
+    this.setState({errors: nextProps.errors})
   }
 
   renderErrors() {
+    console.log(this.state.errors);
     return(
       <ul>
         {Object.keys(this.state.errors).map((error, i) => (
@@ -50,23 +65,11 @@ class EditProfileForm extends React.Component {
     );
   }
 
-  handleSubmit(e) {
-    // debugger;
-    e.preventDefault();
-    let user = {
-      email: this.state.email,
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      username: this.state.username
-    };
-
-    this.props.updateUser(user);
-  }
-
 
   render() {
+    console.log(this.state);
     let { user } = this.props;
-    if (!user) {return null};
+    if (!this.state) {return null};
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -75,7 +78,7 @@ class EditProfileForm extends React.Component {
           <input type="text"
             value={this.state.email}
             onChange={this.update('email')}
-            placeholder="JohnDoe@yahoo.com"
+            placeholder="JohnDoe@sbemail.com"
             className="auth-form-input"
           /></label>
         <br/>
@@ -101,11 +104,12 @@ class EditProfileForm extends React.Component {
             placeholder="JohnD"
             className="auth-form-input"
           /></label>
-          <button className="edit button">Save Changes</button>
+          <button className="edit button">Save Changes</button> <div><Link to="/profile">Cancel</Link></div>
+          {this.renderErrors()}
         </form>
       </div>
     )
   }
 }
 
-export default EditProfileForm;
+export default withRouter(EditProfileForm);

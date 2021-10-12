@@ -11,9 +11,10 @@ export const fetchUser = (email) => {
 // create handled in session_api_util.js
 
 export const updateUser = (user) => {
-  return axios.post('/api/users/:email', user);
+  // debugger
+  return axios.patch(`/api/users/${user.id}`, user);
 };
 
 export const deleteUser = email => {
-  return axios.delete('/api/users/:email', email);
+  return axios.delete(`/api/users/${email}`, email);
 };
