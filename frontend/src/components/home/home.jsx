@@ -7,16 +7,12 @@ import { mapsKey } from '../../config/mapsAPI'
 export default class Home extends React.Component{
    constructor(props){
       super(props)
-      this.getLocation = this.getLocation.bind(this);
       
       // Animations for pin dropping.
       this.map = null;
       this.pins = [];
       this.markers = [];
-      this.drop = this.drop.bind(this);
-      this.addMarkerWithTimeout = this.addMarkerWithTimeout.bind(this);
-      this.clearMarkers = this.clearMarkers.bind(this);
-
+      
       // Google Maps API loader uses state to determine map options.
       this.loader = null;
 
@@ -29,6 +25,13 @@ export default class Home extends React.Component{
          pins: this.pins
       }
       this.google = window.google;
+
+      // Bindings 
+      this.drop = this.drop.bind(this);
+      this.getLocation = this.getLocation.bind(this);
+      this.addMarkerWithTimeout = this.addMarkerWithTimeout.bind(this);
+      this.clearMarkers = this.clearMarkers.bind(this);
+      this.addEventPlaceMarker = this.addEventPlaceMarker.bind(this);
    }
 
    componentDidMount(){
@@ -44,12 +47,33 @@ export default class Home extends React.Component{
             this.google = window.google;
             this.map = new google.maps.Map(document.getElementById("map"), this.state);
             this.getLocation();
-            this.drop();
+            
+            // Init event handlers
+            this.addEventPlaceMarker();
          })
          .catch(e => {
             // Do error handling
          });
       this.drop();
+      
+      
+   }
+
+   addEventPlaceMarker(){
+      this.map.addListener("click", (mapsMouseEvent) => {
+         let position = {
+            lat: mapsMouseEvent.latLng.lat(),
+            lng: mapsMouseEvent.latLng.lng(),
+         }
+
+         this.markers.push(
+            new this.google.maps.Marker({
+               position: position,
+               map: this.map,
+               animation: this.google.maps.Animation.DROP,
+            })
+         );
+      })
    }
 
    componentDidUpdate() {
