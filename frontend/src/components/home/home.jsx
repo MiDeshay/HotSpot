@@ -1,59 +1,83 @@
 import React from 'react';
-import GoogleMapReact from 'google-map-react';
+import { Loader } from "@googlemaps/js-api-loader"
 import PinsContainer from '../pins/pins_container';
+import { mapsKey } from '../../config/mapsAPI'
 
-const mapsAPI = "";
+
 export default class Home extends React.Component{
-
    constructor(props){
       super(props)
-
-      this.lat = 0;
-      this.lng = 0;
-      this.zoom = 11;
-      this.state = ({
-         lat: this.lat,
-         lng: this.lng
-      })
-
       this.getLocation = this.getLocation.bind(this);
+      
+      // Animations for pin dropping.
       this.map = null;
-      this.maps = null;
       this.pins = [];
       this.markers = [];
       this.drop = this.drop.bind(this);
-      this.handleApiLoaded = this.handleApiLoaded.bind(this);   
       this.addMarkerWithTimeout = this.addMarkerWithTimeout.bind(this);
+      this.clearMarkers = this.clearMarkers.bind(this);
+
+      // Google Maps API loader uses state to determine map options.
+      this.loader = null;
+
+      this.state = {
+         center: {
+            lat: 0,
+            lng: 0
+         },
+         zoom: 11,
+         pins: this.pins
+      }
+      this.google = window.google;
    }
 
    componentDidMount(){
-      this.getLocation();
+      this.loader = new Loader({
+         apiKey: mapsKey,
+         version: "weekly",
+         libraries: ["places"],
+      })
+
+      this.loader
+         .load()
+         .then((google) => {
+            this.google = window.google;
+            this.map = new google.maps.Map(document.getElementById("map"), this.state);
+            this.getLocation();
+            this.drop();
+         })
+         .catch(e => {
+            // Do error handling
+         });
       this.drop();
    }
 
-   componentDidUpdate(){
-      
-   }
-
-   handleApiLoaded({map, maps}){
-      this.map = map;
-      this.maps = maps;
+   componentDidUpdate() {
+      if (this.pins.length !== 0) this.drop();
    }
 
    getLocation() {
       if (navigator.geolocation) {
          navigator.geolocation.getCurrentPosition( pos => {
             this.setState({
-               lat: pos.coords.latitude,
-               lng: pos.coords.longitude
+               center: {
+                  lat: pos.coords.latitude,
+                  lng: pos.coords.longitude
+               }
             })
+            this.map.setCenter(this.state.center)
 
+            // Pins added for debugging
+            let sign = -1;
             for (let i = 0; i < 15; i++){
-               let sign = -1;
-               let lat = pos.coords.latitude + (Math.floor(Math.random() * .30 * sign));
-               let lng = pos.coords.longitude + (Math.floor(Math.random() * .30 * sign));
-               this.pins.push( Object.assign({}, {lat, lng}));
+               let lat = pos.coords.latitude + (Math.random() * 0.2 * sign);
+               let lng = pos.coords.longitude + (Math.random() * 0.2 * sign);
+               sign *= -1;
+               this.pins.push({lat, lng});
             }
+            this.setState({
+               pins: this.pins
+            })
             
          });
       } else { 
@@ -62,42 +86,36 @@ export default class Home extends React.Component{
    }
 
    drop(){
+      this.clearMarkers();
       for (let i = 0; i < this.pins.length; i++) {
-         console.log(this.pins);
-         this.addMarkerWithTimeout(this.pins[i], i * 200);
+         this.addMarkerWithTimeout(this.pins[i], i * 20);
       }
    }
 
+   clearMarkers() {
+      for (let i = 0; i < this.markers.length; i++) {
+        this.markers[i].setMap(null);
+      }
+      this.markers = [];
+   }
+
+   // Spawns markers on the map with a delayed animation inbetween.
    addMarkerWithTimeout(position, timeout) {
       window.setTimeout(() => {
-         
          this.markers.push(
-            new this.maps.Marker({
+            new this.google.maps.Marker({
                position: position,
                map: this.map,
-               animation: this.maps.Animation.DROP,
-            })
+               animation: this.google.maps.Animation.DROP,
+             })
          );
       }, timeout);
    }
 
    render(){
-      console.log(this.pins);
       return (
-         <div style={{ height: '100vh', width: '100%' }}>
-            <GoogleMapReact
-               bootstrapURLKeys={{ key: mapsAPI }}
-               center={this.state}
-               zoom={this.zoom}
-               yesIWantToUseGoogleMapApiInternals
-               onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
-            >
-               <PinsContainer
-                  lat={this.state.lat}
-                  lng={this.state.lng}
-               />
-               
-            </GoogleMapReact>
+         <div id='map' style={{ height: '100vh', width: '100%' }} >
+      
          </div>
       )  
    }
