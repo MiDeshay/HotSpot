@@ -2,7 +2,7 @@ import React from 'react';
 import GoogleMapReact from 'google-map-react';
 import PinsContainer from '../pins/pins_container';
 
-const mapsAPI = "AIzaSyBN9X253aM9oxuU80falN4ijQxxbeutSyE";
+const mapsAPI = "";
 export default class Home extends React.Component{
 
    constructor(props){
