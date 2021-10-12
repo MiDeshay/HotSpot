@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const User = require('../../models/User'); 
+const User = require('../../models/User');
 
 // Protected Routes
 const passport = require('passport');
@@ -27,10 +27,10 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
   router.get("/:email", (req, res) => {
 
      User.findOne({email: req.params.email}).then( user => {
-  
+
         if (!user) {
             return res.status(404).json("User not found");
-        } 
+        }
 
         res.json({
             id: user.id,
@@ -39,10 +39,10 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
             username: user.username,
             email: user.email
             })
-        
+
      })
-    
-      
+
+
   })
 
   router.patch("/:email", (req, res) => {
@@ -56,11 +56,11 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
     User.findOne({email: req.params.email}).then(user => {
         if(user){
             User.findOneAndUpdate({
-              email: req.params.email}, 
+              email: req.params.email},
               {
               firstName: req.body.firstName,
               lastName: req.body.lastName,
-              email: req.body.email, 
+              email: req.body.email,
               username: req.body.username,
               password: req.body.password,
               password2: req.body.password2
@@ -71,10 +71,10 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
                 }else{
                     res.json({user})
                 }
-            } ) 
+            } )
           } else{
-              return res.status(404).json("User not found"); 
-          } 
+              return res.status(404).json("User not found");
+          }
     })
 
   })
@@ -90,12 +90,12 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
                       res.json({email: req.params.email})
                   }
               })
-          }else{ 
-              return res.status(404).json("User not found"); 
-               
+          }else{
+              return res.status(404).json("User not found");
+
           }
-      })  
-  }) 
+      })
+  })
 
 
 
@@ -175,7 +175,7 @@ router.post('/login', (req, res) =>{
         bcrypt.compare(password, user.password)
             .then(isMatch => {
                 if (isMatch) {
-                    const payload = {id: user.id, firstName: user.firstName, lastName: user.lastName};
+                    const payload = {id: user.id, firstName: user.firstName, lastName: user.lastName, email: user.email, username: user.username};
 
                     jwt.sign(
                         payload,
