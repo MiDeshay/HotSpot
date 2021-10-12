@@ -91,10 +91,10 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
               })
           }else{ 
               return res.status(404).json("User not found"); 
-              
+               
           }
       })  
-  })
+  }) 
 
 
 
