@@ -1,0 +1,43 @@
+:root {
+  --fadeintopdist: 4rem;
+}
+
+.fadeInTop {
+  -webkit-animation-name: fadeInTop;
+  animation-name: fadeInTop;
+}
+
+@keyframes fadeInTop {
+  from {
+    opacity: 0;
+    -webkit-transform: translatey(-100%);
+    transform: translatey(-100%) translatex(50%);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translatey(var(--fadeintopdist));
+    transform: translatey(var(--fadeintopdist)) translatex(50%);
+  }
+}
+
+@-webkit-keyframes fadeInTop {
+  from {
+    opacity: 0;
+    -webkit-transform: translatey(-100%);
+    transform: translatey(-100%) translatex(50%);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translatey(var(--fadeintopdist));
+    transform: translatey(var(--fadeintopdist)) translatex(50%);
+  }
+}
+
+.animated {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
