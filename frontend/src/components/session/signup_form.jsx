@@ -1,5 +1,7 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import Splash from '../splash/splash';
+
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -60,42 +62,67 @@ class SignupForm extends React.Component {
   render() {
     return (
       <div className="auth-form-container">
-        <form onSubmit={this.handleSubmit}>
-          <div className="signup-form">
-              <input type="text"
-                value={this.state.email}
-                onChange={this.update('email')}
-                placeholder="Email"
-              />
-            <br/>
-              <input type="text"
-                value={this.state.firstName}
-                onChange={this.update('firstName')}
-                placeholder="First Name"
-              />
-            <br/>
-              <input type="text"
-                value={this.state.lastName}
-                onChange={this.update('lastName')}
-                placeholder="Last Name"
-              />
-            <br/>
-              <input type="password"
-                value={this.state.password}
-                onChange={this.update('password')}
-                placeholder="Password"
-              />
-            <br/>
-              <input type="password"
-                value={this.state.password2}
-                onChange={this.update('password2')}
-                placeholder="Confirm Password"
-              />
-            <br/>
-            <input type="submit" value="Submit" />
-            {this.renderErrors()}
+        <div className="modal-screen"></div>
+        <div className="auth-form-modal animated fadeInTop">
+          <div className="auth-form-div">
+            <form onSubmit={this.handleSubmit}>
+              <div className="signup-form">
+                <div className="auth-form-header">
+                  <h2>HotSpot</h2>
+                  <div className="header-details">Join billions of users looking for a party</div>
+                </div>
+                <div className="modal-body">
+                    <label>Email
+                    <input type="text"
+                      value={this.state.email}
+                      onChange={this.update('email')}
+                      placeholder="JohnDoe@yahoo.com"
+                      className="auth-form-input"
+                    /></label>
+                  <br/>
+                    <label>First Name
+                    <input type="text"
+                      value={this.state.firstName}
+                      onChange={this.update('firstName')}
+                      placeholder="John"
+                      className="auth-form-input"
+                    /></label>
+                  <br/>
+                    <label>Last Name
+                    <input type="text"
+                      value={this.state.lastName}
+                      onChange={this.update('lastName')}
+                      placeholder="Doe"
+                      className="auth-form-input"
+                    /></label>
+                  <br/>
+                    <label>Password
+                    <input type="password"
+                      value={this.state.password}
+                      onChange={this.update('password')}
+                      placeholder="*****"
+                      className="auth-form-input"
+                    /></label>
+                  <br/>
+                    <label>Confirm Password
+                    <input type="password"
+                      value={this.state.password2}
+                      onChange={this.update('password2')}
+                      placeholder="*****"
+                      className="auth-form-input"
+                    /></label>
+                  <br/>
+                  <input type="submit" value="Signup" className="button submit" />
+                  {this.renderErrors()}
+                  <div className="auth-form-footer">
+                    <div className="auth-other-message">Already have an account?</div> <Link to="/login"><div className="link">Login</div></Link>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
+        <Splash />
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import Splash from '../splash/splash';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -60,24 +61,40 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="auth-form-container">
-        <form onSubmit={this.handleSubmit}>
-          <div>
-              <input type="text"
-                value={this.state.email}
-                onChange={this.update('email')}
-                placeholder="Email"
-              />
-            <br/>
-              <input type="password"
-                value={this.state.password}
-                onChange={this.update('password')}
-                placeholder="Password"
-              />
-            <br/>
-            <input type="submit" value="Submit" />
-            {this.renderErrors()}
-          </div>
-        </form>
+        <div className="auth-form-modal animated fadeInTop">
+          <form onSubmit={this.handleSubmit}>
+            <div className="auth-form-div">
+              <div className="auth-form-header">
+                <h2>Login</h2>
+                <div className="header-details">Welcome back to HotSpot</div>
+              </div>
+              <div className="model-body">
+                <label>Email
+                <input type="text"
+                  value={this.state.email}
+                  onChange={this.update('email')}
+                  placeholder="Email"
+                  className="auth-form-input"
+                /></label>
+                <br/>
+                <label>Password
+                <input type="password"
+                  value={this.state.password}
+                  onChange={this.update('password')}
+                  placeholder="Password"
+                  className="auth-form-input"
+                /></label>
+                <br/>
+                <input type="submit" value="Login" className="button submit" />
+                {this.renderErrors()}
+                <div className="auth-form-footer">
+                  <div className="auth-other-message">Don't have an account?</div> <div className="link"><Link to="/register">Signup</Link></div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <Splash />
       </div>
     );
   }

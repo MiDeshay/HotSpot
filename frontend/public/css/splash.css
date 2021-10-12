@@ -1,0 +1,19 @@
+.splash-container {
+  background-image: url(../images/splash.png);
+  background-repeat: no-repeat;
+  height: 30rem;
+  width: 30rem;
+
+  position: absolute;
+  right: 50%;
+  transform: translatex(50%) translatey(1rem);
+  background-color: var(--bgc1);
+  width: 100%;
+  max-width: 30rem;
+
+  z-index: -1;
+
+  object-fit: cover;
+  height: 100%;
+}
+

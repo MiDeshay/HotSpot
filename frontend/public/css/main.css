@@ -1,9 +1,12 @@
 :root {
   --color1: #4193BE;
+  --color1light: #bce0f3;
   --color1dark: #16303f;
   --color2: #BE4193;
+  --color2light: #ffd3f0;
   --color2dark: #501d3e;
   --color3: #93BE41;
+  --color3light: #edffcc;
   --color3dark: #303f16;
 }
 
