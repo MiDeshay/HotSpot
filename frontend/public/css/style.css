@@ -1,4 +1,6 @@
 @import url(reset.css);
 @import url(main.css);
 @import url(navbar.css);
-@import url(signup.css);
+@import url(session.css);
+@import url(splash.css);
+@import url(modal_anim.css);

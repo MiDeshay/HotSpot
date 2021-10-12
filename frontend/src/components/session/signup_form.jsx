@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import Splash from '../splash/splash';
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -60,42 +61,57 @@ class SignupForm extends React.Component {
   render() {
     return (
       <div className="auth-form-container">
-        <form onSubmit={this.handleSubmit}>
-          <div className="signup-form">
-              <input type="text"
-                value={this.state.email}
-                onChange={this.update('email')}
-                placeholder="Email"
-              />
-            <br/>
-              <input type="text"
-                value={this.state.firstName}
-                onChange={this.update('firstName')}
-                placeholder="First Name"
-              />
-            <br/>
-              <input type="text"
-                value={this.state.lastName}
-                onChange={this.update('lastName')}
-                placeholder="Last Name"
-              />
-            <br/>
-              <input type="password"
-                value={this.state.password}
-                onChange={this.update('password')}
-                placeholder="Password"
-              />
-            <br/>
-              <input type="password"
-                value={this.state.password2}
-                onChange={this.update('password2')}
-                placeholder="Confirm Password"
-              />
-            <br/>
-            <input type="submit" value="Submit" />
-            {this.renderErrors()}
+        <div className="modal-screen"></div>
+        <div className="auth-form-modal animated fadeInTop">
+          <div className="auth-form-div">
+            <form onSubmit={this.handleSubmit}>
+              <div className="signup-form">
+                <div className="auth-form-header">
+                <h2>Create a new account</h2>
+                <div className="header-details">Join billions of users looking for a party</div>
+                </div>
+                  <input type="text"
+                    value={this.state.email}
+                    onChange={this.update('email')}
+                    placeholder="Email"
+                    className="auth-form-input"
+                  />
+                <br/>
+                  <input type="text"
+                    value={this.state.firstName}
+                    onChange={this.update('firstName')}
+                    placeholder="First Name"
+                    className="auth-form-input"
+                  />
+                <br/>
+                  <input type="text"
+                    value={this.state.lastName}
+                    onChange={this.update('lastName')}
+                    placeholder="Last Name"
+                    className="auth-form-input"
+                  />
+                <br/>
+                  <input type="password"
+                    value={this.state.password}
+                    onChange={this.update('password')}
+                    placeholder="Password"
+                    className="auth-form-input"
+                  />
+                <br/>
+                  <input type="password"
+                    value={this.state.password2}
+                    onChange={this.update('password2')}
+                    placeholder="Confirm Password"
+                    className="auth-form-input"
+                  />
+                <br/>
+                <input type="submit" value="Submit" />
+                {this.renderErrors()}
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
+        <Splash />
       </div>
     );
   }

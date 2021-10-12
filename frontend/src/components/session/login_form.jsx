@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import Splash from '../splash/splash';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -60,24 +61,29 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="auth-form-container">
-        <form onSubmit={this.handleSubmit}>
-          <div>
-              <input type="text"
-                value={this.state.email}
-                onChange={this.update('email')}
-                placeholder="Email"
-              />
-            <br/>
-              <input type="password"
-                value={this.state.password}
-                onChange={this.update('password')}
-                placeholder="Password"
-              />
-            <br/>
-            <input type="submit" value="Submit" />
-            {this.renderErrors()}
-          </div>
-        </form>
+        <div className="auth-form-modal animated fadeInTop">
+          <form onSubmit={this.handleSubmit}>
+            <div>
+                <input type="text"
+                  value={this.state.email}
+                  onChange={this.update('email')}
+                  placeholder="Email"
+                  className="auth-form-input"
+                />
+              <br/>
+                <input type="password"
+                  value={this.state.password}
+                  onChange={this.update('password')}
+                  placeholder="Password"
+                  className="auth-form-input"
+                />
+              <br/>
+              <input type="submit" value="Submit" />
+              {this.renderErrors()}
+            </div>
+          </form>
+        </div>
+        <Splash />
       </div>
     );
   }
