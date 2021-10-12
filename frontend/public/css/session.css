@@ -13,13 +13,27 @@
   background-color: var(--bgc1);
   width: 20rem;
   max-width: 30rem;
-  background-color: var(--color1light);
+  background-color: var(--color3light);
   border: solid 0.1rem var(--color1dark);
+  border-radius: 0.25rem;
 }
 
 .auth-form-input {
   width: 100%;
-  margin: 0.2rem;
+  margin-bottom: 0.2rem;
+  border-radius: 0.25rem;
+  border: solid 0.1rem var(--color2dark);
+  transition: background-color 0.2s;
+
+}
+
+.auth-form-input:hover {
+  background-color: var(--color1light);
+}
+
+.auth-form-input:focus-visible {
+  border-color: var(--color3);
+  outline: none;
 }
 
 .auth-form-div {
@@ -45,9 +59,41 @@
 
 .auth-form-header > h2 {
   font-size: 2rem;
-  color: var(--color3);
+  color: var(--color2);
+  text-align: center;
 }
 
 .header-details {
-  color: var(--color3dark)
+  color: var(--color3dark);
+  text-align: center;
+}
+
+.button {
+  border: solid 0.1rem var(--color1dark);
+  border-radius: 0.3rem;
+  background-color: var(--color1light);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: var(--color1);
+}
+
+.button:active {
+  background-color: var(--color1dark);
+}
+
+.auth-form-footer {
+  display:flex;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.auth-other-message {
+  margin-right: 0.3rem;
+}
+
+.link {
+  color: var(--color1);
 }
