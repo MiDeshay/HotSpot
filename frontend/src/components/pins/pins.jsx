@@ -2,6 +2,12 @@ import React from 'react';
 //import GoogleMapReact from 'google-map-react';
 
 export default class Pins extends React.Component{
+
+   constructor(props){
+      super(props) 
+
+   }
+
    componentDidMount(){
    }
 
@@ -13,7 +19,8 @@ export default class Pins extends React.Component{
    render(){
       
       return (
-         <div onClick={()=> this.getLocation()}>{this.props.text}</div>
+         <i className="fas fa-map-pin" onClick={()=> this.getLocation()} 
+         style={ {fontSize: "300%",} }></i>
       )  
    }
 }
