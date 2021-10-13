@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 const EventSchema = new Schema({
     pinId: {
-        type: Number
+        type: String,
+        required: true
     },
-
     
     startDate: {
         type: String, 
