@@ -1,6 +1,6 @@
 import home from './home'
 import { connect } from 'react-redux'
-import { getEvents } from '../../actions/event_actions'
+import { getEvents, createEvent } from '../../actions/event_actions'
 
 const mapStateToProps = state => ({
    user: state.entities.users[state.session.user.id],
@@ -9,6 +9,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
    getEvents: () => dispatch(getEvents()),
+   createEvent: (eventForm) => dispatch(createEvent(eventForm)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(home);

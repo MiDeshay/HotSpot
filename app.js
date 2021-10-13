@@ -5,13 +5,8 @@ const express = require("express");
 const db = require('./config/keys').mongoURI;
 // Express Routes for our models
 const users = require("./routes/api/users");
-<<<<<<< HEAD
-const events = require('./routes/api/events')
-
-=======
 const events = require("./routes/api/events");
 const groups = require("./routes/api/groups");
->>>>>>> 3e450adbac0c05d817c45c46e49626c87dbf4dae
 const bodyParser = require('body-parser');
 const passport = require('passport');
 

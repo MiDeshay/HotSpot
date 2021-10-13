@@ -29,14 +29,15 @@ export default class Home extends React.Component{
       this.google = window.google;
 
       // Only redraw pins if different from previous set 
-      this.prevEvents = this.props.events;
+      //this.prevEvents = this.props.events;
+      this.eventsLoaded = false;
 
       // Bindings 
       this.drop = this.drop.bind(this);
       this.getLocation = this.getLocation.bind(this);
       this.addMarkerWithTimeout = this.addMarkerWithTimeout.bind(this);
       this.clearMarkers = this.clearMarkers.bind(this);
-      this.addEventPlaceMarker = this.addEventPlaceMarker.bind(this);
+      this.addEvent = this.addEvent.bind(this);
       this.placeDebugPins = this.placeDebugPins.bind(this);
    }
 
@@ -59,7 +60,7 @@ export default class Home extends React.Component{
             });
             this.props.getEvents();
             // Init event handlers
-            this.addEventPlaceMarker();
+            this.addEvent();
          })
          .catch(e => {
             // Do error handling
@@ -68,9 +69,10 @@ export default class Home extends React.Component{
    }
 
    componentDidUpdate() {
-      if (this.prevEvents !== this.props.events){
+      if (Object.keys(this.props.events).length !== 0 && !this.eventsLoaded){
          this.drop(); 
-         this.prevEvents = Object.assign({}, this.props.events);
+         this.eventsLoaded = true;
+         //this.prevEvents = Object.assign({}, this.props.events);
       }
    }
 
@@ -106,15 +108,33 @@ export default class Home extends React.Component{
    }
 
    // Place a marker at cursor position
-   addEventPlaceMarker(){
+   addEvent(){
       this.map.addListener("click", (mapsMouseEvent) => {
-         let pin = {
-            location :{
-               lat: mapsMouseEvent.latLng.lat(),
-               lng: mapsMouseEvent.latLng.lng(),
-            }
+         // let pin = {
+         //    location :{
+         //       lat: mapsMouseEvent.latLng.lat(),
+         //       lng: mapsMouseEvent.latLng.lng(),
+         //    }
+         // }
+         // this.addMarkerWithTimeout(pin, 1);
+         const pin = {
+            pinId: 1,
+            address: "No",
+            city: "Somewhere",
+            hostEmail: "foobar@gmail.com",
+            title: "McDonald",
+            description: "A McBurger all you can eat festival",
+            mapLat: mapsMouseEvent.latLng.lat(),
+            mapLng: mapsMouseEvent.latLng.lng(),
+            startDate: "10/15/2022",
+            endDate: "10/20/2022",
          }
-         this.addMarkerWithTimeout(pin, 1);
+         this.props.createEvent(pin);
+         pin.location = {
+            lat: mapsMouseEvent.latLng.lat(),
+            lng: mapsMouseEvent.latLng.lng(),
+         }
+         this.addMarkerWithTimeout(pin)
       });
    }
 
@@ -154,7 +174,7 @@ export default class Home extends React.Component{
             position: pin.location,
             map: this.map,
             animation: this.google.maps.Animation.DROP,
-            label: pin.title,
+            label: pin.title[0],
          })
          marker.eventDetails = pin;
 
