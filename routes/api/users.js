@@ -79,7 +79,10 @@ router.patch("/:userId", (req, res) => {
 
 router.delete("/:userId", (req,res) => {
 
+
+     
       let user = User.findById(req.params.userId).then( user => {
+
         if (user){
             User.deleteOne({_id: req.params.userId}, (err, obj) => {
                 if (err){
