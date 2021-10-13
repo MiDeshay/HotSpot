@@ -86,7 +86,7 @@ export default class Home extends React.Component{
             this.map.setCenter(this.state.center)
             //this.placeDebugPins(pos);
          });
-      } else { 
+      } else {
          // Improve error messages later
       }
    }
@@ -174,8 +174,8 @@ export default class Home extends React.Component{
    render(){
       return (
          <div id='map' style={{ height: '100vh', width: '100%' }} >
-      
+
          </div>
-      )  
+      )
    }
 }
