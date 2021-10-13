@@ -54,9 +54,6 @@ export default class Home extends React.Component{
          .catch(e => {
             // Do error handling
          });
-      this.drop();
-      
-      
    }
 
    addEventPlaceMarker(){
@@ -68,12 +65,12 @@ export default class Home extends React.Component{
 
          this.markers.push(
             new this.google.maps.Marker({
+               animation: this.google.maps.Animation.DROP,
                position: position,
                map: this.map,
-               animation: this.google.maps.Animation.DROP,
             })
          );
-      })
+      });
    }
 
    componentDidUpdate() {
