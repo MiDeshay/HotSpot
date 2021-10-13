@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-// import './navbar.css'
+import UserSearchContainer from '../search/user_search_container';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -16,12 +16,14 @@ class NavBar extends React.Component {
 
   // Selectively render links dependent on whether the user is logged in
   getLinks() {
+    let { currentUser } = this.props;
       if (this.props.loggedIn) {
         return (
             <div className="nav-bar-links protected-buttons">
                 <Link to={'/'}>Index</Link>
-                <Link to={'/profile'}>Profile</Link>
-                <button onClick={this.logoutUser}>Logout</button>
+                <Link to={`/profile/${currentUser.id}`}>Profile</Link>
+                <button onClick={this.logoutUser} className="button">Logout</button>
+                <UserSearchContainer />
             </div>
         );
       } else {

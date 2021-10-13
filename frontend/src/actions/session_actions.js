@@ -1,5 +1,6 @@
 import * as APIUtil from '../util/session_api_util';
 import jwt_decode from 'jwt-decode';
+import { receiveUser } from './user_actions';
 
 export const RECEIVE_CURRENT_USER = "RECEIVE_CURRENT_USER";
 export const RECEIVE_SESSION_ERRORS = "RECEIVE_SESSION_ERRORS";
@@ -11,7 +12,7 @@ export const receiveCurrentUser = currentUser => ({
     type: RECEIVE_CURRENT_USER,
     currentUser
 });
- 
+
 // This will be used to redirect the user to the login page upon signup
 export const receiveUserSignIn = () => {
     return ({
@@ -40,6 +41,8 @@ export const signup = user => dispatch => {
         const decoded = jwt_decode(token);
         dispatch(receiveCurrentUser(decoded));
     // ADD USER TO THE STATE
+        // dispatch(receiveUser(decoded));
+
        return dispatch(receiveUserSignIn());
     }, err => {
         return (
