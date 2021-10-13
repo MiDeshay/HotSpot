@@ -1,6 +1,5 @@
 import React from 'react';
 import { Loader } from "@googlemaps/js-api-loader"
-import PinsContainer from '../pins/pins_container';
 import { mapsKey } from '../../config/mapsAPI'
 
 
@@ -21,7 +20,7 @@ export default class Home extends React.Component{
             lat: 0,
             lng: 0
          },
-         zoom: 11,
+         zoom: 11, // Hard coded default zoom value, free free to change
          pins: this.pins
       }
       this.google = window.google;
@@ -41,6 +40,7 @@ export default class Home extends React.Component{
          libraries: ["places"],
       })
 
+      // Once maps is loaded, do any actions involving map after .then
       this.loader
          .load()
          .then((google) => {
@@ -48,14 +48,51 @@ export default class Home extends React.Component{
             this.map = new google.maps.Map(document.getElementById("map"), this.state);
             this.getLocation();
             
+            this.props.getEvents();
             // Init event handlers
             this.addEventPlaceMarker();
          })
          .catch(e => {
             // Do error handling
          });
+      
    }
 
+   componentDidUpdate() {
+      //if (this.pins.length !== 0) this.drop();
+      if (Object.keys(this.props.events).length !== 0) this.drop();
+   }
+
+   getLocation() {
+      if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition( pos => {
+            this.setState({
+               center: {
+                  lat: pos.coords.latitude,
+                  lng: pos.coords.longitude
+               }
+            })
+            this.map.setCenter(this.state.center)
+
+            // Pins added for debugging
+            // let sign = -1;
+            // for (let i = 0; i < 5; i++){
+            //    let lat = pos.coords.latitude + (Math.random() * 0.2 * sign);
+            //    let lng = pos.coords.longitude + (Math.random() * 0.2 * sign);
+            //    sign *= -1;
+            //    this.pins.push({lat, lng});
+            // }
+            // this.setState({
+            //    pins: this.pins
+            // })
+            
+         });
+      } else { 
+         // Improve error messages later
+      }
+   }
+
+   // Place a marker at cursor position
    addEventPlaceMarker(){
       this.map.addListener("click", (mapsMouseEvent) => {
          let position = {
@@ -73,43 +110,20 @@ export default class Home extends React.Component{
       });
    }
 
-   componentDidUpdate() {
-      if (this.pins.length !== 0) this.drop();
-   }
-
-   getLocation() {
-      if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition( pos => {
-            this.setState({
-               center: {
-                  lat: pos.coords.latitude,
-                  lng: pos.coords.longitude
-               }
-            })
-            this.map.setCenter(this.state.center)
-
-            // Pins added for debugging
-            let sign = -1;
-            for (let i = 0; i < 15; i++){
-               let lat = pos.coords.latitude + (Math.random() * 0.2 * sign);
-               let lng = pos.coords.longitude + (Math.random() * 0.2 * sign);
-               sign *= -1;
-               this.pins.push({lat, lng});
-            }
-            this.setState({
-               pins: this.pins
-            })
-            
-         });
-      } else { 
-         // Improve error messages later
-      }
-   }
-
    drop(){
       this.clearMarkers();
-      for (let i = 0; i < this.pins.length; i++) {
-         this.addMarkerWithTimeout(this.pins[i], i * 20);
+      // for (let i = 0; i < this.pins.length; i++) {
+      //    this.addMarkerWithTimeout(this.pins[i], i * 20);
+      // }
+      const events = this.props.events;
+      let i = 0;
+      for (let event in events) {
+         let pin = {
+            location: events[event].location,
+            title: events[event].title
+         }
+         this.addMarkerWithTimeout(pin, i*20);
+         i++;
       }
    }
 
@@ -121,13 +135,15 @@ export default class Home extends React.Component{
    }
 
    // Spawns markers on the map with a delayed animation inbetween.
-   addMarkerWithTimeout(position, timeout) {
+   addMarkerWithTimeout(pin, timeout) {
+      console.log(pin.location);
       window.setTimeout(() => {
          this.markers.push(
             new this.google.maps.Marker({
-               position: position,
+               position: pin.location,
                map: this.map,
                animation: this.google.maps.Animation.DROP,
+               label: pin.title
              })
          );
       }, timeout);

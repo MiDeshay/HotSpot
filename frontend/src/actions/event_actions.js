@@ -1,11 +1,11 @@
-import getEventsApi from '../util/event_api_util'
+import { getEventsApi } from '../util/event_api_util'
 
 export const RECEIVE_EVENT_ERRORS = "RECEIVE_EVENT_ERRORS";
-export const RECEIVE_EVENT = 'RECEIVE_EVENT';
+export const RECEIVE_EVENTS = 'RECEIVE_EVENTS';
 
 // Creators
 const receiveEvents = (events) => ({
-   type: RECEIVE_EVENT,
+   type: RECEIVE_EVENTS,
    events
 })
 
@@ -14,10 +14,10 @@ const receiveErrors = errors => ({
    errors
 });
 
-export const getEvents = () => (
+export const getEvents = () => dispatch => (
    getEventsApi()
       .then
-         (events => dispatch(receiveEvents(events)),
+         (events => dispatch(receiveEvents(events.data)),
          (errs => dispatch(receiveErrors(errs)))
       )
 )

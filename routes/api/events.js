@@ -9,7 +9,9 @@ const keys = require('../../config/keys');
 
 router.get( "/", (req, res) => {
    Event.find()
-      .then(events => res.json(events))
+      .then(events => {
+         res.json(events)
+      })
       .catch(err => res.status(404).json({noEventsFound: 'No events found'}))
 });
 
@@ -24,7 +26,7 @@ router.post( "/",
          },
          author: req.user.id
       })
-      
+
       newEvent.save()
          .then(event => res.json(event))
          .catch(err => res.status(400).send(err));
