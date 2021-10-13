@@ -70,8 +70,7 @@ router.patch("/:userId", (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 username: user.username,
-                email: user.email,
-                message: "hello"
+                email: user.email
             })
         }
     } )
@@ -80,7 +79,7 @@ router.patch("/:userId", (req, res) => {
 router.delete("/:userId", (req,res) => {
 
 
-     
+
       let user = User.findById(req.params.userId).then( user => {
 
         if (user){
