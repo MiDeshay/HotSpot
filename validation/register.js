@@ -10,8 +10,6 @@ module.exports = function validateSignupInput(data) {
    data.password = validText(data.password) ? data.password : '';
    data.password2 = validText(data.password2) ? data.password2 : '';
 
-   console.log(Validator.isEmail(data.email+''));
-
    if (!Validator.isLength(data.firstName, { min: 1, max: 60 })) {
       errors.firstName = 'firstName must be between 1 and 60 characters';
    }

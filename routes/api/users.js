@@ -81,7 +81,7 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
 
   router.delete("/:email", (req,res) => {
 
-      let user = User.findOne({email: req.params.email}).then( user => {
+      User.findOne({email: req.params.email}).then( user => {
         if (user){
             User.deleteOne({email: req.params.email}, (err, obj) => {
                 if (err){
