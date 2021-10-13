@@ -14,7 +14,7 @@ class EditProfileForm extends React.Component {
 
   componentDidMount() {
     // if (!this.props.user) {
-    //   this.props.fetchUser(this.props.currentUser.email).then(res => {
+    //   this.props.fetchUser(this.props.currentUser.userId).then(res => {
     //     let nextState = Object.assign({}, res, {errors: this.props.errors})
     //     this.setState(nextState);
     //   });
@@ -36,11 +36,12 @@ class EditProfileForm extends React.Component {
       email: this.state.email,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      username: this.state.username
+      username: this.state.username,
+      id: this.props.user.id
     };
 
+    // console.log(user);
     this.props.updateUser(user);
-    // this.props.history.push("/profile");
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,7 +54,7 @@ class EditProfileForm extends React.Component {
   }
 
   renderErrors() {
-    console.log(this.state.errors);
+    // console.log(this.state.errors);
     return(
       <ul>
         {Object.keys(this.state.errors).map((error, i) => (
@@ -67,7 +68,7 @@ class EditProfileForm extends React.Component {
 
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     let { user } = this.props;
     if (!this.state) {return null};
     return (
@@ -104,7 +105,7 @@ class EditProfileForm extends React.Component {
             placeholder="JohnD"
             className="auth-form-input"
           /></label>
-          <button className="edit button">Save Changes</button> <div><Link to="/profile">Cancel</Link></div>
+          <button className="edit button">Save Changes</button> <Link to="/profile"><div className="button cancel">Cancel</div></Link>
           {this.renderErrors()}
         </form>
       </div>

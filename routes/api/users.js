@@ -20,6 +20,7 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
       id: req.user.id,
       firstName: req.user.firstName,
       lastName: req.user.lastName,
+      username: req.user.username,
       email: req.user.email
     });
   })
@@ -27,7 +28,7 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
 
 router.get("/:userId", (req, res) => {
 
-     User.findOne({id: req.params.userId}).then( user => {
+     User.findById(req.params.userId).then( user => {
 
         if (!user) {
             return res.status(404).json("User not found");
@@ -46,7 +47,7 @@ router.get("/:userId", (req, res) => {
 
 })
 
-router.patch("/:id", (req, res) => {
+router.patch("/:userId", (req, res) => {
 
     const { errors, isValid } = validateEditProfile(req.body);
 
@@ -54,39 +55,40 @@ router.patch("/:id", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    User.findOne({id: req.params.id}).then(user => {
-        if(user){
-            User.findOneAndUpdate({
-              id: req.params.id},
-              {
-              firstName: req.body.firstName,
-              lastName: req.body.lastName,
-              email: req.body.email,
-              username: req.body.username
-               }
-            , {new: true}, (error, user) => {
-                if (error){
-                  res.status(400).json(error);
-                }else{
-                    res.json({user})
-                }
-            } )
-          } else{
-              return res.status(404).json("User not found");
-          }
-    })
-
+    User.findByIdAndUpdate( req.params.userId,
+        {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            username: req.body.username,
+            email: req.body.email,
+        }, {new: true}, (error, user) => {
+        if (error){
+            res.status(400).json(error);
+        }else{
+            res.json({
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username,
+                email: user.email,
+                message: "hello"
+            })
+        }
+    } )
 })
 
-router.delete("/:email", (req,res) => {
+router.delete("/:userId", (req,res) => {
 
-      let user = User.findOne({email: req.params.email}).then( user => {
+
+     
+      let user = User.findById(req.params.userId).then( user => {
+
         if (user){
-            User.deleteOne({email: req.params.email}, (err, obj) => {
+            User.deleteOne({_id: req.params.userId}, (err, obj) => {
                 if (err){
                     res.status(400).json(err);
                   } else{
-                      res.json({email: req.params.email})
+                      res.json({id: req.params.userId})
                   }
               })
           }else{
@@ -99,7 +101,13 @@ router.delete("/:email", (req,res) => {
 
 
 router.get('/', (req, res) => {
-    User.find({}, (err, users) => {
+    User.find({}, {
+        firstName: 1,
+        lastName: 1,
+        username: 1,
+        email: 1,
+        id: 1
+    }, (err, users) => {
         res.json(users)
     })
 })

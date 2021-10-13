@@ -36,7 +36,6 @@ app.use("/api/users", users);
 app.use("/api/events", events);
 
 
-
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server is runnin on port ${port}`));

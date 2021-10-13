@@ -35,13 +35,15 @@ export const fetchUser = userId => dispatch => (
     dispatch(receiveErrors(err.response.data));
 }));
 
+// export const fetchAttendingUsers = eventId
+
 export const updateUser = user => dispatch => {
   // debugger
   return UserApiUtil.updateUser(user).then(user => dispatch(receiveUser(user))).catch(err => {
     dispatch(receiveErrors(err.response.data));
 })};
 
-export const deleteUser = email => dispatch => (
-  UserApiUtil.deleteUser(email).then(() => dispatch(removeUser(email))).catch(err => {
+export const deleteUser = userId => dispatch => (
+  UserApiUtil.deleteUser(userId).then(() => dispatch(removeUser(userId))).catch(err => {
     dispatch(receiveErrors(err.response.data));
 }));

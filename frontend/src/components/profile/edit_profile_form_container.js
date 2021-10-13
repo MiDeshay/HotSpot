@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateUser: user => dispatch(updateUser(user)),
-  fetchUser: email => dispatch(fetchUser(email))
+  fetchUser: userId => dispatch(fetchUser(userId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfileForm);

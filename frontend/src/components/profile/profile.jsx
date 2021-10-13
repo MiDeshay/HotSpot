@@ -8,12 +8,11 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    // console.log(this.props.user.email)
-    this.props.fetchUser(this.props.currentUser.email);
+    this.props.fetchUser(this.props.currentUser.id);
   }
 
   render() {
-    let { user } = this.props;
+    let { user, currentUser } = this.props;
     if (!user) {return null};
     let { firstName, lastName, username, email } = user;
     return (
@@ -25,7 +24,7 @@ class Profile extends React.Component {
         <br/>
         Email: {email}
         <br/>
-        {Boolean(this.props.currentUser.id === user.id) ? <Link to="/profile/edit"><button>Edit Profile</button></Link> : null}
+        {Boolean(currentUser.id === user.id) ? <Link to={`/profile/${currentUser.id}/edit`}><button className="button">Edit Profile</button></Link> : null}
       </div>
     )
   }

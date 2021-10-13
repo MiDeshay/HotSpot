@@ -41,7 +41,7 @@ export const signup = user => dispatch => {
         const decoded = jwt_decode(token);
         dispatch(receiveCurrentUser(decoded));
     // ADD USER TO THE STATE
-        dispatch(receiveUser(decoded));
+        // dispatch(receiveUser(decoded));
 
        return dispatch(receiveUserSignIn());
     }, err => {
