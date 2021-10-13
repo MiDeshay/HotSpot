@@ -9,9 +9,9 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchUser: email => dispatch(fetchUser(email)),
+  fetchUser: userId => dispatch(fetchUser(userId)),
   updateUser: user => dispatch(updateUser(user)),
-  deleteUser: email => dispatch(deleteUser(email))
+  deleteUser: userId => dispatch(deleteUser(userId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
