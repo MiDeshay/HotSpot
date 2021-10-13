@@ -5,7 +5,7 @@ export const fetchUsers = () => {
 };
 
 export const fetchUser = (userId) => {
-  return axios.get(`/api/users/${userId}`, userId);
+  return axios.get(`/api/users/${userId}`);
 };
 
 // create handled in session_api_util.js

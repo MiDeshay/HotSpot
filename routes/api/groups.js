@@ -14,7 +14,7 @@ router.get("/test", (req, res) => res.json({ msg: "This is the groups route" }))
 
 router.post('/create', (req, res) => {
   const { errors, isValid } = validateGroupInput(req.body);
-
+  console.log(req);
   if (!isValid) {
     return res.status(400).json(errors);
   }
@@ -50,15 +50,19 @@ router.post('/create', (req, res) => {
 
 
 router.get('/:groupName', (req, res) => {
-  req.body.description = "dummy description"; // to use the same validator
-  const { errors, isValid } = validateGroupInput(req.body);
+  // req.body.description = "dummy description"; // to use the same validator
+  // const { errors, isValid } = validateGroupInput(req.body);
 
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
+  // if (!isValid) {
+  //   return res.status(400).json(errors);
+  // }
+  console.log(req.params.groupName)
 
-  Group.findOne({name: req.body.name})
+  Group.findOne({name: req.params.groupName})
   .then(group => {
+    if (!group) {
+      return res.status(404).json("Group not found");
+    }
     res.json({group});
   })
 });
@@ -73,25 +77,26 @@ router.get('/', (req, res) => {
 })
 
 
-router.delete('/:groupId', (req, res) => {
+router.delete('/:groupId/:ownerId', (req, res) => {
+  console.log(req);
   const errors = {};
-  Group.findById(req.body.groupId)
+  Group.findById(req.params.groupId)
   .then(group => {
-    if (!group || group.id !== req.body.groupId) {
+    if (!group || group.id !== req.params.groupId) {
       errors.group = 'Failed to find group';
       return res.status(400).json(errors);
     } else {
-      User.findById(req.body.userId)
+      User.findById(req.params.ownerId)
       .then(user => {
         if (!user || user.id !== group.ownerId) {
           errors.owner = 'You are not the group owner';
           return res.status(400).json(errors);
         } else {
-          Group.findByIdAndDelete(req.body.groupId, err => {
+          Group.findByIdAndDelete(req.params.groupId, err => {
             if (err) {
               return res.status(400).json(err);
             } else {
-              return res.json({id: req.body.groupId});
+              return res.json({id: req.params.groupId});
             }
           })
         }
