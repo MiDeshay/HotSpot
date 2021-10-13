@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 class UserSearch extends React.Component {
   constructor(props) {
@@ -39,7 +41,7 @@ class UserSearch extends React.Component {
       <div>
         <input type="text" value={searchTerm} onChange={this.updateInput('searchTerm')} placeholder="Search Users" />
         <ul>
-        {!isSearching ? null : Object.values(users).map((user, i) => this.filter(user) ? <div key={i}>{user.username}</div>: null)}
+        {!isSearching ? null : Object.values(users).map((user, i) => this.filter(user) ? <Link to={`/profile/${user.id}`}><div key={i}>{user.username}</div></Link>: null)}
         </ul>
       </div>
     )
