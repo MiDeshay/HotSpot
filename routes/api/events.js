@@ -11,8 +11,8 @@ const validateEventInput = require("../../validation/event")
 //adds the email to an events list of attendee emails
 //throws an error if the event doesn't exist or email is already on the attendee email list
 //returns the event with its attendees information
-router.patch("/join_event/:pinId", (req, res) => {
-    Event.findOne({pinId: req.params.pinId}).then(event => {
+router.patch("/join_event/:eventId", (req, res) => {
+    Event.findById(req.params.eventId).then(event => {
         if (!event){
             return res.status(404).json("Event not found"); 
         }else{ 
@@ -21,7 +21,7 @@ router.patch("/join_event/:pinId", (req, res) => {
                     if(event.attendeesEmail.includes(user.email)){
                         res.status(404).json("You are already registered for this event.");  
                     }else{
-                        Event.findOneAndUpdate({pinId: req.params.pinId}, 
+                        Event.findByIdAndUpdate(req.params.eventId, 
                             {$push: {attendeesEmail: req.body.email}}, 
                             {new: true}, (error, event) => {
                                 User.findOne({email: event.hostEmail}).then(host=> {
@@ -92,8 +92,8 @@ router.patch("/join_event/:pinId", (req, res) => {
 //removes the email from an events list of attendee emails
 //throws an error if the event doesn't exist or email is already not on the attendee email list
 //returns the event with its updated attendees information
-router.patch("/decline_event/:pinId", (req, res) => {
-    Event.findOne({pinId: req.params.pinId}).then(event => {
+router.patch("/decline_event/:eventId", (req, res) => {
+    Event.findById(req.params.eventId).then(event => {
         if (!event){
             return res.status(404).json("Event not found"); 
         } else {
@@ -102,7 +102,7 @@ router.patch("/decline_event/:pinId", (req, res) => {
                     if(!event.attendeesEmail.includes(user.email)){
                         res.status(404).json("You are already unregistered for the event");  
                     }else{
-                        Event.findOneAndUpdate({pinId: req.params.pinId}, 
+                        Event.findByIdAndUpdate(req.params.eventId, 
                             {$pull: {attendeesEmail: req.body.email}}, 
                             {new: true}, (error, event) => {
                                 User.findOne({email: event.hostEmail}).then(host=> {
@@ -239,7 +239,7 @@ router.post("/create_event", (req, res) => {
 //throws errors if new event is longer than [400] characters
 
 //returns the updated event with host info and attendees info if there are any
-router.patch("/:pinId", (req, res) => {
+router.patch("/:eventId", (req, res) => {
     
     const {errors, isValid} = validateEventInput(req.body)
     
@@ -247,7 +247,7 @@ router.patch("/:pinId", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    Event.findOne({pinId: req.params.pinId}).then( event => {
+    Event.findById(req.params.eventId).then( event => {
         if(event){
             
             Event.findOneAndUpdate({title: event.title}, {
@@ -324,15 +324,15 @@ router.patch("/:pinId", (req, res) => {
 
 //deletes and event based on its id
 //throws and error if the event does not exist
-router.delete("/delete/:pinId", (req, res) => {
+router.delete("/delete/:eventId", (req, res) => {
 
-    Event.findOne({pinId: req.params.pinId}).then(event => {
+    Event.findByIdAndDelete(req.params.eventId).then(event => {
         if(event){
-            Event.deleteOne({pinId: req.params.pinId}, (err, obj) => {
+            Event.deleteOne(req.params.eventId, (err, obj) => {
                 if (err){
                     res.status(400).json(err);
                   } else{
-                      res.json({pinId: req.params.pinId})
+                      res.json({id: req.params.eventId})
                   }  
             })
         }else{ 
@@ -356,8 +356,8 @@ router.get('/', (req, res) => {
 //throws and error if the event does not exist or the events host does not exist
 //if there are attendees, returns the host's info and each attendees info
 //if there are no attendees, returns only the hosts info
-router.get("/:pinId", (req, res) => {
-    Event.findOne({pinId: req.params.pinId}).then(event => {
+router.get("/:eventId", (req, res) => {
+    Event.findById(req.params.eventId).then(event => {
         if(!event){
             return res.status(404).json("Event not found"); 
         }
