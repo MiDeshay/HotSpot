@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loader } from "@googlemaps/js-api-loader"
 import PinsContainer from '../pins/pins_container';
-import { mapsKey } from '../../config/mapsAPI'
+import { mapsKey } from '../../config/keys'
 
 
 

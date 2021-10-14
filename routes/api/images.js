@@ -4,7 +4,7 @@ const deleteImage = require("../../services/delete_image");
 const getImageUrl = require("../../services/get_image");
 
 const aws = require('aws-sdk');
-const config = require('../../config/aws_access')
+const config = require('../../config/keys')
 const params = {
     Bucket: "hotspot-dev"
 }

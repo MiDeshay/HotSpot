@@ -1,5 +1,5 @@
 const aws = require('aws-sdk');
-const config = require('../config/aws_access')
+const config = require('../config/keys')
 const getImageUrl = require("./get_image")
 
 aws.config.update({
