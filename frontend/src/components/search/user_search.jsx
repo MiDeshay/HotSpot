@@ -41,7 +41,7 @@ class UserSearch extends React.Component {
       <div>
         <input type="text" value={searchTerm} onChange={this.updateInput('searchTerm')} placeholder="Search Users" />
         <ul>
-        {!isSearching ? null : Object.values(users).map((user, i) => this.filter(user) ? <Link to={`/profile/${user.id}`}><div key={i}>{user.username}</div></Link>: null)}
+        {!isSearching ? null : Object.values(users).map((user, i) => this.filter(user) ? <Link to={`/profile/${user.id}`} key={`user-${i}`}><div>{user.username}</div></Link>: null)}
         </ul>
       </div>
     )

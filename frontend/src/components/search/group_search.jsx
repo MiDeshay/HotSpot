@@ -33,6 +33,12 @@ class GroupSearch extends React.Component {
     return false;
   }
 
+  handleLink(groupId) {
+    return (e) => {
+      this.props.uiGroupShow(groupId);
+    }
+  }
+
   render() {
     let { searchTerm } = this.state;
     let { groups } = this.props;
@@ -41,7 +47,7 @@ class GroupSearch extends React.Component {
       <div>
         <input type="text" value={searchTerm} onChange={this.updateInput('searchTerm')} placeholder="Search Groups" />
         <ul>
-        {!isSearching ? null : Object.values(groups).map((group, i) => this.filter(group) ? <Link to={`/group/${group.name}`}><div key={i}>{group.name}</div></Link>: null)}
+        {!isSearching ? null : Object.values(groups).map((group, i) => this.filter(group) ? <Link to={`/group/${group.name}`} onClick={this.handleLink(group.id)}><div key={`group-${i}`}>{group.name}</div></Link>: null)}
         </ul>
       </div>
     )

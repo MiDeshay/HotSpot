@@ -4,6 +4,7 @@ export const RECEIVE_GROUPS = "RECEIVE_GROUPS";
 export const RECEIVE_GROUP = "RECEIVE_GROUP";
 export const REMOVE_GROUP = "REMOVE_GROUP";
 export const RECEIVE_GROUP_ERRORS = "RECEIVE_GROUP_ERRORS";
+export const UI_GROUP_SHOW = "UI_GROUP_SHOW";
 
 const receiveGroups = groups => ({
   type: RECEIVE_GROUPS,
@@ -23,6 +24,11 @@ const removeGroup = groupId => ({
 export const receiveErrors = errors => ({
   type: RECEIVE_GROUP_ERRORS,
   errors
+})
+
+export const uiGroupShow = groupId => ({
+  type: UI_GROUP_SHOW,
+  groupId
 })
 
 export const fetchGroups = () => dispatch => {
