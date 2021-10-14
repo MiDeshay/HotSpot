@@ -24,6 +24,12 @@ const UserSchema = new Schema({
       type: String,
       required: true
    },
+   profilePictureKey: {
+      type: String
+   },
+   backgroundPictureKey: {
+      type: String
+   }
 }, {
    timesteamps:true
 })
