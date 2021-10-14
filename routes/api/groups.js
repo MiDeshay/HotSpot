@@ -40,7 +40,7 @@ router.post('/create', (req, res) => {
             events: []
           });
           newGroup.save().then(group => {
-            res.json({group});
+            res.json(group);
           });
         }
       }).catch(err => res.send(err));
@@ -63,7 +63,7 @@ router.get('/:groupName', (req, res) => {
     if (!group) {
       return res.status(404).json("Group not found");
     }
-    res.json({group});
+    res.json(group);
   })
 });
 
@@ -71,8 +71,8 @@ router.get('/', (req, res) => {
   Group.find({}, {
     name: 1,
     id: 1
-  }, (err, Groups) => {
-      res.json(Groups)
+  }, (err, groups) => {
+      res.json(groups)
   })
 })
 
@@ -96,7 +96,7 @@ router.delete('/:groupId/:ownerId', (req, res) => {
             if (err) {
               return res.status(400).json(err);
             } else {
-              return res.json({id: req.params.groupId});
+              return res.json(req.params.groupId);
             }
           })
         }
@@ -134,7 +134,7 @@ router.patch('/members', (req, res) => {
           res.status(400).json(error);
         } else {
           group = Object.assign(group, {members});
-          res.json({group});
+          res.json(group);
         }
       })
     }
@@ -169,7 +169,7 @@ router.patch('/events', (req, res) => {
           res.status(400).json(error);
         } else {
           group = Object.assign(group, {events});
-          res.json({group});
+          res.json(group);
         }
       })
     }

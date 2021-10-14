@@ -9,6 +9,7 @@ import SignupFormContainer from './session/signup_form_container';
 import HomeContainer from './home/home_container';
 import ProfileContainer from './profile/profile_container';
 import EditProfileFormContainer from './profile/edit_profile_form_container';
+import GroupShowContainer from './group/group_show_container';
 
 const App = () => (
   <div className="app">
@@ -18,6 +19,7 @@ const App = () => (
       <AuthRoute exact path="/login" component={LoginFormContainer} />
       <ProtectedRoute exact path={`/profile/:userId`} component={ProfileContainer} />
       <ProtectedRoute exact path="/profile/:userId/edit" component={EditProfileFormContainer} />
+      <ProtectedRoute exact path="/group/:groupName" component={GroupShowContainer} />
       <ProtectedRoute exact path="/" component={MainPage} />
       <Route exact path="/home" component={HomeContainer} />
     </Switch>
