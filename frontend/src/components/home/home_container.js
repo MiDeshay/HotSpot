@@ -1,11 +1,17 @@
 import home from './home';
 import { connect } from 'react-redux';
+import { getEvents, createEvent } from '../../actions/event_actions';
+import { openModal } from '../../actions/modal_actions';
+
 const mapStateToProps = state => ({
-   //currentUser: state.session.currentUser
+   user: state.entities.users[state.session.user.id],
+   events: state.entities.events,
 })
 
 const mapDispatchToProps = dispatch => ({
-   //getUserLikes: (currentUserId) => dispatch(getUserLikes(currentUserId))
+   getEvents: () => dispatch(getEvents()),
+   createEvent: (eventForm) => dispatch(createEvent(eventForm)),
+   openModal: () => dispatch(openModal("createEvent")),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(home);
