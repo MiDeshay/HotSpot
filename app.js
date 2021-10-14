@@ -8,6 +8,8 @@ const events = require("./routes/api/events");
 const groups = require("./routes/api/groups");
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const fileRoutes = require('./routes/api/images')
+
 
 const app = express();
 
@@ -30,7 +32,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/users", users);
 app.use("/api/events", events);
-app.use("/api/images", fileRoutes); 
+app.use("/api/images", fileRoutes);
 app.use("/api/groups", groups);
 
 app.use(passport.initialize());
