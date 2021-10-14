@@ -1,6 +1,7 @@
 import React from 'react';
-import { Loader } from "@googlemaps/js-api-loader"
-import { mapsKey } from '../../config/mapsAPI'
+import { Loader } from "@googlemaps/js-api-loader";
+import { mapsKey } from '../../config/mapsAPI';
+import Modal from '../modals/modal';
 
 export default class Home extends React.Component{
    constructor(props){
@@ -12,8 +13,12 @@ export default class Home extends React.Component{
       this.pins = [];
       this.markers = [];
       this.infoWindow = null;
+      this.mousePos = {
+         lat: 0,
+         lng: 0,
+      };
 
-      // Google Maps API loader uses state to determine map options.
+      // Google Maps API loader uses the current component's React state to determine map options.
       this.loader = null;
 
       this.state = {
@@ -21,16 +26,16 @@ export default class Home extends React.Component{
             lat: 0,
             lng: 0
          },
-         zoom: 11, // Hard coded default zoom value, free free to change
-         pins: this.pins
+         zoom: 12, // Hard coded default zoom value, free free to change
+         pins: this.pins // These pins are only used for debugging
       }
       
       // Get google from the window
       this.google = window.google;
 
-      // Only redraw pins if different from previous set 
-      //this.prevEvents = this.props.events;
+      // Only draw event markers on initial load and when added. All subsequent markers will be placed when a new marker is instantiated.
       this.eventsLoaded = false;
+      this.prevEvents = this.props.events;
 
       // Bindings 
       this.drop = this.drop.bind(this);
@@ -41,6 +46,7 @@ export default class Home extends React.Component{
       this.placeDebugPins = this.placeDebugPins.bind(this);
    }
 
+   // Google maps loader
    componentDidMount(){
       this.loader = new Loader({
          apiKey: mapsKey,
@@ -69,10 +75,10 @@ export default class Home extends React.Component{
    }
 
    componentDidUpdate() {
-      if (Object.keys(this.props.events).length !== 0 && !this.eventsLoaded){
+      if (this.prevEvents !== this.props.events){
          this.drop(); 
          this.eventsLoaded = true;
-         //this.prevEvents = Object.assign({}, this.props.events);
+         this.prevEvents = Object.assign({}, this.props.events);
       }
    }
 
@@ -93,8 +99,8 @@ export default class Home extends React.Component{
       }
    }
 
+   // Add random Pins around your location for debugging
    placeDebugPins(pos){
-      // Add random Pins around your location for debugging
       let sign = -1;
       for (let i = 0; i < 5; i++){
          let lat = pos.coords.latitude + (Math.random() * 0.2 * sign);
@@ -110,32 +116,14 @@ export default class Home extends React.Component{
    // Place a marker at cursor position
    addEvent(){
       this.map.addListener("click", (mapsMouseEvent) => {
-         // const pin = {
-         //    pinId: 1,
-         //    address: "No",
-         //    city: "Somewhere",
-         //    hostEmail: "foobar@gmail.com",
-         //    title: "McDonald",
-         //    description: "A McBurger all you can eat festival",
-         //    mapLat: mapsMouseEvent.latLng.lat(),
-         //    mapLng: mapsMouseEvent.latLng.lng(),
-         //    startDate: "10/15/2022",
-         //    endDate: "10/20/2022",
-         // }
-         // this.props.createEvent(pin);
-         // pin.location = {
-         //    lat: mapsMouseEvent.latLng.lat(),
-         //    lng: mapsMouseEvent.latLng.lng(),
-         // }
-         // this.addMarkerWithTimeout(pin)
+         this.mousePos.lat = mapsMouseEvent.latLng.lat();
+         this.mousePos.lng = mapsMouseEvent.latLng.lng();
          this.props.openModal();
       });
    }
 
    drop(){
-      this.clearMarkers();
-
-      // This for block is only used to show debug pins on the map. Will show nothing if this.pins is empty
+      // This block is only used to show debug pins on the map. Will show nothing if this.pins is empty
       for (let i = 0; i < this.pins.length; i++) {
          this.pins[i].title = "Debug";
          this.addMarkerWithTimeout(this.pins[i], i * 20);
@@ -144,13 +132,15 @@ export default class Home extends React.Component{
       const events = this.props.events;
       let i = 0;
       for (let event in events) {
-         const pin = events[event];
-         pin.location = {
-            lat: parseFloat(events[event].mapLat.$numberDecimal),
-            lng: parseFloat(events[event].mapLng.$numberDecimal)
+         if (!this.prevEvents[event]){
+            const pin = events[event];
+            pin.location = {
+               lat: parseFloat(events[event].mapLat.$numberDecimal),
+               lng: parseFloat(events[event].mapLng.$numberDecimal)
+            }
+            this.addMarkerWithTimeout(pin, i*20);
+            i++;
          }
-         this.addMarkerWithTimeout(pin, i*20);
-         i++;
       }
    }
 
@@ -187,8 +177,9 @@ export default class Home extends React.Component{
 
    render(){
       return (
+         
          <div id='map' style={{ height: '100vh', width: '100%' }} >
-
+            <Modal pos={this.mousePos}/>
          </div>
       )
    }

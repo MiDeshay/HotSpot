@@ -5,9 +5,8 @@ import { createEvent } from "../../actions/event_actions";
 
 const mapStateToProps = state => ({
    events: state.entities.events,
-   currentUser: state.session.user,
-   errors: state.errors.events,
-   user: state.entities.users[state.session.user.id],
+   currentUser: state.entities.users[state.session.user.id],
+   errors: state.errors.event,
 })
 
 const mapDispatchToProps = dispatch => ({

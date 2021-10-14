@@ -9,11 +9,10 @@ import SignupFormContainer from './session/signup_form_container';
 import HomeContainer from './home/home_container';
 import ProfileContainer from './profile/profile_container';
 import EditProfileFormContainer from './profile/edit_profile_form_container';
-import Modal from './modals/modal'
+
 const App = () => (
   <div className="app">
     <NavBarContainer />
-    <Modal/>
     <Switch>
       <AuthRoute exact path="/register" component={SignupFormContainer} />
       <AuthRoute exact path="/login" component={LoginFormContainer} />

@@ -23,15 +23,13 @@ const receiveErrors = errors => ({
 // Thunk actions
 export const getEvents = () => dispatch => (
    getEventsApi()
-      .then
-         (events => dispatch(receiveEvents(events.data)),
-         (errs => dispatch(receiveErrors(errs)))
-      )
+      .then(events => dispatch(receiveEvents(events.data)))
+      .catch(errs => dispatch(receiveErrors(errs.response.data)))
+      
 )
 
 export const createEvent = (eventForm) => dispatch => (
    createEventsApi(eventForm)
-      .then
-         (event => dispatch(receiveEvent(event.data))),
-         (errs => dispatch(receiveErrors(errs)))
+      .then(event => dispatch(receiveEvent(event.data)))
+      .catch(errs => dispatch(receiveErrors(errs.response.data)))
 )

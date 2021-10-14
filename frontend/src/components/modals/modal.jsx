@@ -3,7 +3,10 @@ import { closeModal } from '../../actions/modal_actions';
 import { connect } from 'react-redux';
 import CreateEventContainer from '../events/create_event_container';
 
-function Modal({modal, closeModal}) {
+function Modal(props) {
+   let modal = props.modal;
+   let closeModal = props.closeModal;
+
    if (!modal) {
       return null;
    }
@@ -12,7 +15,7 @@ function Modal({modal, closeModal}) {
    
    switch (modal) {
       case "createEvent": 
-         component = <CreateEventContainer />; 
+         component = <CreateEventContainer pos={props.pos}/>; 
          break;
       default:
          return null;
