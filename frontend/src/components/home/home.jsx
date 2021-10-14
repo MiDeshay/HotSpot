@@ -110,31 +110,25 @@ export default class Home extends React.Component{
    // Place a marker at cursor position
    addEvent(){
       this.map.addListener("click", (mapsMouseEvent) => {
-         // let pin = {
-         //    location :{
-         //       lat: mapsMouseEvent.latLng.lat(),
-         //       lng: mapsMouseEvent.latLng.lng(),
-         //    }
+         // const pin = {
+         //    pinId: 1,
+         //    address: "No",
+         //    city: "Somewhere",
+         //    hostEmail: "foobar@gmail.com",
+         //    title: "McDonald",
+         //    description: "A McBurger all you can eat festival",
+         //    mapLat: mapsMouseEvent.latLng.lat(),
+         //    mapLng: mapsMouseEvent.latLng.lng(),
+         //    startDate: "10/15/2022",
+         //    endDate: "10/20/2022",
          // }
-         // this.addMarkerWithTimeout(pin, 1);
-         const pin = {
-            pinId: 1,
-            address: "No",
-            city: "Somewhere",
-            hostEmail: "foobar@gmail.com",
-            title: "McDonald",
-            description: "A McBurger all you can eat festival",
-            mapLat: mapsMouseEvent.latLng.lat(),
-            mapLng: mapsMouseEvent.latLng.lng(),
-            startDate: "10/15/2022",
-            endDate: "10/20/2022",
-         }
-         this.props.createEvent(pin);
-         pin.location = {
-            lat: mapsMouseEvent.latLng.lat(),
-            lng: mapsMouseEvent.latLng.lng(),
-         }
-         this.addMarkerWithTimeout(pin)
+         // this.props.createEvent(pin);
+         // pin.location = {
+         //    lat: mapsMouseEvent.latLng.lat(),
+         //    lng: mapsMouseEvent.latLng.lng(),
+         // }
+         // this.addMarkerWithTimeout(pin)
+         this.props.openModal();
       });
    }
 
