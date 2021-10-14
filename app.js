@@ -9,6 +9,8 @@ const events = require("./routes/api/events");
 const groups = require("./routes/api/groups");
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const fileRoutes = require('./routes/api/images')
+
 
 const app = express();
 
@@ -29,12 +31,21 @@ mongoose
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
+<<<<<<< HEAD
 // Express routes
+=======
+
+
+>>>>>>> 25c29770503675088090a57ece60d6f6f50eec04
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/users", users);
 app.use("/api/events", events);
+<<<<<<< HEAD
 
+=======
+app.use("/api/images", fileRoutes);
+>>>>>>> 25c29770503675088090a57ece60d6f6f50eec04
 app.use("/api/groups", groups);
 
 

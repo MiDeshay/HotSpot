@@ -1,5 +1,5 @@
 const aws = require('aws-sdk');
-const config = require('../config/aws_access')
+const config = require('../config/keys')
 
 
 aws.config.update({
