@@ -105,6 +105,7 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
 
 
 router.get("/:userId", (req, res) => {
+    console.log(req);
 
      User.findById(req.params.userId).then( user => {
 

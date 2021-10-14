@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 
-class UserSearch extends React.Component {
+class GroupSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +12,7 @@ class UserSearch extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchUsers();
+    this.props.fetchGroups();
   }
 
   updateInput(field) {
@@ -23,29 +23,35 @@ class UserSearch extends React.Component {
     }
   }
 
-  filter(user) {
+  filter(group) {
     let { searchTerm } = this.state;
     if (searchTerm === "") {
       return true;
-    } else if (user.username.toLowerCase().includes(searchTerm.toLowerCase())) {
+    } else if (group.name.toLowerCase().includes(searchTerm.toLowerCase())) {
       return true
     }
     return false;
   }
 
+  handleLink(groupId) {
+    return (e) => {
+      this.props.uiGroupShow(groupId);
+    }
+  }
+
   render() {
     let { searchTerm } = this.state;
-    let { users } = this.props;
+    let { groups } = this.props;
     let isSearching = Boolean(searchTerm !== "");
     return (
       <div>
-        <input type="text" value={searchTerm} onChange={this.updateInput('searchTerm')} placeholder="Search Users" />
+        <input type="text" value={searchTerm} onChange={this.updateInput('searchTerm')} placeholder="Search Groups" />
         <ul>
-        {!isSearching ? null : Object.values(users).map((user, i) => this.filter(user) ? <Link to={`/profile/${user.id}`} key={`user-${i}`}><div>{user.username}</div></Link>: null)}
+        {!isSearching ? null : Object.values(groups).map((group, i) => this.filter(group) ? <Link to={`/group/${group.name}`} onClick={this.handleLink(group.id)}><div key={`group-${i}`}>{group.name}</div></Link>: null)}
         </ul>
       </div>
     )
   }
 }
 
-export default UserSearch;
+export default GroupSearch;
