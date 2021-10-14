@@ -2,6 +2,7 @@ node_modules/
 package-lock.json
 
 /config/keys_dev.js
+/config/aws_access.js
 /frontend/node_modules
 
 package-lock.json

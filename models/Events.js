@@ -46,7 +46,11 @@ const EventSchema = new Schema({
     }, 
     mapLng: {
         type: mongoose.Types.Decimal128
-    }
+    }, 
+    coverPictureKey:{
+        type: String
+    },
+    eventPicturesKeys: [String],
 },  {
     timestamps: true
 }
