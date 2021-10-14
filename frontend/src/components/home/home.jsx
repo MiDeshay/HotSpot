@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loader } from "@googlemaps/js-api-loader";
-import { mapsKey } from '../../config/mapsAPI';
+import { mapsKey } from '../../config/keys';
 import Modal from '../modals/modal';
 
 export default class Home extends React.Component{
