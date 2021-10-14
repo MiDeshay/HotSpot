@@ -8,7 +8,7 @@ import { mapsKey } from '../../config/mapsAPI'
 
 export default class Home extends React.Component{
    constructor(props){
-      super(props)
+      super(props) 
 
       // Animations for pin dropping.
       this.map = null;
