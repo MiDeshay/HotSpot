@@ -2,7 +2,6 @@ import React from 'react';
 import { Loader } from "@googlemaps/js-api-loader";
 import { mapsKey } from '../../config/keys';
 import Modal from '../modals/modal';
-
 export default class Home extends React.Component{
    constructor(props){
       super(props)
@@ -44,6 +43,7 @@ export default class Home extends React.Component{
       this.clearMarkers = this.clearMarkers.bind(this);
       this.addEvent = this.addEvent.bind(this);
       this.placeDebugPins = this.placeDebugPins.bind(this);
+      this.initMarkerWindow = this.initMarkerWindow.bind(this);
    }
 
    // Google maps loader
@@ -67,6 +67,8 @@ export default class Home extends React.Component{
             this.props.getEvents();
             // Init event handlers
             this.addEvent();
+
+            
          })
          .catch(e => {
             // Do error handling
@@ -153,30 +155,55 @@ export default class Home extends React.Component{
             label: pin.title[0],
          })
          marker.eventDetails = pin;
-
-         marker.addListener("click", () => {
-            this.infoWindow.setContent(marker.eventDetails.description);
-            this.infoWindow.open({
-               anchor: marker,
-               map: this.map,
-               shouldFocus: false,
-             });
-         })
-
+         this.initMarkerWindow(marker);
          this.markers.push(marker);
       }, timeout);
    }
 
+   // Initialize a maps marker with html and event listeners.
+   initMarkerWindow(marker) {
+      marker.addListener("click", () => {
+         this.infoWindow.setContent(
+            `<div class='info-window'> `+
+               `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
+               `<p class='event-text'>${marker.eventDetails.description}</p>` + 
+               `<p class='event-text'>${marker.eventDetails.address}</p>` +
+               `<p class='event-text'>${marker.eventDetails.city}</p>` +
+               `<p class='event-text'>${marker.eventDetails.startDate}</p>` +
+               `<p class='event-text'>${marker.eventDetails.endDate}</p>` +
+         
+               (marker.eventDetails.hostEmail !== this.props.user.email ? "" : 
+                  `<div class='event-buttons'> ` +
+                     `<button id='event-edit'>Edit</button>` +
+                     `<button id='event-delete'>Delete</button>`  +
+                  `</div>` 
+               ) +
+            '</div>'
+         );
+         // Event handlers for buttons in info window.
+         this.google.maps.event.addListener(this.infoWindow, "domready", () => {
+            let deleteButton = document.getElementById('event-delete'); 
+            if (deleteButton) deleteButton.onclick=this.clearMarkers;
+         });
+
+         this.infoWindow.open({
+            anchor: marker,
+            map: this.map,
+            shouldFocus: false,
+          });
+      })
+   }
+
    clearMarkers() {
+      console.log("Yo")
       for (let i = 0; i < this.markers.length; i++) {
-        this.markers[i].setMap(null);
+      this.markers[i].setMap(null);
       }
       this.markers = [];
    }
 
    render(){
       return (
-         
          <div id='map' style={{ height: '100vh', width: '100%' }} >
             <Modal pos={this.mousePos}/>
          </div>
