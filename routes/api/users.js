@@ -44,7 +44,8 @@ router.patch('/change_profile_picture/:userId', (req, res) => {
                                 username: user.username,
                                 email: user.email,
                                 profilePictureKey: user.profilePictureKey, 
-                                backgroundPictureKey: user.backgroundPictureKey
+                                backgroundPictureKey: user.backgroundPictureKey,
+                                groupsJoined: user.groupsJoined
                             })
                         }
                     })
@@ -81,7 +82,8 @@ router.patch('/change_background_picture/:userId', (req, res) => {
                                 username: user.username,
                                 email: user.email,
                                 profilePictureKey: user.profilePictureKey,
-                                backgroundPictureKey: user.backgroundPictureKey
+                                backgroundPictureKey: user.backgroundPictureKey,
+                                groupsJoined: user.groupsJoined
                             })
                         }
                     })
@@ -99,7 +101,8 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
       firstName: req.user.firstName,
       lastName: req.user.lastName,
       username: req.user.username,
-      email: req.user.email
+      email: req.user.email,
+      groupsJoined: req.user.groupsJoined
     });
   })
 
@@ -118,7 +121,8 @@ router.get("/:userId", (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             username: user.username,
-            email: user.email
+            email: user.email,
+            groupsJoined: user.groupsJoined
             })
 
      })
@@ -149,7 +153,8 @@ router.patch("/:userId", (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                groupsJoined: user.groupsJoined
             })
         }
     } )
@@ -190,7 +195,8 @@ router.get('/', (req, res) => {
         email: 1,
         id: 1,
         profilePictureKey: 1,
-        backgroundPictureKey: 1
+        backgroundPictureKey: 1,
+        groupsJoined: 1
     }, (err, users) => {
         res.json(users)
     })
@@ -227,7 +233,7 @@ router.post('/register', (req, res) => {
                     newUser.password = hash;
                     newUser.save()
                     .then(user => {
-                        const payload = { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName };
+                        const payload = { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, groupsJoined: user.groupsJoined };
 
                         jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
                             res.json({
@@ -264,9 +270,9 @@ router.post('/login', (req, res) =>{
         bcrypt.compare(password, user.password)
             .then(isMatch => {
                 if (isMatch) {
-                    const payload = {id: user.id, firstName: user.firstName, lastName: user.lastName};
+                    const payload = {id: user.id, firstName: user.firstName, lastName: user.lastName, groupsJoined: user.groupsJoined};
 
-                    jwt.sign(
+                    jwt.sign( 
                         payload,
                         keys.secretOrKey, {expiresIn: 3600},
                         (err, token) => {
@@ -286,4 +292,4 @@ router.post('/login', (req, res) =>{
 
 
 
-module.exports = router;
+module.exports = router; 

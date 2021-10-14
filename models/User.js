@@ -29,7 +29,8 @@ const UserSchema = new Schema({
    },
    backgroundPictureKey: {
       type: String
-   }
+   },
+   groupsJoined: [String],
 }, {
    timesteamps:true
 })

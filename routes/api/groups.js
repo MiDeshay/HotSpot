@@ -118,25 +118,34 @@ router.patch('/members', (req, res) => {
       if (!isValid) {
         return res.status(400).json(errors);
       }
-      let { members } = group;
-      if (Boolean(req.body.isAdding === 'true')) {
-        members.push(req.body.memberId);
-      } else {
-        let memberIndex = members.indexOf(req.body.memberId);
-        if (memberIndex > -1) {
-          members.splice(memberIndex, 1);
+      ///new adding group to users groups
+        if (!user){
+          return res.status(400).json("User not found")
+        } else{
+          let { members } = group;
+          if (Boolean(req.body.isAdding === 'true')) {
+            members.push(req.body.memberId);
+          } else {
+            let memberIndex = members.indexOf(req.body.memberId);
+            if (memberIndex > -1) {
+              members.splice(memberIndex, 1);
+            }
+          }
+          Group.findByIdAndUpdate(req.body.groupId, {
+            members: members
+          }, {new: true}, (error, group) => {
+            if (error) {
+              res.status(400).json(error);
+            } else {
+              group = Object.assign(group, {members});
+              res.json(group);
+            }
+          })
         }
-      }
-      Group.findByIdAndUpdate(req.body.groupId, {
-        members: members
-      }, {new: true}, (error, group) => {
-        if (error) {
-          res.status(400).json(error);
-        } else {
-          group = Object.assign(group, {members});
-          res.json(group);
-        }
-      })
+
+
+
+      
     }
   })
 })
