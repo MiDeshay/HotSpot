@@ -4,8 +4,6 @@ import PinsContainer from '../pins/pins_container';
 import { mapsKey } from '../../config/mapsAPI'
 
 
-const mapsAPI = "AIzaSyAeXRSAV1JrrCUr6yNP1gXdVUN72cz5Egc";
-export default class Home extends React.Component{
 
 
 export default class Home extends React.Component{

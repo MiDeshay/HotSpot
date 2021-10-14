@@ -13,7 +13,85 @@ const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 const validateEditProfile = require('../../validation/profile');
 
-router.get("/test", (req, res) => res.json({ msg: "This is the users route" }));
+//images 
+const upload = require('../../services/post_image');
+const singleUpload = upload.single('image');
+const deleteImage = require("../../services/delete_image")
+
+
+router.patch('/change_profile_picture/:userId', (req, res) => {
+    User.findById(req.params.userId).then(user => {
+        if(!user){
+            return res.status(404).json("User not found");
+        } else {
+            singleUpload(req, res, (error) => {
+                if (error){
+                    return res.status(404).json(error);
+                }else{
+                    if(user.profilePictureKey){
+                        deleteImage(user.profilePictureKey)
+                    }
+                    User.findByIdAndUpdate( req.params.userId, {
+                        profilePictureKey: req.file.key
+                    }, {new: true}, (error, user) => {
+                        if (error){
+                            res.status(400).json(error);
+                        }else{
+                            res.json({
+                                id: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                username: user.username,
+                                email: user.email,
+                                profilePictureKey: user.profilePictureKey, 
+                                backgroundPictureKey: user.backgroundPictureKey
+                            })
+                        }
+                    })
+                }
+
+
+            })
+        }
+    })
+})
+
+router.patch('/change_background_picture/:userId', (req, res) => {
+    User.findById(req.params.userId).then(user => {
+        if(!user){
+            return res.status(404).json("User not found");
+        } else {
+            singleUpload(req, res, (error) => {
+                if (error){
+                    return res.status(404).json(error);
+                }else{
+                    if(user.backgroundPictureKey){
+                        deleteImage(user.backgroundPictureKey)
+                    }
+                    User.findByIdAndUpdate( req.params.userId, {
+                        backgroundPictureKey: req.file.key
+                    }, {new: true}, (error, user) => {
+                        if (error){
+                            res.status(400).json(error);
+                        }else{
+                            res.json({
+                                id: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                username: user.username,
+                                email: user.email,
+                                profilePictureKey: user.profilePictureKey,
+                                backgroundPictureKey: user.backgroundPictureKey
+                            })
+                        }
+                    })
+                }
+
+
+            })
+        }
+    })
+})
 
 router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
     res.json({
@@ -79,11 +157,15 @@ router.patch("/:userId", (req, res) => {
 
 router.delete("/:userId", (req,res) => {
 
-
-     
       let user = User.findById(req.params.userId).then( user => {
 
         if (user){
+            if(user.profilePictureKey){
+                deleteImage(user.profilePictureKey)
+            }
+            if(user.backgroundPictureKey){
+                deleteImage(user.backgroundPictureKey)
+            }
             User.deleteOne({_id: req.params.userId}, (err, obj) => {
                 if (err){
                     res.status(400).json(err);
@@ -106,13 +188,13 @@ router.get('/', (req, res) => {
         lastName: 1,
         username: 1,
         email: 1,
-        id: 1
+        id: 1,
+        profilePictureKey: 1,
+        backgroundPictureKey: 1
     }, (err, users) => {
         res.json(users)
     })
 })
-
-
 
 router.post('/register', (req, res) => {
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -201,5 +283,7 @@ router.post('/login', (req, res) =>{
     })
 
 })
+
+
 
 module.exports = router;
