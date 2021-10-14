@@ -1,5 +1,5 @@
-import home from './home'
-import { connect } from 'react-redux'
+import home from './home';
+import { connect } from 'react-redux';
 const mapStateToProps = state => ({
    //currentUser: state.session.currentUser
 })

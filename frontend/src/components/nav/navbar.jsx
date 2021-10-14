@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import UserSearchContainer from '../search/user_search_container';
+import GroupSearchContainer from '../search/group_search_container';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class NavBar extends React.Component {
                 <Link to={`/profile/${currentUser.id}`}>Profile</Link>
                 <button onClick={this.logoutUser} className="button">Logout</button>
                 <UserSearchContainer />
+                <GroupSearchContainer />
             </div>
         );
       } else {
