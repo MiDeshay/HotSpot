@@ -9,12 +9,12 @@ import { mapsKey } from '../../config/mapsAPI'
 export default class Home extends React.Component{
    constructor(props){
       super(props)
-      
+
       // Animations for pin dropping.
       this.map = null;
       this.pins = [];
       this.markers = [];
-      
+
       // Google Maps API loader uses state to determine map options.
       this.loader = null;
 
@@ -28,7 +28,7 @@ export default class Home extends React.Component{
       }
       this.google = window.google;
 
-      // Bindings 
+      // Bindings
       this.drop = this.drop.bind(this);
       this.getLocation = this.getLocation.bind(this);
       this.addMarkerWithTimeout = this.addMarkerWithTimeout.bind(this);
@@ -49,7 +49,7 @@ export default class Home extends React.Component{
             this.google = window.google;
             this.map = new google.maps.Map(document.getElementById("map"), this.state);
             this.getLocation();
-            
+
             // Init event handlers
             this.addEventPlaceMarker();
          })
@@ -57,8 +57,8 @@ export default class Home extends React.Component{
             // Do error handling
          });
       this.drop();
-      
-      
+
+
    }
 
    addEventPlaceMarker(){
@@ -104,9 +104,9 @@ export default class Home extends React.Component{
             this.setState({
                pins: this.pins
             })
-            
+
          });
-      } else { 
+      } else {
          // Improve error messages later
       }
    }
@@ -141,8 +141,8 @@ export default class Home extends React.Component{
    render(){
       return (
          <div id='map' style={{ height: '100vh', width: '100%' }} >
-      
+
          </div>
-      )  
+      )
    }
 }

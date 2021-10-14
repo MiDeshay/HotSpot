@@ -17,21 +17,6 @@ aws.config.update({
 
 const s3 = new aws.S3({signatureVersion: 'v4'})
 
-// const uploadImage = (imageKey) => {
-//     singleUpload(req, res, function(err) {
-//         if (err){
-//             return {error: err}
-//         }
-//         return {'imgKey': imageKey}
-//     })
-// }
-
-
-// const deleteImage = (imageKey) => {
-//     deleteImage(req.body.key) 
-//     res.json({imgKey: req.body.key}) 
-// }
-    
 
 router.get('/get-all-images', (req,res) => {
     const allImages = {}

@@ -148,8 +148,7 @@ router.patch("/:userId", (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 username: user.username,
-                email: user.email,
-                message: "hello"
+                email: user.email
             })
         }
     } )
