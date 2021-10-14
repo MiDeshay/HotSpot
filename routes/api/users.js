@@ -55,7 +55,7 @@ router.patch('/change_profile_picture/:userId', (req, res) => {
         }
     })
 })
-
+ 
 router.patch('/change_background_picture/:userId', (req, res) => {
     User.findById(req.params.userId).then(user => {
         if(!user){
