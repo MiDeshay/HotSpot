@@ -13,10 +13,6 @@ export default class CreateEvent extends React.Component {
          description: "",
          mapLat: this.props.pos.lat,
          mapLng: this.props.pos.lng,
-         location: {
-            lat: this.props.pos.lat,
-            lng: this.props.pos.lng,
-         },
          startDate: "",
          endDate: "",     
       }

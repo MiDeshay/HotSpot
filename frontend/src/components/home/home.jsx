@@ -26,7 +26,7 @@ export default class Home extends React.Component{
             lat: 0,
             lng: 0
          },
-         zoom: 12, // Hard coded default zoom value, free free to change
+         zoom: 11, // Hard coded default zoom value, free free to change. Lower number less zoom.
          pins: this.pins // These pins are only used for debugging
       }
       
@@ -134,28 +134,20 @@ export default class Home extends React.Component{
       for (let event in events) {
          if (!this.prevEvents[event]){
             const pin = events[event];
-            pin.location = {
-               lat: parseFloat(events[event].mapLat.$numberDecimal),
-               lng: parseFloat(events[event].mapLng.$numberDecimal)
-            }
             this.addMarkerWithTimeout(pin, i*20);
             i++;
          }
       }
    }
 
-   clearMarkers() {
-      for (let i = 0; i < this.markers.length; i++) {
-        this.markers[i].setMap(null);
-      }
-      this.markers = [];
-   }
-
    // Spawns markers on the map with a delayed animation inbetween.
    addMarkerWithTimeout(pin, timeout) {
       window.setTimeout(() => {
          const marker = new this.google.maps.Marker({
-            position: pin.location,
+            position: {
+               lat: parseFloat(pin.mapLat.$numberDecimal),
+               lng: parseFloat(pin.mapLng.$numberDecimal),
+            },
             map: this.map,
             animation: this.google.maps.Animation.DROP,
             label: pin.title[0],
@@ -173,6 +165,13 @@ export default class Home extends React.Component{
 
          this.markers.push(marker);
       }, timeout);
+   }
+
+   clearMarkers() {
+      for (let i = 0; i < this.markers.length; i++) {
+        this.markers[i].setMap(null);
+      }
+      this.markers = [];
    }
 
    render(){
