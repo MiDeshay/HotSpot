@@ -19,9 +19,9 @@ const receiveGroup = group => ({
   group
 });
 
-const removeGroup = groupId => ({
+const removeGroup = group => ({
   type: REMOVE_GROUP,
-  groupId
+  group
 });
 
 const groupAddMember = group => ({
@@ -66,7 +66,7 @@ export const createGroup = payload => dispatch => {
 })};
 
 export const updateGroup = group => dispatch => {
-  GroupApiUtil.updateGroup(group).then(group => dispatch(receiveGroup(group))).catch(err => {
+  GroupApiUtil.updateGroup(group).then(group => dispatch(receiveGroup(group))).catch(err => { // Need to fix, this actually adds a new group to the current state.
     dispatch(receiveErrors(err.response.data));
 })};
 

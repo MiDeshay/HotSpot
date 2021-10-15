@@ -87,7 +87,9 @@ router.delete('/:groupId/:ownerId', (req, res) => {
             if (err) {
               return res.status(400).json(err);
             } else {
-              return res.json(group);
+               Event.deleteMany({group: group._id})
+               .then( () => res.json(group))
+               .catch( err => res.status(400).json(err))
             }
           })
         }

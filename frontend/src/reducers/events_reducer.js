@@ -13,12 +13,6 @@ const eventsReducer = (state = {}, action) => {
       case RECEIVE_EVENT: 
          newState[action.event._id] = action.event;
          return newState;
-
-      case REMOVE_GROUP:
-         action.group.data.events.map(eventId => {
-            delete newState[eventId]
-         })
-         return newState
       
       case CLEAR_EVENTS: 
          return {};
