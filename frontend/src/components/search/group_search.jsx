@@ -9,6 +9,7 @@ class GroupSearch extends React.Component {
       searchTerm: ""
     }
     this.filter = this.filter.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -39,15 +40,21 @@ class GroupSearch extends React.Component {
     }
   }
 
+  handleClick(e) {
+      this.props.uiGroupSearchActive(!this.props.isActive);
+  }
+
   render() {
     let { searchTerm } = this.state;
     let { groups } = this.props;
-    let isSearching = Boolean(searchTerm !== "");
+    // let isSearching = Boolean(searchTerm !== "");
+    let isSearching = this.props.isActive;
     return (
       <div>
-        <input type="text" value={searchTerm} onChange={this.updateInput('searchTerm')} placeholder="Search Groups" />
-        <ul>
-        {!isSearching ? null : Object.values(groups).map((group, i) => this.filter(group) ? <Link to={`/group/${group.name}`} onClick={this.handleLink(group.id)}><div key={`group-${i}`}>{group.name}</div></Link>: null)}
+        <input type="text" value={searchTerm} onClick={this.handleClick} onChange={this.updateInput('searchTerm')} placeholder="Search Groups" />
+        <ul className="drop-down-list">
+          {!isSearching || searchTerm !== "" ? null : <li key="group-create" className="drop-down-item link"><Link to={'/groups/create'}>Create a group</Link></li>}
+          {!isSearching ? null : Object.values(groups).map((group, i) => this.filter(group) ? <li key={`group-${i}`} className="drop-down-item"><Link to={`/groups/${group.name}`} onClick={this.handleLink(group.id)}><div>{group.name}</div></Link></li> : null)}
         </ul>
       </div>
     )

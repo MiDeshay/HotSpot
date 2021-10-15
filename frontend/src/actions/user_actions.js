@@ -4,6 +4,7 @@ export const RECEIVE_USERS = "RECEIVE_USERS";
 export const RECEIVE_USER = "RECEIVE_USER";
 export const REMOVE_USER = "REMOVE_USER";
 export const RECEIVE_USER_ERRORS = "RECEIVE_USER_ERRORS";
+export const UI_USER_SEARCH_ISACTIVE = "UI_USER_SEARCH_ISACTIVE";
 
 const receiveUsers = users => ({
   type: RECEIVE_USERS,
@@ -24,6 +25,11 @@ export const receiveErrors = errors => ({
   type: RECEIVE_USER_ERRORS,
   errors
 });
+
+export const uiUserSearchActive = isActive => ({
+  type: UI_USER_SEARCH_ISACTIVE,
+  isActive
+})
 
 export const fetchUsers = () => dispatch => (
   UserApiUtil.fetchUsers().then(users => dispatch(receiveUsers(users))).catch(err => {

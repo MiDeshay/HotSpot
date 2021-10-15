@@ -8,12 +8,16 @@ export const fetchGroup = name => {
   return axios.get(`/api/groups/${name}`);
 };
 
-export const deleteGroup = payload => {
-  return axios.delete(`/api/groups/${payload.groupId}/${payload.ownerId}`);
-};
-
 export const createGroup = payload => {
   return axios.post('/api/groups/create', payload);
+};
+
+export const updateGroup = group => {
+  return axios.patch(`/api/groups/${group.id}/update`, group);
+};
+
+export const deleteGroup = payload => {
+  return axios.delete(`/api/groups/${payload.groupId}/${payload.ownerId}`);
 };
 
 export const updateGroupMembers = payload => {

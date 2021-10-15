@@ -9,6 +9,7 @@ class UserSearch extends React.Component {
       searchTerm: ""
     }
     this.filter = this.filter.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -33,15 +34,20 @@ class UserSearch extends React.Component {
     return false;
   }
 
+  handleClick(e) {
+    this.props.uiUserSearchActive(!this.props.isActive);
+}
+
   render() {
     let { searchTerm } = this.state;
     let { users } = this.props;
-    let isSearching = Boolean(searchTerm !== "");
+    // let isSearching = Boolean(searchTerm !== "");
+    let isSearching = this.props.isActive;
     return (
       <div>
-        <input type="text" value={searchTerm} onChange={this.updateInput('searchTerm')} placeholder="Search Users" />
-        <ul>
-        {!isSearching ? null : Object.values(users).map((user, i) => this.filter(user) ? <Link to={`/profile/${user.id}`} key={`user-${i}`}><div>{user.username}</div></Link>: null)}
+        <input type="text" value={searchTerm} onClick={this.handleClick} onChange={this.updateInput('searchTerm')} placeholder="Search Users" />
+        <ul className="drop-down-list">
+          {!isSearching ? null : Object.values(users).map((user, i) => this.filter(user) ? <li className="drop-down-item" key={`user-${i}`}><Link to={`/profile/${user.id}`} ><div>{user.username}</div></Link></li> : null)}
         </ul>
       </div>
     )

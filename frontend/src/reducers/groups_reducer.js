@@ -11,7 +11,7 @@ const groupsReducer = (state={}, action) => {
     case RECEIVE_GROUP:
       nextState = Object.assign({}, state);
       fixGroupId(action);
-      nextState[action.group.data.id] = action.group.data;
+      nextState[action.group.data.name] = action.group.data;
       return nextState;
     case REMOVE_GROUP:
       nextState = Object.assign({}, state);
@@ -41,7 +41,7 @@ const fixGroupIds = action => {
       delete currentgroup._id;
       delete action.groups.data[i];
     }
-    action.groups.data[group._id] = currentgroup;
+    action.groups.data[group.name] = currentgroup;
   })
   return action;
 }
