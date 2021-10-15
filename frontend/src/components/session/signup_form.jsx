@@ -63,11 +63,11 @@ class SignupForm extends React.Component {
     return (
       <div className="auth-form-container">
         <div className="modal-screen"></div>
-        <div className="auth-form-modal animated fadeInTop">
+        <div className="form-modal animated fadeInTop">
           <div className="auth-form-div">
             <form onSubmit={this.handleSubmit}>
               <div className="signup-form">
-                <div className="auth-form-header">
+                <div className="modal-header">
                   <h2>HotSpot</h2>
                   <div className="header-details">Join billions of users looking for a party</div>
                 </div>
@@ -77,7 +77,7 @@ class SignupForm extends React.Component {
                       value={this.state.email}
                       onChange={this.update('email')}
                       placeholder="JohnDoe@yahoo.com"
-                      className="auth-form-input"
+                      className="text-input"
                     /></label>
                   <br/>
                     <label>First Name
@@ -85,7 +85,7 @@ class SignupForm extends React.Component {
                       value={this.state.firstName}
                       onChange={this.update('firstName')}
                       placeholder="John"
-                      className="auth-form-input"
+                      className="text-input"
                     /></label>
                   <br/>
                     <label>Last Name
@@ -93,7 +93,7 @@ class SignupForm extends React.Component {
                       value={this.state.lastName}
                       onChange={this.update('lastName')}
                       placeholder="Doe"
-                      className="auth-form-input"
+                      className="text-input"
                     /></label>
                   <br/>
                     <label>Password
@@ -101,7 +101,7 @@ class SignupForm extends React.Component {
                       value={this.state.password}
                       onChange={this.update('password')}
                       placeholder="*****"
-                      className="auth-form-input"
+                      className="text-input"
                     /></label>
                   <br/>
                     <label>Confirm Password
@@ -109,12 +109,12 @@ class SignupForm extends React.Component {
                       value={this.state.password2}
                       onChange={this.update('password2')}
                       placeholder="*****"
-                      className="auth-form-input"
+                      className="text-input"
                     /></label>
                   <br/>
                   <input type="submit" value="Signup" className="button submit" />
                   {this.renderErrors()}
-                  <div className="auth-form-footer">
+                  <div className="modal-footer">
                     <div className="auth-other-message">Already have an account?</div> <Link to="/login"><div className="link">Login</div></Link>
                   </div>
                 </div>
