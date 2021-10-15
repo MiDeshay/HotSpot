@@ -1,0 +1,16 @@
+.form {
+  padding: 1rem;
+}
+
+.li-split {
+  display:flex;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+}
+
+.textarea-input {
+  resize: vertical;
+  padding: 0.5rem;
+  margin: 0.2rem 0rem;
+  width: calc(100% - 2rem);
+}

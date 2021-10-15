@@ -61,10 +61,10 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="auth-form-container">
-        <div className="auth-form-modal animated fadeInTop">
+        <div className="form-modal animated fadeInTop">
           <form onSubmit={this.handleSubmit}>
             <div className="auth-form-div">
-              <div className="auth-form-header">
+              <div className="modal-header">
                 <h2>Login</h2>
                 <div className="header-details">Welcome back to HotSpot</div>
               </div>
@@ -74,7 +74,7 @@ class LoginForm extends React.Component {
                   value={this.state.email}
                   onChange={this.update('email')}
                   placeholder="Email"
-                  className="auth-form-input"
+                  className="text-input"
                 /></label>
                 <br/>
                 <label>Password
@@ -82,12 +82,12 @@ class LoginForm extends React.Component {
                   value={this.state.password}
                   onChange={this.update('password')}
                   placeholder="Password"
-                  className="auth-form-input"
+                  className="text-input"
                 /></label>
                 <br/>
                 <input type="submit" value="Login" className="button submit" />
                 {this.renderErrors()}
-                <div className="auth-form-footer">
+                <div className="modal-footer">
                   <div className="auth-other-message">Don't have an account?</div> <div className="link"><Link to="/register">Signup</Link></div>
                 </div>
               </div>

@@ -10,12 +10,12 @@ function Modal(props) {
    if (!modal) {
       return null;
    }
-   
+
    let component;
-   
+
    switch (modal) {
-      case "createEvent": 
-         component = <CreateEventContainer pos={props.pos}/>; 
+      case "createEvent":
+         component = <CreateEventContainer pos={props.pos}/>;
          break;
       default:
          return null;
@@ -23,7 +23,7 @@ function Modal(props) {
 
    return (
       <div className="modal-background" onClick={closeModal}>
-         <div className="modal-child" onClick={e => e.stopPropagation()}>
+         <div onClick={e => e.stopPropagation()}>
          { component }
          </div>
       </div>
