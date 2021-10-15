@@ -15,8 +15,8 @@ const groupsReducer = (state={}, action) => {
       return nextState;
     case REMOVE_GROUP:
       nextState = Object.assign({}, state);
-      console.log(action.groupId.data);
-      delete nextState[action.groupId.data];
+      console.log(action.group.id);
+      delete nextState[action.group.data._id];
       console.log(nextState);
       return nextState;
     default: return state;

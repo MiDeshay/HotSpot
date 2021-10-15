@@ -87,7 +87,7 @@ router.delete('/:groupId/:ownerId', (req, res) => {
             if (err) {
               return res.status(400).json(err);
             } else {
-              return res.json(req.params.groupId);
+              return res.json(group);
             }
           })
         }

@@ -9,7 +9,7 @@ const Auth = ({ component: Component, path, loggedIn, exact }) => (
       <Component {...props} />
     ) : (
         // Redirect to the Index page if the user is authenticated
-      <Redirect to="/home" />
+      <Redirect to="/" />
     )
   )} />
 );
