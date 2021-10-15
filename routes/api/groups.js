@@ -14,7 +14,6 @@ router.get("/test", (req, res) => res.json({ msg: "This is the groups route" }))
 
 router.post('/create', (req, res) => {
   const { errors, isValid } = validateGroupInput(req.body);
-  console.log(req);
   if (!isValid) {
     return res.status(400).json(errors);
   }
@@ -50,14 +49,6 @@ router.post('/create', (req, res) => {
 
 
 router.get('/:groupName', (req, res) => {
-  // req.body.description = "dummy description"; // to use the same validator
-  // const { errors, isValid } = validateGroupInput(req.body);
-
-  // if (!isValid) {
-  //   return res.status(400).json(errors);
-  // }
-  console.log(req.params.groupName)
-
   Group.findOne({name: req.params.groupName})
   .then(group => {
     if (!group) {
@@ -78,7 +69,6 @@ router.get('/', (req, res) => {
 
 
 router.delete('/:groupId/:ownerId', (req, res) => {
-  console.log(req);
   const errors = {};
   Group.findById(req.params.groupId)
   .then(group => {
@@ -101,6 +91,24 @@ router.delete('/:groupId/:ownerId', (req, res) => {
           })
         }
       })
+    }
+  })
+})
+
+router.patch('/:groupName/update', (req, res) => {
+  const { errors, isValid } = validateGroupInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+  Group.findByIdAndUpdate(req.body.groupId, {
+    name: req.body.name,
+    description: req.body.description
+  }, {new: true}, (error, group) => {
+    if (error) {
+      return res.status(400).json(error);
+    } else {
+      // group = Object.assign(group, {name: req.body.name}, {description: req.body.description});
+      res.json(group);
     }
   })
 })
