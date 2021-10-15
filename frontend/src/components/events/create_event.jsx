@@ -15,7 +15,7 @@ export default class CreateEvent extends React.Component {
          mapLng: this.props.pos.lng,
          startDate: "",
          endDate: "",
-         groupName: "",     
+         groupId: "",     
       }
       this.prevEvents = this.props.events;
       this.submitted = false;
@@ -27,6 +27,7 @@ export default class CreateEvent extends React.Component {
 
    handleUpdate(input){
       return (e) => {
+         console.log(e.currentTarget.value);
          this.setState({
             [input]: e.currentTarget.value,
          })
@@ -97,10 +98,10 @@ export default class CreateEvent extends React.Component {
                
 
                <label htmlFor="groups">Choose a Group:</label>
-               <select id="groups" onChange={this.handleUpdate('groupName')}>
+               <select id="groups" onChange={this.handleUpdate('groupId')}>
                   <option value="" selected='true' disabled='disabled'>Select a group</option>
                   {this.groups.map( group => (
-                     <option value={group.name} >{group.name}</option>
+                     <option value={group.id} >{group.name}</option>
                   ))
                } 
                </select>

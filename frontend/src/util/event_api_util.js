@@ -7,3 +7,7 @@ export const getEventsApi = () => {
 export const createEventsApi = (eventForm) => (
    axios.post('/api/events/create_event', eventForm)
 )
+
+export const updateEventApi = (eventId, eventForm) => (
+   axios.patch(`/api/events/${eventId}`, eventForm)
+)

@@ -7,7 +7,7 @@ const groupsReducer = (state={}, action) => {
     case RECEIVE_GROUPS:
       fixGroupIds(action);
       nextState = Object.assign({}, state, action.groups.data);
-      return nextState;
+      return action.groups.data;
     case RECEIVE_GROUP: case GROUP_ADD_MEMBER: case CREATE_GROUP:
       nextState = Object.assign({}, state);
       fixGroupId(action);
