@@ -1,7 +1,8 @@
 .nav-bar-container {
   display: flex;
-  width: 100%;
+  width: calc(100% - 2rem);
   justify-content: space-between;
+  padding: 0.5rem 1rem;
 }
 
 .nav-bar-container > h1 {
@@ -11,4 +12,9 @@
 .nav-bar-links {
   display: flex;
   flex-direction: column;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
 }

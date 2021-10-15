@@ -36,6 +36,9 @@ class UserSearch extends React.Component {
 
   handleClick(e) {
     this.props.uiUserSearchActive(!this.props.isActive);
+    if (!this.props.isActive) {
+      this.props.uiGroupSearchActive(false);
+    }
 }
 
   render() {

@@ -21,11 +21,9 @@ class NavBar extends React.Component {
       if (this.props.loggedIn) {
         return (
             <div className="nav-bar-links protected-buttons">
-                <Link to={'/'}>Index</Link>
-                <Link to={`/profile/${currentUser.id}`}>Profile</Link>
-                <button onClick={this.logoutUser} className="button">Logout</button>
-                <UserSearchContainer />
-                <GroupSearchContainer />
+                <button onClick={this.logoutUser} className="button subtle">Logout</button>
+                <Link to={`/profile/${currentUser.id}`}><button className="button">Profile</button></Link>
+
             </div>
         );
       } else {
@@ -41,7 +39,9 @@ class NavBar extends React.Component {
   render() {
       return (
         <div className="nav-bar-container">
-            <h1>HotSpot</h1>
+            <Link to="/home"><h1 className="title">HotSpot</h1></Link>
+            <UserSearchContainer />
+            <GroupSearchContainer />
             { this.getLinks() }
         </div>
       );
