@@ -425,7 +425,7 @@ router.post("/create_event", (req, res) => {
     if (!isValid) {
         return res.status(400).json(errors);
     }
-
+    
     const newEvent = new Event({
         pinId: req.body.pinId,
         address: req.body.address, 
@@ -440,37 +440,17 @@ router.post("/create_event", (req, res) => {
 
     })
 
-    newEvent.save().then(event => {
-     User.findOne({email: event.hostEmail}).then(host=> {
-        if(!host){
-            return res.status(404).json("Host not found"); 
-        }
 
-        const hostInfo = {
-            id: host.id,
-            username: host.username,
-            email: host.email,
-            firstName: host.firstName,
-            lastName: host.lastName
-        }
-        res.json({
-            id: event.id,
-            pinId: event.pinId,
-            title: event.title,
-            city: event.city,
-            address: event.address,
-            description: event.description,
-            mapLat: event.mapLat,
-            mapLng: event.mapLng,
-            host: hostInfo,
-            startDate: event.startDate,
-            endDate: event.endDate,
-            eventPicturesKeys: null,
-            coverPictureKey: null   
-        })
-        
-    }).catch(err => res.send(err)); 
-     })
+    User.findOne({email: newEvent.hostEmail}).then(host=> {
+      if(!host){
+         return res.status(404).json("Host not found"); 
+      }
+      newEvent.host.push(host);
+
+      newEvent.save().then(event => {
+         res.json(event)
+      }).catch(err => res.send(err)); 
+   })
         
 })  
 
@@ -605,10 +585,16 @@ router.delete("/delete/:eventId", (req, res) => {
 //To save space, these events don't host info or attendee info
 //When a user selects a specific event, we can use a get :id request to get more info
 router.get('/', (req, res) => {
-    Event.find({}, (err, events) => {
-        res.json(events)
-    })
-  }) 
+   Event.find({}).populate('host').exec( (err, events) => {
+      //res.json(events)
+      let result = {}
+      Object.values(events).forEach( (event) => {
+         result[event._id] = event
+      })
+
+      return res.json(result);
+   })
+}) 
 
 
 //returns an event

@@ -162,6 +162,9 @@ export default class Home extends React.Component{
 
    // Initialize a maps marker with html and event listeners.
    initMarkerWindow(marker) {
+      // Temporary until events route is updated. ------------------------
+      if (!marker.eventDetails.hostEmail) marker.eventDetails.hostEmail = marker.eventDetails.host.email;
+      // -----------------------------------------------------------------
       marker.addListener("click", () => {
          this.infoWindow.setContent(
             `<div class='info-window'> `+
