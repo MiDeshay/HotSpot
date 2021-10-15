@@ -18,6 +18,7 @@ class GroupShow extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     console.log('i updated')
+    if (!this.props.group) return;
     if (prevProps.group && prevProps.group.id !== this.props.group.id) {
       this.props.fetchGroup(this.props.group.name);
     }
