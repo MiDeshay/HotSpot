@@ -436,11 +436,12 @@ router.post("/create_event", (req, res) => {
 
     })
 
-    newEvent.save().then(event => {
-     User.findOne({email: event.hostEmail}).then(host=> {
+    User.findOne({email: req.body.hostEmail}).then(host=> {
+        newEvent.save().then(event => {
         if(!host){
             return res.status(404).json("Host not found"); 
         }
+        newEvent.host.push(host)
 
         const hostInfo = {
             id: host.id,
@@ -457,6 +458,7 @@ router.post("/create_event", (req, res) => {
             description: event.description,
             mapLat: event.mapLat,
             mapLng: event.mapLng,
+            hostEmail: event.hostEmail,
             host: hostInfo,
             startDate: event.startDate,
             endDate: event.endDate,
@@ -597,8 +599,8 @@ router.delete("/delete/:eventId", (req, res) => {
 //To save space, these events don't host info or attendee info
 //When a user selects a specific event, we can use a get :id request to get more info
 router.get('/', (req, res) => {
-    Event.find({}, (err, events) => {
-        res.json(events)
+    Event.find({}).populate('host').exec((err, events) => {
+        res.json({events: events})
     })
   }) 
 

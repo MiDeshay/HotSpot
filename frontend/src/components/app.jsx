@@ -21,7 +21,7 @@ const App = () => (
       <ProtectedRoute exact path="/profile/:userId/edit" component={EditProfileFormContainer} />
       <ProtectedRoute exact path="/group/:groupName" component={GroupShowContainer} />
       <ProtectedRoute exact path="/" component={MainPage} />
-      <Route exact path="/home" component={HomeContainer} />
+      <ProtectedRoute exact path="/home" component={HomeContainer} />
     </Switch>
   </div>
 );
