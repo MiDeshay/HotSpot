@@ -59,12 +59,7 @@ router.get('/:groupName', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  Group.find({}, {
-    name: 1,
-    id: 1,
-    members: 1,
-    events: 1
-  }, (err, groups) => {
+  Group.find({}, (err, groups) => {
       res.json(groups)
   })
 })
