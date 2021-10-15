@@ -75,6 +75,8 @@ export default class Home extends React.Component{
             // Do error handling
          });
 
+         this.props.fetchUsers()
+
    }
 
    componentDidUpdate() {
