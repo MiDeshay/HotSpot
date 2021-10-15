@@ -1,4 +1,4 @@
-import {RECEIVE_EVENTS, RECEIVE_EVENT} from '../actions/event_actions'
+import {RECEIVE_EVENTS, RECEIVE_EVENT, CLEAR_EVENTS} from '../actions/event_actions'
 
 const eventsReducer = (state = {}, action) => {
    Object.freeze(state);
@@ -12,7 +12,9 @@ const eventsReducer = (state = {}, action) => {
       case RECEIVE_EVENT: 
          newState[action.event._id] = action.event;
          return newState;
-         
+      
+      case CLEAR_EVENTS: 
+         return {};
       default: return state; 
    }
 }

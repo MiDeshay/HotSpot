@@ -14,13 +14,15 @@ export default class CreateEvent extends React.Component {
          mapLat: this.props.pos.lat,
          mapLng: this.props.pos.lng,
          startDate: "",
-         endDate: "",     
+         endDate: "",
+         groupName: "",     
       }
       this.prevEvents = this.props.events;
       this.submitted = false;
       // Bindings
       this.handleUpdate = this.handleUpdate.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.groups = [];
    } 
 
    handleUpdate(input){
@@ -39,6 +41,14 @@ export default class CreateEvent extends React.Component {
 
    // Set min date for inputs
    componentDidMount(){
+      for (let name in this.props.groups){
+         let group = this.props.groups[name];
+         if (group.members.includes(this.props.currentUser.id)){
+            this.groups.push(group);
+         }
+      }
+
+
       let today = new Date();
       let dd = today.getDate();
       let mm = today.getMonth() + 1; 
@@ -85,6 +95,15 @@ export default class CreateEvent extends React.Component {
                <label htmlFor='event-end-date'>End Date </label>
                <input className='event-date' onChange={this.handleUpdate('endDate')}type='date' value={this.state.endDate} id='event-end-date'/>
                
+
+               <label htmlFor="groups">Choose a Group:</label>
+               <select id="groups" onChange={this.handleUpdate('groupName')}>
+                  <option value="" selected='true' disabled='disabled'>Select a group</option>
+                  {this.groups.map( group => (
+                     <option value={group.name} >{group.name}</option>
+                  ))
+               } 
+               </select>
                <div>
                   <button className='generic-button' onClick={this.props.closeModal}>Cancel</button>
                   <input type='submit' value="Create Event"/>

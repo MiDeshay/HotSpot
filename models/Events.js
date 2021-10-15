@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('./User');
+const Group = require('./Group');
 const EventSchema = new Schema({
     startDate: {
         type: String, 
@@ -33,7 +34,8 @@ const EventSchema = new Schema({
         type: String,
         required: true
     }, 
-    host: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    
+    group: {type: Schema.Types.ObjectId, ref: 'Group'},
 
     description: {
         type: String,

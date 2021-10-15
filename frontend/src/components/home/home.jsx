@@ -37,7 +37,7 @@ export default class Home extends React.Component{
       // Only draw event markers on initial load and when added. All subsequent markers will be placed when a new marker is instantiated.
       this.eventsLoaded = false;
       this.prevEvents = this.props.events;
-
+      this.prevUserState = this.props.user;
       // Bindings 
       this.drop = this.drop.bind(this);
       this.getLocation = this.getLocation.bind(this);
@@ -86,6 +86,10 @@ export default class Home extends React.Component{
       }
    }
 
+   componentWillUnmount(){
+      this.props.clearEvents();
+   }
+
    getLocation() {
       if (navigator.geolocation) {
          navigator.geolocation.getCurrentPosition( pos => {
@@ -132,36 +136,18 @@ export default class Home extends React.Component{
          this.pins[i].title = "Debug";
          this.addMarkerWithTimeout(this.pins[i], i * 20);
       }
-      Object.values(this.props.groups).map(group => {  
-         if(group.members.includes(this.props.user.id)){
-
-         const allEvents = this.props.events
-      
-           Object.values(allEvents).map(event => {
-            let i = 0;
-              if(group.events.includes(event._id)){
-               if (!this.prevEvents[event]){
-                  const pin = event;
-                  this.addMarkerWithTimeout(pin, i*20);
-                  i++;
-               }
-              }
-           })
-
-            // const events = this.props.events;
-            
-            // for (let event in events) {
-            //    let i = 0;
-            //    if (!this.prevEvents[event]){
-            //       const pin = events[event];
-            //       this.addMarkerWithTimeout(pin, i*20);
-            //       i++;
-            //    }
-            // }
+      const events = this.props.events;
+      for (let event in events) {
+         let i = 0;
+         let userGroups = this.props.user.groupsJoined;
+         // console.log("Event Id: " + events[event].group._id);
+         // console.log(userGroups)
+         if (!this.prevEvents[event] && userGroups.includes(events[event].group._id)){
+            const pin = events[event];
+            this.addMarkerWithTimeout(pin, i*20);
+            i++;
          }
-      })
-
-
+      }
    }
 
    // Spawns markers on the map with a delayed animation inbetween.
@@ -220,7 +206,6 @@ export default class Home extends React.Component{
    }
 
    clearMarkers() {
-      console.log("Yo")
       for (let i = 0; i < this.markers.length; i++) {
       this.markers[i].setMap(null);
       }

@@ -433,19 +433,21 @@ router.post("/create_event", (req, res) => {
         mapLng: req.body.mapLng,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
-
     })
-
+    
 
     User.findOne({email: newEvent.hostEmail}).then(host=> {
       if(!host){
          return res.status(404).json("Host not found"); 
       }
       newEvent.host.push(host);
-
-      newEvent.save().then(event => {
-         res.json(event)
-      }).catch(err => res.send(err)); 
+      Group.findOne({name: req.body.groupName}).then( group => {
+         newEvent.group = group;
+         newEvent.save().then(event => {
+            res.json(event);
+         }).catch(err => res.send(err)); 
+      }).catch(err => res.send(err));
+      
    })
         
 })  
@@ -578,13 +580,13 @@ router.delete("/delete/:eventId", (req, res) => {
 //To save space, these events don't host info or attendee info
 //When a user selects a specific event, we can use a get :id request to get more info
 router.get('/', (req, res) => {
-   Event.find({}).populate('host').exec( (err, events) => {
+   Event.find({}).populate('host').populate('group', 'name').exec( (err, events) => {
       //res.json(events)
       let result = {}
-      Object.values(events).forEach( (event) => {
-         result[event._id] = event
+      Object.values(events).forEach( (event, i) => {
+         result[event._id] = event;
       })
-
+      
       return res.json(result);
    })
 }) 
