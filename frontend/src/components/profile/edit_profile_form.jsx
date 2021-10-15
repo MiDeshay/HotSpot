@@ -46,7 +46,7 @@ class EditProfileForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors.length <= 0) {
-      this.props.history.push('/profile');
+      this.props.history.push(`/profile/${nextProps.user.id}`);
     }
 
     // Set or clear errors
@@ -105,7 +105,7 @@ class EditProfileForm extends React.Component {
             placeholder="JohnD"
             className="auth-form-input"
           /></label>
-          <button className="edit button">Save Changes</button> <Link to="/profile"><div className="button cancel">Cancel</div></Link>
+          <button className="edit button">Save Changes</button> <Link to={`/profile/${user.id}`}><div className="button cancel">Cancel</div></Link>
           {this.renderErrors()}
         </form>
       </div>

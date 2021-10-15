@@ -7,8 +7,8 @@ import Modal from '../modals/modal';
 export default class Home extends React.Component{
    constructor(props){
       super(props)
-      
-      // The map and collection of related objects/collection. Pins is only used for debugging. 
+
+      // The map and collection of related objects/collection. Pins is only used for debugging.
       // this.markers contains the collection of actual markers representing events.
       this.map = null;
       this.pins = [];
@@ -30,7 +30,7 @@ export default class Home extends React.Component{
          zoom: 11, // Hard coded default zoom value, free free to change. Lower number less zoom.
          pins: this.pins // These pins are only used for debugging
       }
-      
+
       // Get google from the window
       this.google = window.google;
 
@@ -38,7 +38,7 @@ export default class Home extends React.Component{
       this.eventsLoaded = false;
       this.prevEvents = this.props.events;
 
-      // Bindings 
+      // Bindings
       this.drop = this.drop.bind(this);
       this.getLocation = this.getLocation.bind(this);
       this.addMarkerWithTimeout = this.addMarkerWithTimeout.bind(this);
@@ -70,17 +70,17 @@ export default class Home extends React.Component{
             // Init event handlers
             this.addEvent();
 
-            
+
          })
          .catch(e => {
             // Do error handling
          });
-      
+
    }
 
    componentDidUpdate() {
       if (this.prevEvents !== this.props.events){
-         this.drop(); 
+         this.drop();
          this.eventsLoaded = true;
          this.prevEvents = Object.assign({}, this.props.events);
       }
@@ -132,11 +132,11 @@ export default class Home extends React.Component{
          this.pins[i].title = "Debug";
          this.addMarkerWithTimeout(this.pins[i], i * 20);
       }
-      Object.values(this.props.groups).map(group => {  
+      Object.values(this.props.groups).map(group => {
          if(group.members.includes(this.props.user.id)){
 
          const allEvents = this.props.events
-      
+
            Object.values(allEvents).map(event => {
             let i = 0;
               if(group.events.includes(event._id)){
@@ -149,7 +149,7 @@ export default class Home extends React.Component{
            })
 
             // const events = this.props.events;
-            
+
             // for (let event in events) {
             //    let i = 0;
             //    if (!this.prevEvents[event]){
@@ -188,23 +188,23 @@ export default class Home extends React.Component{
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
-               `<p class='event-text'>${marker.eventDetails.description}</p>` + 
+               `<p class='event-text'>${marker.eventDetails.description}</p>` +
                `<p class='event-text'>${marker.eventDetails.address}</p>` +
                `<p class='event-text'>${marker.eventDetails.city}</p>` +
                `<p class='event-text'>${marker.eventDetails.startDate}</p>` +
                `<p class='event-text'>${marker.eventDetails.endDate}</p>` +
-         
-               (marker.eventDetails.hostEmail !== this.props.user.email ? "" : 
+
+               (marker.eventDetails.hostEmail !== this.props.user.email ? "" :
                   `<div class='event-buttons'> ` +
                      `<button id='event-edit'>Edit</button>` +
                      `<button id='event-delete'>Delete</button>`  +
-                  `</div>` 
+                  `</div>`
                ) +
             '</div>'
          );
          // Event handlers for buttons in info window.
          this.google.maps.event.addListener(this.infoWindow, "domready", () => {
-            let deleteButton = document.getElementById('event-delete'); 
+            let deleteButton = document.getElementById('event-delete');
             if (deleteButton) deleteButton.onclick=this.clearMarkers;
          });
 
@@ -226,7 +226,7 @@ export default class Home extends React.Component{
 
    render(){
       return (
-         <div id='map' style={{ height: '100vh', width: '100%' }} >
+         <div id='map'>
             <Modal pos={this.mousePos}/>
          </div>
       )
