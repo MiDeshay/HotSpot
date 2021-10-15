@@ -599,7 +599,8 @@ router.delete("/delete/:eventId", (req, res) => {
 //To save space, these events don't host info or attendee info
 //When a user selects a specific event, we can use a get :id request to get more info
 router.get('/', (req, res) => {
-    Event.find({}).populate('host').exec((err, events) => {
+    
+    Event.find({}, (err, events) => {
         res.json({events: events})
     })
   }) 
