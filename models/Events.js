@@ -2,11 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('./User');
 const EventSchema = new Schema({
-    pinId: {
-        type: String,
-        required: true
-    },
-    
     startDate: {
         type: String, 
         required: true
@@ -31,6 +26,9 @@ const EventSchema = new Schema({
         type: String,
         required: true
     },
+    host: [
+        { type: Schema.Types.ObjectId, ref: 'User' }
+    ],
     hostEmail: {
         type: String,
         required: true

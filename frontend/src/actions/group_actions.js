@@ -5,6 +5,7 @@ export const RECEIVE_GROUP = "RECEIVE_GROUP";
 export const REMOVE_GROUP = "REMOVE_GROUP";
 export const RECEIVE_GROUP_ERRORS = "RECEIVE_GROUP_ERRORS";
 export const UI_GROUP_SHOW = "UI_GROUP_SHOW";
+export const UI_GROUP_SEARCH_ISACTIVE = "UI_GROUP_SEARCH_ISACTIVE";
 
 const receiveGroups = groups => ({
   type: RECEIVE_GROUPS,
@@ -31,6 +32,11 @@ export const uiGroupShow = groupId => ({
   groupId
 })
 
+export const uiGroupSearchActive = isActive => ({
+  type: UI_GROUP_SEARCH_ISACTIVE,
+  isActive
+})
+
 export const fetchGroups = () => dispatch => {
   GroupApiUtil.fetchGroups().then(groups => dispatch(receiveGroups(groups))).catch(err => {
     dispatch(receiveErrors(err.response.data));
@@ -44,6 +50,11 @@ export const fetchGroup = name => dispatch => {
 
 export const createGroup = payload => dispatch => {
   GroupApiUtil.createGroup(payload).then(group => dispatch(receiveGroup(group))).catch(err => {
+    dispatch(receiveErrors(err.response.data));
+})};
+
+export const updateGroup = group => dispatch => {
+  GroupApiUtil.updateGroup(group).then(group => dispatch(receiveGroup(group))).catch(err => {
     dispatch(receiveErrors(err.response.data));
 })};
 

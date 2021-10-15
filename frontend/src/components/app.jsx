@@ -10,6 +10,8 @@ import HomeContainer from './home/home_container';
 import ProfileContainer from './profile/profile_container';
 import EditProfileFormContainer from './profile/edit_profile_form_container';
 import GroupShowContainer from './group/group_show_container';
+import CreateGroupFormContainer from './group/group_form/create_group_form_container';
+import EditGroupFormContainer from './group/group_form/edit_group_form_container';
 
 const App = () => (
   <div className="app">
@@ -19,7 +21,9 @@ const App = () => (
       <AuthRoute exact path="/login" component={LoginFormContainer} />
       <ProtectedRoute exact path={`/profile/:userId`} component={ProfileContainer} />
       <ProtectedRoute exact path="/profile/:userId/edit" component={EditProfileFormContainer} />
-      <ProtectedRoute exact path="/group/:groupName" component={GroupShowContainer} />
+      <ProtectedRoute exact path="/groups/create" component={CreateGroupFormContainer} />
+      <ProtectedRoute exact path="/groups/:groupName" component={GroupShowContainer} />
+      <ProtectedRoute exact path="/groups/:groupName/edit" component={EditGroupFormContainer} />
       <ProtectedRoute exact path="/" component={MainPage} />
       <ProtectedRoute exact path="/home" component={HomeContainer} />
     </Switch>

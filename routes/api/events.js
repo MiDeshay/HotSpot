@@ -273,7 +273,6 @@ router.patch("/join_event/:eventId", (req, res) => {
                                         .then(attendees => {
                                             res.json({
                                                 id: event.id,
-                                                pinId: event.pinId,
                                                 city: event.city,
                                                 title: event.title,
                                                 address: event.address,
@@ -291,7 +290,6 @@ router.patch("/join_event/:eventId", (req, res) => {
                                     }else{
                                         res.json({
                                             id: event.id,
-                                            pinId: event.pinId,
                                             city: event.city,
                                             title: event.title,
                                             address: event.address,
@@ -358,7 +356,6 @@ router.patch("/decline_event/:eventId", (req, res) => {
                                         .then(attendees => {
                                             res.json({
                                                 id: event.id,
-                                                pinId: event.pinId,
                                                 city: event.city,
                                                 title: event.title,
                                                 address: event.address,
@@ -376,7 +373,6 @@ router.patch("/decline_event/:eventId", (req, res) => {
                                     }else{
                                         res.json({
                                             id: event.id,
-                                            pinId: event.pinId,
                                             city: event.city,
                                             title: event.title,
                                             address: event.address,
@@ -473,7 +469,6 @@ router.patch("/:eventId", (req, res) => {
         if(event){
             
             Event.findOneAndUpdate({title: event.title}, {
-                pinId: req.body.pinId,
                 address: req.body.address, 
                 city: req.body.city,
                 hostEmail: req.body.hostEmail,
@@ -507,7 +502,6 @@ router.patch("/:eventId", (req, res) => {
                             .then(attendees => {
                                 res.json({
                                     id: event.id,
-                                    pinId: event.pinId,
                                     city: event.city,
                                     title: event.title,
                                     address: event.address,
@@ -525,7 +519,6 @@ router.patch("/:eventId", (req, res) => {
                         }else{
                             res.json({
                                 id: event.id,
-                                pinId: event.pinId,
                                 city: event.city,
                                 title: event.title,
                                 address: event.address,
@@ -625,7 +618,6 @@ router.get("/:eventId", (req, res) => {
                 .then(attendees => {
                     res.json({ 
                         id: event.id,
-                        pinId: event.pinId,
                         title: event.title,
                         city: event.city,
                         address: event.address,
@@ -643,7 +635,6 @@ router.get("/:eventId", (req, res) => {
             }else{
                 res.json({
                     id: event.id,
-                    pinId: event.pinId,
                     title: event.title,
                     city: event.city,
                     address: event.address,
