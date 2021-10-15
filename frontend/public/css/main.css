@@ -10,13 +10,24 @@
   --color3dark: #303f16;
 }
 
+*, body {
+  font-family: 'Roboto', sans-serif;
+}
+
+
 body {
-  background-color: var(--color1);
+  background-image: linear-gradient(var(--color1light),var(--color1),var(--color1), var(--color1), var(--color1dark));
+  max-height: 100vw;
+}
+
+footer {
+  font-size: 0.8rem;
 }
 
 div#root {
   display: flex;
   justify-content: center;
+  height: 100vh;
 }
 
 div.app {
@@ -31,4 +42,39 @@ a:link {
 a:visited {
   text-decoration: none;
   color: inherit;
+}
+
+.button {
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.2rem;
+  padding: 0.2rem 1rem;
+}
+
+input[type=text], input[type=password] {
+  margin: 0.2rem;
+  padding: 0.5rem;
+  width: calc(100% - 2rem);
+  outline: none;
+}
+
+
+
+/* SCROLL BAR */
+/* width */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color2dark);
+  border-radius: 0.2rem;
 }

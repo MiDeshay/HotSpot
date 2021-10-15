@@ -41,7 +41,10 @@ class GroupSearch extends React.Component {
   }
 
   handleClick(e) {
-      this.props.uiGroupSearchActive(!this.props.isActive);
+    this.props.uiGroupSearchActive(!this.props.isActive);
+    if (!this.props.isActive) {
+      this.props.uiUserSearchActive(false);
+    }
   }
 
   render() {
