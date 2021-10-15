@@ -132,16 +132,36 @@ export default class Home extends React.Component{
          this.pins[i].title = "Debug";
          this.addMarkerWithTimeout(this.pins[i], i * 20);
       }
+      Object.values(this.props.groups).map(group => {  
+         if(group.members.includes(this.props.user.id)){
 
-      const events = this.props.events;
-      let i = 0;
-      for (let event in events) {
-         if (!this.prevEvents[event]){
-            const pin = events[event];
-            this.addMarkerWithTimeout(pin, i*20);
-            i++;
+         const allEvents = this.props.events
+      
+           Object.values(allEvents).map(event => {
+            let i = 0;
+              if(group.events.includes(event._id)){
+               if (!this.prevEvents[event]){
+                  const pin = event;
+                  this.addMarkerWithTimeout(pin, i*20);
+                  i++;
+               }
+              }
+           })
+
+            // const events = this.props.events;
+            
+            // for (let event in events) {
+            //    let i = 0;
+            //    if (!this.prevEvents[event]){
+            //       const pin = events[event];
+            //       this.addMarkerWithTimeout(pin, i*20);
+            //       i++;
+            //    }
+            // }
          }
-      }
+      })
+
+
    }
 
    // Spawns markers on the map with a delayed animation inbetween.
