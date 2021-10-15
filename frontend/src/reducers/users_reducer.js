@@ -1,4 +1,5 @@
 import { RECEIVE_USER, RECEIVE_USERS } from '../actions/user_actions';
+import { GROUP_ADD_MEMBER, CREATE_GROUP } from '../actions/group_actions'
 
 const userReducer = (state={}, action) => {
   Object.freeze(state);
@@ -20,6 +21,11 @@ const userReducer = (state={}, action) => {
       }
       return nextState;
 
+    case GROUP_ADD_MEMBER: case CREATE_GROUP:
+      nextState = Object.assign({}, state);
+      let members = action.group.data.members;
+      nextState[members[members.length - 1]].groupsJoined.push(action.group.data._id);
+      return nextState;
     default: return state;
   }
 }

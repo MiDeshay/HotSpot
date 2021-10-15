@@ -38,8 +38,12 @@ router.post('/create', (req, res) => {
             members: [user.id],
             events: []
           });
+
+
           newGroup.save().then(group => {
-            res.json(group);
+            user.groupsJoined.push(newGroup); 
+            user.save();
+            return res.json(group);
           });
         }
       }).catch(err => res.send(err));
@@ -111,49 +115,46 @@ router.patch('/:groupName/update', (req, res) => {
 })
 
 router.patch('/members', (req, res) => {
-  // res.json({ msg: "This is the groups add_member route" })
-  const errors = {};
-  Group.findById(req.body.groupId)
-  .then(group => {
-    if (!group) {
-      errors.owner = 'Failed to find group';
-      return res.status(400).json(errors);
-    } else {
-      const { errors, isValid } = validateGroupMembers({group, memberId: req.body.memberId, isAdding: Boolean(req.body.isAdding === 'true')});
-      if (!isValid) {
-        return res.status(400).json(errors);
-      }
-      ///new adding group to users groups
-        if (!user){
-          return res.status(400).json("User not found")
-        } else{
-          let { members } = group;
-          if (Boolean(req.body.isAdding === 'true')) {
-            members.push(req.body.memberId);
-          } else {
-            let memberIndex = members.indexOf(req.body.memberId);
-            if (memberIndex > -1) {
-              members.splice(memberIndex, 1);
-            }
-          }
-          Group.findByIdAndUpdate(req.body.groupId, {
-            members: members
-          }, {new: true}, (error, group) => {
-            if (error) {
-              res.status(400).json(error);
-            } else {
-              group = Object.assign(group, {members});
-              res.json(group);
-            }
-          })
-        }
-
-
-
-      
-    }
-  })
-})
+   // res.json({ msg: "This is the groups add_member route" })
+   const errors = {};
+   Group.findById(req.body.groupId)
+   .then(group => {
+     if (!group) {
+       errors.owner = 'Failed to find group';
+       return res.status(400).json(errors);
+     } else {
+       const { errors, isValid } = validateGroupMembers({group, memberId: req.body.memberId, isAdding: Boolean(req.body.isAdding === 'true')});
+       if (!isValid) {
+         return res.status(400).json(errors);
+       }
+       let { members } = group;
+       
+       if (Boolean(req.body.isAdding === 'true')) {
+         members.push(req.body.memberId);
+         User.findById(req.body.memberId).then( user => {
+            user.groupsJoined.push(group); 
+            user.save() // Fix later to handle error handling.
+         })
+            
+       } else {
+         let memberIndex = members.indexOf(req.body.memberId);
+         if (memberIndex > -1) {
+           members.splice(memberIndex, 1);
+         }
+       }
+       Group.findByIdAndUpdate(req.body.groupId, {
+         members: members
+       }, {new: true}, (error, group) => {
+         if (error) {
+           res.status(400).json(error);
+         } else {
+           group = Object.assign(group, {members});
+           res.json(group);
+         }
+       })
+     }
+   })
+ })
 
 router.patch('/events', (req, res) => {
   const errors = {};

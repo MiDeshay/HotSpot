@@ -1,6 +1,6 @@
 import home from './home';
 import { connect } from 'react-redux';
-import { getEvents, createEvent } from '../../actions/event_actions';
+import { getEvents, createEvent, clearEvents } from '../../actions/event_actions';
 import { openModal } from '../../actions/modal_actions';
 
 const mapStateToProps = state => ({
@@ -12,6 +12,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
    getEvents: () => dispatch(getEvents()),
    createEvent: (eventForm) => dispatch(createEvent(eventForm)),
+   clearEvents: () => dispatch(clearEvents()),
    openModal: () => dispatch(openModal("createEvent")),
 })
 

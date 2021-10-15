@@ -7,6 +7,7 @@ const mapStateToProps = state => ({
    events: state.entities.events,
    currentUser: state.entities.users[state.session.user.id],
    errors: state.errors.event,
+   groups: state.entities.groups,
 })
 
 const mapDispatchToProps = dispatch => ({

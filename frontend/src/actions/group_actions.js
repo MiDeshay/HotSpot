@@ -6,6 +6,8 @@ export const REMOVE_GROUP = "REMOVE_GROUP";
 export const RECEIVE_GROUP_ERRORS = "RECEIVE_GROUP_ERRORS";
 export const UI_GROUP_SHOW = "UI_GROUP_SHOW";
 export const UI_GROUP_SEARCH_ISACTIVE = "UI_GROUP_SEARCH_ISACTIVE";
+export const GROUP_ADD_MEMBER = "GROUP_ADD_MEMBER"
+export const CREATE_GROUP = "CREATE_GROUP"
 
 const receiveGroups = groups => ({
   type: RECEIVE_GROUPS,
@@ -21,6 +23,16 @@ const removeGroup = groupId => ({
   type: REMOVE_GROUP,
   groupId
 });
+
+const groupAddMember = group => ({
+   type: GROUP_ADD_MEMBER,
+  group
+})
+
+const groupCreate = group => ({
+   type: CREATE_GROUP,
+  group
+})
 
 export const receiveErrors = errors => ({
   type: RECEIVE_GROUP_ERRORS,
@@ -49,7 +61,7 @@ export const fetchGroup = name => dispatch => {
 })};
 
 export const createGroup = payload => dispatch => {
-  GroupApiUtil.createGroup(payload).then(group => dispatch(receiveGroup(group))).catch(err => {
+  GroupApiUtil.createGroup(payload).then(group => dispatch(groupCreate(group))).catch(err => {
     dispatch(receiveErrors(err.response.data));
 })};
 
@@ -59,7 +71,7 @@ export const updateGroup = group => dispatch => {
 })};
 
 export const updateGroupMembers = payload => dispatch => {
-  GroupApiUtil.updateGroupMembers(payload).then(group => dispatch(receiveGroup(group))).catch(err => {
+  GroupApiUtil.updateGroupMembers(payload).then(group => dispatch(groupAddMember(group))).catch(err => {
     dispatch(receiveErrors(err.response.data));
 })};
 

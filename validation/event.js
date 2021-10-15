@@ -12,7 +12,7 @@ module.exports = function validateEventInput(data) {
    data.title = validText(data.title) ? data.title : '';
    data.startDate = validText(data.startDate) ? data.startDate : '';
    data.endDate = validText(data.endDate) ? data.endDate : '';
-   
+   data.groupName = validText(data.groupName) ? data.groupName : '';
 
    if (!Validator.isLength(data.title, { min: 1, max: 150 })) {
       errors.title = 'Title must be between 1 and 60 characters';
@@ -40,6 +40,10 @@ module.exports = function validateEventInput(data) {
     if (Validator.isEmpty(data.endDate)) {
     errors.endDate = 'End Date is required';
     }
+
+    if (Validator.isEmpty(data.groupName)) {
+      errors.endDate = 'Please select a group';
+      }
 
 
    return {
