@@ -21,7 +21,7 @@ export default class CreateEvent extends React.Component {
       // Bindings
       this.handleUpdate = this.handleUpdate.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
-   }
+   } 
 
    handleUpdate(input){
       return (e) => {
