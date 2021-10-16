@@ -7,14 +7,17 @@ import { fetchUsers } from '../../actions/user_actions';
 const mapStateToProps = state => ({
    user: state.entities.users[state.session.user.id],
    events: state.entities.events,
-   groups: state.entities.groups
+   groups: state.entities.groups,
+   modal: state.ui.modal,
 })
 
 const mapDispatchToProps = dispatch => ({
    getEvents: () => dispatch(getEvents()),
    createEvent: (eventForm) => dispatch(createEvent(eventForm)),
    clearEvents: () => dispatch(clearEvents()),
-   openModal: () => dispatch(openModal("createEvent")),
+   openCreate: () => dispatch(openModal("createEvent")),
+   openUpdate: () => dispatch(openModal("updateEvent")),
+
    fetchUsers: () => dispatch(fetchUsers())
 })
 

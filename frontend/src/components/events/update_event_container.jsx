@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { closeModal } from "../../actions/modal_actions";
 import { updateEvent } from "../../actions/event_actions";
+import UpdateEvent from './update_event'
 
 const mapStateToProps = state => ({
    events: state.entities.events,
@@ -15,7 +16,3 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateEvent)
-
-class UpdateEvent extends React.Component{
-   
-}

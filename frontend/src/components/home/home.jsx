@@ -19,6 +19,8 @@ export default class Home extends React.Component{
          lng: 0,
       };
 
+      this.selectedEvent = {};
+
       // Google Maps API loader uses the current component's React state to determine map options.
       this.loader = null;
 
@@ -127,7 +129,7 @@ export default class Home extends React.Component{
       this.map.addListener("click", (mapsMouseEvent) => {
          this.mousePos.lat = mapsMouseEvent.latLng.lat();
          this.mousePos.lng = mapsMouseEvent.latLng.lng();
-         this.props.openModal();
+         this.props.openCreate();
       });
    }
 
@@ -141,8 +143,6 @@ export default class Home extends React.Component{
       for (let event in events) {
          let i = 0;
          let userGroups = this.props.user.groupsJoined;
-         // console.log("Event Id: " + events[event].group._id);
-         // console.log(userGroups)
          if (!this.prevEvents[event] && userGroups.includes(events[event].group._id)){
             const pin = events[event];
             this.addMarkerWithTimeout(pin, i*20);
@@ -171,9 +171,6 @@ export default class Home extends React.Component{
 
    // Initialize a maps marker with html and event listeners.
    initMarkerWindow(marker) {
-      // Temporary until events route is updated. ------------------------
-      if (!marker.eventDetails.hostEmail) marker.eventDetails.hostEmail = marker.eventDetails.host.email;
-      // -----------------------------------------------------------------
       marker.addListener("click", () => {
          this.infoWindow.setContent(
             `<div class='info-window'> `+
@@ -198,6 +195,13 @@ export default class Home extends React.Component{
          this.google.maps.event.addListener(this.infoWindow, "domready", () => {
             let deleteButton = document.getElementById('event-delete');
             if (deleteButton) deleteButton.onclick=this.clearMarkers;
+
+            let editButton = document.getElementById('event-edit');
+            if (editButton) editButton.onclick=() => {
+               this.selectedEvent = marker.eventDetails;
+               console.log(this.selectedEvent)
+               this.props.openUpdate();
+            }
          });
 
          this.infoWindow.open({
@@ -216,9 +220,10 @@ export default class Home extends React.Component{
    }
 
    render(){
+      let test = this.selectedEvent;
       return (
          <div id='map'>
-            <Modal pos={this.mousePos}/>
+            <Modal pos={this.mousePos} event={this.selectedEvent}/>
          </div>
       )
    }

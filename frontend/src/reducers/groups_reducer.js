@@ -6,7 +6,7 @@ const groupsReducer = (state={}, action) => {
   switch (action.type) {
     case RECEIVE_GROUPS:
       fixGroupIds(action);
-      nextState = Object.assign({}, state, action.groups.data);
+      //nextState = Object.assign({}, state, action.groups.data);
       return action.groups.data;
     case RECEIVE_GROUP: case GROUP_ADD_MEMBER: case CREATE_GROUP:
       nextState = Object.assign({}, state);
