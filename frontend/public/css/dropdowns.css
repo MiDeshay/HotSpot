@@ -18,3 +18,12 @@
 .drop-down-item:hover {
   background-color: var(--color3light);
 }
+
+.drop-down-input {
+  z-index: 15;
+}
+
+.none {
+  z-index: 9;
+  background-color: rgba(0, 0, 0, 0);
+}

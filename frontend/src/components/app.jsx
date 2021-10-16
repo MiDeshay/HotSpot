@@ -26,7 +26,7 @@ const App = () => (
       <ProtectedRoute exact path="/groups/:groupName" component={GroupShowContainer} />
       <ProtectedRoute exact path="/groups/:groupName/edit" component={EditGroupFormContainer} />
       <ProtectedRoute exact path="/home" component={HomeContainer} />
-      {/* <Route exact path="/links" component={LinksShow} /> */}
+      <Route exact path="/links" component={LinksShow} />
       <ProtectedRoute exact path="/" component={MainPage} />
     </Switch>
   </div>
