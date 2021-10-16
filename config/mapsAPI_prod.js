@@ -1,0 +1,1 @@
+export const mapsKey = process.env.MAPS_KEY

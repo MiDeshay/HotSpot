@@ -6,8 +6,9 @@ const mapStateToProps = (state, ownProps) => {
   console.log(ownProps);
   return ({
   isAuth: state.session.isAuthenticated,
-  currentUser: state.session.user,
-  user: state.entities.users[ownProps.match.params.userId]
+  currentUser: state.entities.users[state.session.user.id],
+  user: state.entities.users[ownProps.match.params.userId],
+  groups: state.entities.groups
 })};
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

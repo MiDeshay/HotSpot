@@ -46,33 +46,60 @@ class GroupShow extends React.Component {
       )
     } else {
       return (
-        <button className="button destroy" onClick={() => {deleteGroup({groupId: group.id, ownerId: currentUser.id})}}>Destroy</button>
+        <button className="button destroy" onClick={() => {deleteGroup({groupId: group.id, ownerId: currentUser.id})}}>Delete Group</button>
       )
     }
 
   }
 
   render() {
-    let { group, users } = this.props;
+    let { group, users, events } = this.props;
+    const allEvents = Object.values(events)
+    console.log(allEvents)
     if (!group || !group.members) return null;
     return (
       <div className="group-show-div">
-        Group Show
+         <div> {group.name}</div>
+        <div>{group.description} </div>
+
         <br/>
-        {group.name}
+        <Link to={`/profile/${group.ownerId}`}>
+          <div>Owner</div>
+          <div>{users[group.ownerId].firstName} {users[group.ownerId].lastName}</div>
+          <div>{users[group.ownerId].username} </div>
+          <div>{users[group.ownerId].email} </div>
+
+        </Link>
+
+        <br/>
+        <div>
+          <div>Members</div>
+          <ul>
+          {!users ? null : group.members.map(memberId => <Link to={`/profile/${memberId}`} key={memberId}>{users[memberId].username}</Link>)}
+          </ul>
+        </div>
+
+        <br/>
+        <div>
+          <div> Events</div>
+          <ul>
+            {allEvents.map((event, i) => 
+            <div key={i}>
+              <li><div>Title: </div> {event.title}</li>
+              <li><div>Description:</div> {event.description}</li>
+              <Link to={`/profile/${event.host[0]._id}`}>
+                <div>Host Info:</div>
+                <li> {event.host[0].firstName} {event.host[0].firstName} </li>
+                <li> {event.host[0].email} </li>
+          
+              </Link>
+              
+            </div>)}
+          </ul>
+        </div>
+        <br/>
+
         {this.renderEditButton()}{this.renderJoinButton()}
-        <br/>
-        {group.description}
-        <br/>
-        {users[group.ownerId].username}
-        <br/>
-        {group.id}
-        <br/>
-        Members
-        <br/>
-        <ul>
-        {!users ? null : group.members.map(memberId => <li key={memberId}>{users[memberId].username}</li>)}
-        </ul>
       </div>
     )
   }

@@ -5,6 +5,7 @@ import { fetchGroup, uiGroupShow, updateGroupMembers, deleteGroup } from "../../
 const mapStateToProps = (state, ownProps) => ({
   groups: state.entities.groups,
   group: state.entities.groups[ownProps.match.params.groupName],
+  events: state.entities.events,
   users: state.entities.users,
   groupId: state.ui.groups.id,
   currentUser: state.session.user,
