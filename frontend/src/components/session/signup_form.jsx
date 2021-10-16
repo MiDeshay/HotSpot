@@ -17,6 +17,7 @@ class SignupForm extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.clearedErrors = false;
+    this.screenClick = this.screenClick.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -59,10 +60,15 @@ class SignupForm extends React.Component {
     );
   }
 
+  screenClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   render() {
     return (
       <div className="auth-form-container">
-        <div className="modal-screen"></div>
+        <div className="modal-screen" onClick={this.screenClick}></div>
         <div className="form-modal animated fadeInTop">
           <div className="auth-form-div">
             <form onSubmit={this.handleSubmit}>

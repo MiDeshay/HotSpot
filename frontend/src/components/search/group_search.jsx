@@ -54,7 +54,8 @@ class GroupSearch extends React.Component {
     let isSearching = this.props.isActive;
     return (
       <div>
-        <input type="text" value={searchTerm} onClick={this.handleClick} onChange={this.updateInput('searchTerm')} placeholder="Search Groups" />
+        <div className={`${isSearching ? "modal-screen " : ""}none`} onClick={this.handleClick}/>
+        <input className="drop-down-input" type="text" value={searchTerm} onClick={this.handleClick} onChange={this.updateInput('searchTerm')} placeholder="Search Groups" />
         <ul className="drop-down-list">
           {!isSearching || searchTerm !== "" ? null : <li key="group-create" className="drop-down-item link"><Link to={'/groups/create'}>Create a group</Link></li>}
           {!isSearching ? null : Object.values(groups).map((group, i) => this.filter(group) ? <li key={`group-${i}`} className="drop-down-item"><Link to={`/groups/${group.name}`} onClick={this.handleLink(group.id)}><div>{group.name}</div></Link></li> : null)}

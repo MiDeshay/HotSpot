@@ -61,6 +61,7 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="auth-form-container">
+        <div className="modal-screen"></div>
         <div className="form-modal animated fadeInTop">
           <form onSubmit={this.handleSubmit}>
             <div className="auth-form-div">
