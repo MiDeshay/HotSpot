@@ -1,22 +1,11 @@
 import React from 'react';
 
-export default class CreateEvent extends React.Component {
+export default class UpdateEvent extends React.Component {
 
    constructor(props){
       super(props)
-      this.state = {
-         pinId: 1,
-         address: "",
-         city: "",
-         hostEmail: this.props.currentUser.email,
-         title: "",
-         description: "",
-         mapLat: this.props.pos.lat,
-         mapLng: this.props.pos.lng,
-         startDate: "",
-         endDate: "",
-         groupId: "",     
-      }
+      this.state = Object.assign({}, this.props.event, {groupId: this.props.event.group._id});
+      this.prevEvents = this.props.events;
       this.submitted = false;
       // Bindings
       this.handleUpdate = this.handleUpdate.bind(this);
@@ -34,7 +23,7 @@ export default class CreateEvent extends React.Component {
 
    handleSubmit(e){
       e.preventDefault();
-      this.props.createEvent(this.state);
+      this.props.updateEvent(this.state._id, this.state);
       this.submitted = true;
    }
 
@@ -46,7 +35,6 @@ export default class CreateEvent extends React.Component {
             this.groups.push(group);
          }
       }
-
 
       let today = new Date();
       let dd = today.getDate();
@@ -101,21 +89,11 @@ export default class CreateEvent extends React.Component {
                      <label htmlFor='event-end-date'>End Date </label>
                      <input className='event-date' onChange={this.handleUpdate('endDate')}type='date' value={this.state.endDate} id='event-end-date'/>
                   </li>
-                  <li className="li-split">
-
-                     <label htmlFor="groups">Choose a Group:</label>
-                     <select id="groups" onChange={this.handleUpdate('groupId')}>
-                        <option value="" selected='true' disabled='disabled'>Select a group</option>
-                        {this.groups.map( group => (
-                           <option value={group.id} >{group.name}</option>
-                        ))
-                     }
-                     </select>
-                  </li>
+                  
                </ul>
                <div className="modal-footer">
                   <button className='generic-button' onClick={this.props.closeModal}>Cancel</button>
-                  <input type='submit' value="Create Event"/>
+                  <input type='submit' value="Update Event"/>
                </div>
 
                <ul>

@@ -52,6 +52,12 @@ class GroupForm extends React.Component {
     }
     this.setState({errors: nextProps.errors});
   }
+  
+  componentWillUnmount(){
+   if (this.props.formType === "Edit Group"){
+      this.props.fetchGroups();
+   }
+  }
 
   handleSubmit(e) {
     e.preventDefault();

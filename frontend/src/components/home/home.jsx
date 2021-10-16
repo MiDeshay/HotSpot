@@ -19,6 +19,8 @@ export default class Home extends React.Component{
          lng: 0,
       };
 
+      this.selectedEvent = {};
+
       // Google Maps API loader uses the current component's React state to determine map options.
       this.loader = null;
 
@@ -28,22 +30,20 @@ export default class Home extends React.Component{
             lng: 0
          },
          zoom: 11, // Hard coded default zoom value, free free to change. Lower number less zoom.
-         pins: this.pins // These pins are only used for debugging
+         pins: this.pins, // These pins are only used for debugging
+         currentEvents: {}, // This will be the list of events that are currently marked on the map. Used for drawing markers.
       }
-
       // Get google from the window
       this.google = window.google;
 
       // Only draw event markers on initial load and when added. All subsequent markers will be placed when a new marker is instantiated.
       this.eventsLoaded = false;
-      this.prevEvents = this.props.events;
       // Bindings
       this.drop = this.drop.bind(this);
       this.getLocation = this.getLocation.bind(this);
       this.addMarkerWithTimeout = this.addMarkerWithTimeout.bind(this);
       this.clearMarkers = this.clearMarkers.bind(this);
       this.addEvent = this.addEvent.bind(this);
-      this.placeDebugPins = this.placeDebugPins.bind(this);
       this.initMarkerWindow = this.initMarkerWindow.bind(this);
    }
 
@@ -68,27 +68,22 @@ export default class Home extends React.Component{
             this.props.getEvents();
             // Init event handlers
             this.addEvent();
-
-
          })
          .catch(e => {
             // Do error handling
          });
 
          this.props.fetchUsers()
-
    }
 
    componentDidUpdate() {
-      if (this.prevEvents !== this.props.events){
+      if (this.state.currentEvents !== this.props.events){
          this.drop();
          this.eventsLoaded = true;
-         this.prevEvents = Object.assign({}, this.props.events);
+         this.setState({
+            currentEvents: this.props.events,   
+         })
       }
-   }
-
-   componentWillUnmount(){
-      this.props.clearEvents();
    }
 
    getLocation() {
@@ -101,25 +96,10 @@ export default class Home extends React.Component{
                }
             })
             this.map.setCenter(this.state.center)
-            //this.placeDebugPins(pos);
          });
       } else {
          // Improve error messages later
       }
-   }
-
-   // Add random Pins around your location for debugging
-   placeDebugPins(pos){
-      let sign = -1;
-      for (let i = 0; i < 5; i++){
-         let lat = pos.coords.latitude + (Math.random() * 0.2 * sign);
-         let lng = pos.coords.longitude + (Math.random() * 0.2 * sign);
-         sign *= -1;
-         this.pins.push({lat, lng});
-      }
-      this.setState({
-         pins: this.pins
-      })
    }
 
    // Place a marker at cursor position
@@ -127,23 +107,20 @@ export default class Home extends React.Component{
       this.map.addListener("click", (mapsMouseEvent) => {
          this.mousePos.lat = mapsMouseEvent.latLng.lat();
          this.mousePos.lng = mapsMouseEvent.latLng.lng();
-         this.props.openModal();
+         this.props.openCreate();
       });
    }
 
+   // Uses this.state.currentEvents to determine whether to draw a new marker or not.
+   // Iterates through events prop, if an event is found to not be in state.currentEvents,
+   // add a new marker with that event's details.
    drop(){
-      // This block is only used to show debug pins on the map. Will show nothing if this.pins is empty
-      for (let i = 0; i < this.pins.length; i++) {
-         this.pins[i].title = "Debug";
-         this.addMarkerWithTimeout(this.pins[i], i * 20);
-      }
       const events = this.props.events;
       for (let event in events) {
          let i = 0;
          let userGroups = this.props.user.groupsJoined;
-         // console.log("Event Id: " + events[event].group._id);
-         // console.log(userGroups)
-         if (!this.prevEvents[event] && userGroups.includes(events[event].group._id)){
+
+         if (!this.state.currentEvents[event] && userGroups.includes(events[event].group._id)){
             const pin = events[event];
             this.addMarkerWithTimeout(pin, i*20);
             i++;
@@ -171,9 +148,6 @@ export default class Home extends React.Component{
 
    // Initialize a maps marker with html and event listeners.
    initMarkerWindow(marker) {
-      // Temporary until events route is updated. ------------------------
-      if (!marker.eventDetails.hostEmail) marker.eventDetails.hostEmail = marker.eventDetails.host.email;
-      // -----------------------------------------------------------------
       marker.addListener("click", () => {
          this.infoWindow.setContent(
             `<div class='info-window'> `+
@@ -195,9 +169,18 @@ export default class Home extends React.Component{
             '</div>'
          );
          // Event handlers for buttons in info window.
+         // Delete button and Edit button dispatches their respective action using the marker's information
          this.google.maps.event.addListener(this.infoWindow, "domready", () => {
             let deleteButton = document.getElementById('event-delete');
-            if (deleteButton) deleteButton.onclick=this.clearMarkers;
+            if (deleteButton) deleteButton.onclick = () => {
+               this.props.deleteEvent(marker.eventDetails._id)
+            }
+
+            let editButton = document.getElementById('event-edit');
+            if (editButton) editButton.onclick=() => {
+               this.selectedEvent = marker.eventDetails;
+               this.props.openUpdate();
+            }
          });
 
          this.infoWindow.open({
@@ -216,9 +199,10 @@ export default class Home extends React.Component{
    }
 
    render(){
+      let test = this.selectedEvent;
       return (
          <div id='map'>
-            <Modal pos={this.mousePos}/>
+            <Modal pos={this.mousePos} event={this.selectedEvent}/>
          </div>
       )
    }
