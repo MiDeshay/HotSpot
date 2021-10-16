@@ -7,7 +7,6 @@ import UpdateEventContainer from '../events/update_event_container';
 function Modal(props) {
    let modal = props.modal;
    let closeModal = props.closeModal;
-   console.log(props.event);
    if (!modal) {
       return null;
    }

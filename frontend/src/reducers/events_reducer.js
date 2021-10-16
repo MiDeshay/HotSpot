@@ -1,4 +1,4 @@
-import {RECEIVE_EVENTS, RECEIVE_EVENT, CLEAR_EVENTS} from '../actions/event_actions'
+import {RECEIVE_EVENTS, RECEIVE_EVENT, CLEAR_EVENTS, DELETE_EVENT} from '../actions/event_actions'
 import {REMOVE_GROUP} from '../actions/group_actions'
 
 const eventsReducer = (state = {}, action) => {
@@ -16,6 +16,10 @@ const eventsReducer = (state = {}, action) => {
       
       case CLEAR_EVENTS: 
          return {};
+      
+      case DELETE_EVENT:
+         delete newState[action.event.id];
+         return newState;
       default: return state; 
    }
 }

@@ -1,6 +1,6 @@
 import home from './home';
 import { connect } from 'react-redux';
-import { getEvents, createEvent, clearEvents } from '../../actions/event_actions';
+import { getEvents, createEvent, deleteEvent } from '../../actions/event_actions';
 import { openModal } from '../../actions/modal_actions';
 import { fetchUsers } from '../../actions/user_actions';
 
@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
    getEvents: () => dispatch(getEvents()),
    createEvent: (eventForm) => dispatch(createEvent(eventForm)),
-   clearEvents: () => dispatch(clearEvents()),
+   deleteEvent: eventId => dispatch(deleteEvent(eventId)),
    openCreate: () => dispatch(openModal("createEvent")),
    openUpdate: () => dispatch(openModal("updateEvent")),
 
