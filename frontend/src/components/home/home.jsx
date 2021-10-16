@@ -88,7 +88,7 @@ export default class Home extends React.Component{
    }
 
    componentWillUnmount(){
-      this.props.clearEvents();
+      //this.props.clearEvents();
    }
 
    getLocation() {
