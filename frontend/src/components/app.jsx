@@ -12,6 +12,7 @@ import EditProfileFormContainer from './profile/edit_profile_form_container';
 import GroupShowContainer from './group/group_show_container';
 import CreateGroupFormContainer from './group/group_form/create_group_form_container';
 import EditGroupFormContainer from './group/group_form/edit_group_form_container';
+import LinksShow from './links/links_show';
 
 const App = () => (
   <div className="app">
@@ -24,8 +25,9 @@ const App = () => (
       <ProtectedRoute exact path="/groups/create" component={CreateGroupFormContainer} />
       <ProtectedRoute exact path="/groups/:groupName" component={GroupShowContainer} />
       <ProtectedRoute exact path="/groups/:groupName/edit" component={EditGroupFormContainer} />
-      <ProtectedRoute exact path="/" component={MainPage} />
       <ProtectedRoute exact path="/home" component={HomeContainer} />
+      {/* <Route exact path="/links" component={LinksShow} /> */}
+      <ProtectedRoute exact path="/" component={MainPage} />
     </Switch>
   </div>
 );
