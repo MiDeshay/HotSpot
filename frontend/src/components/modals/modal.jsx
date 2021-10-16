@@ -25,7 +25,8 @@ function Modal(props) {
    }
 
    return (
-      <div className="modal-background" onClick={closeModal}>
+      <div className="modal-background">
+         <div className="modal-close" onClick={closeModal} />
          <div onClick={e => e.stopPropagation()}>
          { component }
          </div>
