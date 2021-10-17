@@ -84,8 +84,8 @@ export default class UpdateEvent extends React.Component {
                `<p class='event-text'>${marker.eventDetails.description}</p>` +
                `<p class='event-text'>${marker.eventDetails.address}</p>` +
                `<p class='event-text'>${marker.eventDetails.city}</p>` +
-               `<p class='event-text'>${marker.eventDetails.startDate}</p>` +
-               `<p class='event-text'>${marker.eventDetails.endDate}</p>` +
+               `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
+               `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
 
          '</div>'
       );
@@ -98,19 +98,19 @@ export default class UpdateEvent extends React.Component {
                <ul>
                   <li>
                      <label htmlFor='event-title'>Title </label>
-                     <input onChange={this.handleUpdate('title')}type='text' value={this.state.title} id='event-title' className="text-input"/>
+                     <input autocomplete="off" onChange={this.handleUpdate('title')}type='text' value={this.state.title} id='event-title' className="text-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-description'>Description </label>
-                     <textarea onChange={this.handleUpdate('description')}type='body' value={this.state.description} id='event-description' className="textarea-input"/>
+                     <textarea autocomplete="off" onChange={this.handleUpdate('description')}type='body' value={this.state.description} id='event-description' className="textarea-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-address'>Address </label>
-                     <input onChange={this.handleUpdate('address')}type='text' value={this.state.address} id='event-address' className="text-input"/>
+                     <input autocomplete="off" onChange={this.handleUpdate('address')}type='text' value={this.state.address} id='event-address' className="text-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-city'>City </label>
-                     <input onChange={this.handleUpdate('city')}type='text' value={this.state.city} id='event-city' className="text-input"/>
+                     <input autocomplete="off" onChange={this.handleUpdate('city')}type='text' value={this.state.city} id='event-city' className="text-input"/>
                   </li>
                   <li className="li-split">
                      <label htmlFor='event-start-date'>Start Date </label>

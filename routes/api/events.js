@@ -272,7 +272,7 @@ router.patch("/join_event/:eventId", (req, res) => {
                                         User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
                                         .then(attendees => {
                                             res.json({
-                                                id: event.id,
+                                                _id: event.id,
                                                 city: event.city,
                                                 title: event.title,
                                                 address: event.address,
@@ -289,7 +289,7 @@ router.patch("/join_event/:eventId", (req, res) => {
                                         })
                                     }else{
                                         res.json({
-                                            id: event.id,
+                                            _id: event.id,
                                             city: event.city,
                                             title: event.title,
                                             address: event.address,
@@ -355,7 +355,7 @@ router.patch("/decline_event/:eventId", (req, res) => {
                                         User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
                                         .then(attendees => {
                                             res.json({
-                                                id: event.id,
+                                                _id: event.id,
                                                 city: event.city,
                                                 title: event.title,
                                                 address: event.address,
@@ -372,7 +372,7 @@ router.patch("/decline_event/:eventId", (req, res) => {
                                         })
                                     }else{
                                         res.json({
-                                            id: event.id,
+                                            _id: event.id,
                                             city: event.city,
                                             title: event.title,
                                             address: event.address,

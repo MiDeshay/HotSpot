@@ -1,6 +1,6 @@
 import home from './home';
 import { connect } from 'react-redux';
-import { getEvents, createEvent, deleteEvent } from '../../actions/event_actions';
+import { getEvents, createEvent, deleteEvent, joinEvent, declineEvent } from '../../actions/event_actions';
 import { openModal } from '../../actions/modal_actions';
 import { fetchUsers } from '../../actions/user_actions';
 
@@ -17,8 +17,9 @@ const mapDispatchToProps = dispatch => ({
    deleteEvent: eventId => dispatch(deleteEvent(eventId)),
    openCreate: () => dispatch(openModal("createEvent")),
    openUpdate: () => dispatch(openModal("updateEvent")),
-
-   fetchUsers: () => dispatch(fetchUsers())
+   fetchUsers: () => dispatch(fetchUsers()),
+   joinEvent: (eventId, email) => dispatch(joinEvent(eventId, email)),
+   declineEvent: (eventId, email) => dispatch(declineEvent(eventId, email)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(home);
