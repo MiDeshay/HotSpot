@@ -47,6 +47,8 @@ export default class Home extends React.Component{
       this.clearMarkers = this.clearMarkers.bind(this);
       this.addEvent = this.addEvent.bind(this);
       this.initMarkerWindow = this.initMarkerWindow.bind(this);
+
+      this.eventRespondButton = "";
    }
 
    // Google maps loader
@@ -151,23 +153,21 @@ export default class Home extends React.Component{
    // Initialize a maps marker with html and event listeners.
    initMarkerWindow(marker) {
       let eventId = marker.eventDetails._id;
-      let eventRespondButton = `<button id='event-respond' class='button'>Join</button>`; 
-      if (marker.eventDetails.attendeesEmail.includes(this.props.user.email)){
-         eventRespondButton = `<button id='event-respond' class='button'>Leave</button>`; 
-      }
-
+      let joinButton = `<button id='event-respond' class='button'>Join</button>`; 
+      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`; 
+      
       marker.addListener("click", () => {
+         console.log(this.props.events[eventId]);
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<div class='event-header'>`+
                   `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
                   `<div class='event-buttons'> ` +
                      (marker.eventDetails.hostEmail !== this.props.user.email ? 
-                        eventRespondButton 
+                        (this.props.events[eventId].attendeesEmail.includes(this.props.user.email)? leaveButton : joinButton )
                         :
                         `<button id='event-edit' class='button'>Edit</button>` +
                         `<button id='event-delete' class='button'>Delete</button>`  
-                  
                      ) +
                   `</div>` +
                `</div>` +
