@@ -55,8 +55,13 @@ class GroupShow extends React.Component {
   render() {
     let { group, users, events } = this.props;
     const allEvents = Object.values(events)
-    console.log(allEvents)
     if (!group || !group.members) return null;
+    let filterredEvents = [];
+    allEvents.forEach(event => {
+      if (event.group._id === group.id) {
+        filterredEvents.push(event);
+      }
+    });
     return (
       <div className="group-show-div">
          <div id="group-title"> {group.name}</div>
@@ -65,11 +70,12 @@ class GroupShow extends React.Component {
             <div className="group-text">{group.description} </div>
          </div>
 
-    
+
         <div className="group-container" id="events-container">
           <div className="group-header"> Events: </div>
+            <div className="top-scroll" />
           <ul id="event-list">
-            {allEvents.map((event, i) => 
+            {filterredEvents.map((event, i) =>
             <div className="group-text event" key={i}>
               <li className="event-info-main"><div className="event-title" className="event-text">{event.title}</div></li>
               <li className="event-info-sub" ><div className="event-description group-label" >Description:</div> <div className="event-text">{event.description}</div></li>
@@ -77,14 +83,15 @@ class GroupShow extends React.Component {
               <li className="event-info-sub"> <div  className="event-host group-label" >Host email:</div> <div className="event-text">{event.host[0].email} </div></li>
             </div>)}
           </ul>
+            <div className="bottom-scroll" />
         </div>
 
 
         <div className="group-container">
           <div className="group-header">Members:</div>
           <ul id="members-list">
-          {!users ? null : group.members.map(memberId => 
-          
+          {!users ? null : group.members.map(memberId =>
+
           <Link to={`/profile/${memberId}`} className="group-text member-button member-list-item" key={memberId}>{users[memberId].username}</Link>)}
           </ul>
         </div>

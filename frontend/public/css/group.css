@@ -65,10 +65,6 @@
     transition: background-color 0.2s;
 }
 
-#members-list{
-    position: relative;
-    bottom: 20px;
-}
 .group-label{
     font-size: 17px;
 }
@@ -77,11 +73,17 @@
     height: 260px;
     overflow-y: hidden;
     overflow-x: hidden;
+        border-top: solid 0.2rem var(--color1dark);
+    border-bottom: solid 0.2rem var(--color1dark);
+    background-color: var(--color1);
+    filter:brightness(90%);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 #event-list:hover {
     overflow-y: scroll;
-    overflow-x: scroll;
+    /* overflow-x: scroll; */
   }
 
 
@@ -110,15 +112,19 @@
 
 #members-list{
     display: flex;
-    position: relative;
-    top: 0px;
     height: 30px;
     overflow-x: hidden;
     overflow-y: hidden;
+    bottom: 20px;
+    padding-bottom: 0.5rem;
 }
 
-#members-list{
+#members-list:hover {
     overflow-x: scroll;
+}
+
+.member-list-item {
+    margin-right: 0.5rem;
 }
 
 
@@ -136,21 +142,18 @@
 }
 
 
+.top-scroll {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.548));
+    width: 100%;
+    height: 0.8rem;
+    position: absolute;
+    z-index: 2;
+}
 
-/* <Link to={`/profile/${group.ownerId}`} className="member-button group-container">
-<div className="group-header">Group Creator:</div>
-<div className="owner-info-container ">
-  <div className="owner-field group-label">Name:</div>
-  <div id="owner-name" className="group-text owner-data">{users[group.ownerId].firstName} {users[group.ownerId].lastName}</div>
-</div>
-
-<div className="owner-info-container">
-  <div className="owner-field group-label">Username:</div>
-  <div id="owner-username" className="group-text owner-data">{users[group.ownerId].username} </div>
-</div>
-<div className="owner-info-container">
-  <div className="owner-field group-label">Contact info:</div>
-  <div id="owner-email" className="group-text owner-data" >{users[group.ownerId].email} </div>
-</div>
-
-</Link> */
+.bottom-scroll {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.548));
+    width: 100%;
+    height: 1rem;
+    position: absolute;
+    transform: translateY(-1rem)
+}
