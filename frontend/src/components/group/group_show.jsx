@@ -9,9 +9,9 @@ class GroupShow extends React.Component {
   }
 
   componentDidMount() {
-    console.log('i mounted')
     // if (this.props.group && !this.props.group.members) { // if
       this.props.fetchGroup(this.props.match.params.groupName);
+      this.props.getEvents()
       // this.props.uiGroupShow(this.props.group.id);
     // }
   }
@@ -59,45 +59,36 @@ class GroupShow extends React.Component {
     if (!group || !group.members) return null;
     return (
       <div className="group-show-div">
-         <div> {group.name}</div>
-        <div>{group.description} </div>
+         <div id="group-title"> {group.name}</div>
+         <div className="group-container">
+            <div className="group-header">About us:</div>
+            <div className="group-text">{group.description} </div>
+         </div>
 
-        <br/>
-        <Link to={`/profile/${group.ownerId}`}>
-          <div>Owner</div>
-          <div>{users[group.ownerId].firstName} {users[group.ownerId].lastName}</div>
-          <div>{users[group.ownerId].username} </div>
-          <div>{users[group.ownerId].email} </div>
-
-        </Link>
-
-        <br/>
-        <div>
-          <div>Members</div>
-          <ul>
-          {!users ? null : group.members.map(memberId => <Link to={`/profile/${memberId}`} key={memberId}>{users[memberId].username}</Link>)}
-          </ul>
-        </div>
-
-        <br/>
-        <div>
-          <div> Events</div>
-          <ul>
+    
+        <div className="group-container" id="events-container">
+          <div className="group-header"> Events: </div>
+          <ul id="event-list">
             {allEvents.map((event, i) => 
-            <div key={i}>
-              <li><div>Title: </div> {event.title}</li>
-              <li><div>Description:</div> {event.description}</li>
-              <Link to={`/profile/${event.host[0]._id}`}>
-                <div>Host Info:</div>
-                <li> {event.host[0].firstName} {event.host[0].firstName} </li>
-                <li> {event.host[0].email} </li>
-          
-              </Link>
-              
+            <div className="group-text event" key={i}>
+              <li className="event-info-main"><div className="event-title" className="event-text">{event.title}</div></li>
+              <li className="event-info-sub" ><div className="event-description group-label" >Description:</div> <div className="event-text">{event.description}</div></li>
+              <li className="event-info-sub" ><div className="event-description group-label" >Date:</div> <div className="event-text">{event.startDate}</div></li>
+              <li className="event-info-sub"> <div  className="event-host group-label" >Host email:</div> <div className="event-text">{event.host[0].email} </div></li>
             </div>)}
           </ul>
         </div>
-        <br/>
+
+
+        <div className="group-container">
+          <div className="group-header">Members:</div>
+          <ul id="members-list">
+          {!users ? null : group.members.map(memberId => 
+          
+          <Link to={`/profile/${memberId}`} className="group-text member-button member-list-item" key={memberId}>{users[memberId].username}</Link>)}
+          </ul>
+        </div>
+
 
         {this.renderEditButton()}{this.renderJoinButton()}
       </div>

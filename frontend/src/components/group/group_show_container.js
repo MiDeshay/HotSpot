@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import GroupShow from "./group_show";
+import { getEvents } from '../../actions/event_actions';
 import { fetchGroup, uiGroupShow, updateGroupMembers, deleteGroup } from "../../actions/group_actions";
 
 const mapStateToProps = (state, ownProps) => ({
@@ -13,6 +14,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchGroup: name => dispatch(fetchGroup(name)),
+  //if coming straight to this page, events aren't loaded in
+  getEvents: () => dispatch(getEvents()),
   uiGroupShow: groupId => dispatch(uiGroupShow(groupId)),
   updateGroupMembers: payload => dispatch(updateGroupMembers(payload)),
   deleteGroup: payload => dispatch(deleteGroup(payload)),
