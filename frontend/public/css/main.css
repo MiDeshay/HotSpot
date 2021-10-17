@@ -77,15 +77,17 @@ input[type=text], input[type=password] {
 /* width */
 ::-webkit-scrollbar {
   width: 0.5rem;
+  background-color: rgb(182, 182, 182);
+  border: solid 0.1rem black;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  border-radius: 10px;
+  border-radius: 0.3rem;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--color2dark);
+  background: var(--color1dark);
   border-radius: 0.2rem;
 }

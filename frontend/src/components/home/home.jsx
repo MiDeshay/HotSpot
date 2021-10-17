@@ -12,14 +12,17 @@ export default class Home extends React.Component{
       // this.markers contains the collection of actual markers representing events.
       this.map = null;
       this.pins = [];
-      this.markers = [];
+      this.markers = {}; // The list of marker objects created from currentEvents. These are references to the marker object directly created by google maps API.
       this.infoWindow = null;
       this.mousePos = {
          lat: 0,
          lng: 0,
       };
 
-      this.selectedEvent = {};
+      this.selectedEvent = {
+         event: null,
+         marker: null,
+      };
 
       // Google Maps API loader uses the current component's React state to determine map options.
       this.loader = null;
@@ -142,7 +145,7 @@ export default class Home extends React.Component{
          })
          marker.eventDetails = pin;
          this.initMarkerWindow(marker);
-         this.markers.push(marker);
+         this.markers[marker.eventDetails._id] = marker;
       }, timeout);
    }
 
@@ -174,11 +177,17 @@ export default class Home extends React.Component{
             let deleteButton = document.getElementById('event-delete');
             if (deleteButton) deleteButton.onclick = () => {
                this.props.deleteEvent(marker.eventDetails._id)
+               this.markers[marker.eventDetails._id].setMap(null);
+               delete this.markers[marker.eventDetails._id];
             }
-
             let editButton = document.getElementById('event-edit');
             if (editButton) editButton.onclick=() => {
-               this.selectedEvent = marker.eventDetails;
+               this.selectedEvent = {
+                  event: marker.eventDetails,
+                  marker: this.markers[marker.eventDetails._id],
+                  infoWindow: this.infoWindow,
+               }
+
                this.props.openUpdate();
             }
          });
@@ -192,17 +201,16 @@ export default class Home extends React.Component{
    }
 
    clearMarkers() {
-      for (let i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
+      for (let id in this.markers) {
+         this.markers[id].setMap(null);
       }
-      this.markers = [];
+      this.markers = {};
    }
 
    render(){
-      let test = this.selectedEvent;
       return (
          <div id='map'>
-            <Modal pos={this.mousePos} event={this.selectedEvent}/>
+            <Modal pos={this.mousePos} event={this.selectedEvent} />
          </div>
       )
    }

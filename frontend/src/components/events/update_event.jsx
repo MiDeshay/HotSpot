@@ -4,12 +4,16 @@ export default class UpdateEvent extends React.Component {
 
    constructor(props){
       super(props)
-      this.state = Object.assign({}, this.props.event, {groupId: this.props.event.group._id});
+      this.event = this.props.selectedEvent.event;
+      this.marker = this.props.selectedEvent.marker;
+      this.infoWindow = this.props.selectedEvent.infoWindow;
+      this.state = Object.assign({}, this.event, {groupId: this.event.group._id});
       this.prevEvents = this.props.events;
       this.submitted = false;
       // Bindings
       this.handleUpdate = this.handleUpdate.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.updateMarker = this.updateMarker.bind(this);
       this.groups = [];
    }
 
@@ -56,10 +60,37 @@ export default class UpdateEvent extends React.Component {
       if (this.submitted) {
          if (this.props.errors.length === 0){
             this.props.closeModal();
+            this.updateMarker();
          }
          this.submitted = false;
       }
    }
+
+   updateMarker(){
+      this.marker.eventDetails = this.state;
+      let marker = this.marker; 
+      marker.setLabel(this.state.title[0]);
+      this.infoWindow.setContent(
+         `<div class='info-window'> `+
+            `<div class='event-header'>`+
+               `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
+               (marker.eventDetails.hostEmail !== this.props.currentUser.email ? "" :
+                  `<div class='event-buttons'> ` +
+                     `<button id='event-edit' class='button'>Edit</button>` +
+                     `<button id='event-delete' class='button'>Delete</button>`  +
+                  `</div>`
+               ) +
+               `</div>` +
+               `<p class='event-text'>${marker.eventDetails.description}</p>` +
+               `<p class='event-text'>${marker.eventDetails.address}</p>` +
+               `<p class='event-text'>${marker.eventDetails.city}</p>` +
+               `<p class='event-text'>${marker.eventDetails.startDate}</p>` +
+               `<p class='event-text'>${marker.eventDetails.endDate}</p>` +
+
+         '</div>'
+      );
+   }
+
    render(){
       return (
          <div className='form-modal animated fadeInTop'>

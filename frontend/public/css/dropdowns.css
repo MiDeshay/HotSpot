@@ -1,5 +1,6 @@
 .drop-down-list {
-  background-color: var(--color1light);
+  color: var(--color1dark);
+  background-color: var(--white);
   line-height: 1.5rem;
   position: absolute;
   width: 11rem;
