@@ -6,10 +6,12 @@ const groupsReducer = (state={}, action) => {
   switch (action.type) {
     case RECEIVE_GROUPS:
       fixGroupIds(action);
-      //nextState = Object.assign({}, state, action.groups.data);
+      // nextState = Object.assign({}, state);
+      // nextState[action.groups.data]
       return action.groups.data;
     case RECEIVE_GROUP: case GROUP_ADD_MEMBER: case CREATE_GROUP:
       nextState = Object.assign({}, state);
+      removeOldName(nextState, action);
       fixGroupId(action);
       nextState[action.group.data.name] = action.group.data;
       return nextState;
@@ -42,4 +44,18 @@ const fixGroupIds = action => {
     action.groups.data[group.name] = currentgroup;
   })
   return action;
+}
+
+const removeOldName = (nextState, action) => {
+  console.log(action.group.data._id);
+  let targetName = '';
+  Object.values(nextState).forEach((group, i) => {
+    if (group.id === action.group.data._id) {
+      targetName = group.name;
+    }
+  });
+  if (targetName !== '') {
+    delete nextState[targetName];
+  }
+  // rely on side-effect mutates
 }
