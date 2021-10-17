@@ -8,6 +8,8 @@
   --color3: #93BE41;
   --color3light: #edffcc;
   --color3dark: #303f16;
+  --white: rgb(241, 241, 241);
+  --screen: rgba(0, 0, 0, 0.253);
 }
 
 *, body {
@@ -17,7 +19,7 @@
 
 body {
   background-image: linear-gradient(var(--color1light),var(--color1),var(--color1), var(--color1), var(--color1dark));
-  max-height: 100vw;
+  max-height: 100vh;
 }
 
 footer {
@@ -31,7 +33,8 @@ div#root {
 }
 
 div.app {
-  width: calc(100vw - 10rem);
+  /* width: calc(100vw - 10rem); */
+  width: 100%;
 }
 
 
@@ -53,6 +56,14 @@ a:visited {
   padding: 0.2rem 1rem;
 }
 
+.button.subtle {
+  font-size: 0.8rem;
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--white);
+  border: solid 0.1rem var(--color1light);
+  font-weight: 300;
+}
+
 input[type=text], input[type=password] {
   margin: 0.2rem 0rem;
   padding: 0.5rem;
@@ -66,15 +77,17 @@ input[type=text], input[type=password] {
 /* width */
 ::-webkit-scrollbar {
   width: 0.5rem;
+  background-color: rgb(182, 182, 182);
+  border: solid 0.1rem black;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  border-radius: 10px;
+  border-radius: 0.3rem;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--color2dark);
+  background: var(--color1dark);
   border-radius: 0.2rem;
 }

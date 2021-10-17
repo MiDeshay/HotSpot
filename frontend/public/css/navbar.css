@@ -1,8 +1,13 @@
 .nav-bar-container {
   display: flex;
-  width: calc(100% - 2rem);
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  /* padding: 0rem 0.5rem; */
+  /* padding: 0.5rem 0rem; */
+  border-bottom: solid 0.1rem var(--color1light);
+  background-color: var(--color1dark);
+  color: var(--white);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .nav-bar-container > h1 {
@@ -12,9 +17,37 @@
 .nav-bar-links {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  margin-right: 1rem;
+  margin-top: 0rem;
+  line-height: 1.4rem;
 }
 
 .title {
   font-size: 2rem;
   font-weight: 700;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.3rem;
+
+}
+
+a > .links {
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-self: center;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-bar-links > button, .nav-bar-links > a > button {
+  height: 1.2rem;
+  margin: 0rem;
+}
+
+.nav-bar-links > a > button {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  margin: 0rem;
 }
