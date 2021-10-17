@@ -27,6 +27,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "google-maps-react": "^2.0.6",
+    "jshint": "^2.13.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "mongodb": "^4.1.3",
