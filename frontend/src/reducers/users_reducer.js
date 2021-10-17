@@ -11,11 +11,11 @@ const userReducer = (state={}, action) => {
       return nextState;
 
     case RECEIVE_USER:
-      console.log(action.user.data)
+   
       if (action.user.data.id) {
         nextState = Object.assign({}, state, {[action.user.data.id]: action.user.data});
       } else {
-        console.log('so you have chosen death');
+   
         let fixedUser = changeNumToId(action.user.data);
         nextState = Object.assign({}, state, fixedUser);
       }
@@ -35,7 +35,7 @@ export default userReducer;
 
 const changeNumsToIds = (users) => {
   let result = {};
-  console.log(users)
+
   Object.values(users).forEach(user => {
     user.id = user._id;
     delete user._id;
@@ -46,10 +46,10 @@ const changeNumsToIds = (users) => {
 
 const changeNumToId = (user) => {
   let result = {};
-  console.log(user);
+
   user.id = user._id;
   delete user._id;
   result[user.id] = user
-  console.log(user);
+  
   return result;
 }

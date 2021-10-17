@@ -1,8 +1,8 @@
 import React from 'react';
 import { Loader } from "@googlemaps/js-api-loader";
-//import { mapsKey } from '../../config/keys';
+import { mapsKey } from '../../config/keys';
 import Modal from '../modals/modal';
-const mapsKey = require("../../config/keys").mapsKey
+
 
 
 export default class Home extends React.Component{
