@@ -48,6 +48,7 @@ class UserSearch extends React.Component {
     let isSearching = this.props.isActive;
     return (
       <div>
+        <div className={`${isSearching ? "modal-screen " : ""}none`} onClick={this.handleClick} />
         <input type="text" value={searchTerm} onClick={this.handleClick} onChange={this.updateInput('searchTerm')} placeholder="Search Users" />
         <ul className="drop-down-list">
           {!isSearching ? null : Object.values(users).map((user, i) => this.filter(user) ? <li className="drop-down-item" key={`user-${i}`}><Link to={`/profile/${user.id}`} ><div>{user.username}</div></Link></li> : null)}

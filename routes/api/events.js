@@ -435,13 +435,13 @@ router.post("/create_event", (req, res) => {
         endDate: req.body.endDate,
     })
     
-
+    
     User.findOne({email: newEvent.hostEmail}).then(host=> {
       if(!host){
          return res.status(404).json("Host not found"); 
       }
       newEvent.host.push(host);
-      Group.findOne({name: req.body.groupName}).then( group => {
+      Group.findById(req.body.groupId).then( group => {
          newEvent.group = group;
          newEvent.save().then(event => {
             res.json(event);
@@ -479,62 +479,63 @@ router.patch("/:eventId", (req, res) => {
                 mapLat: req.body.mapLat,
                 mapLng: req.body.mapLng,
                 startDate: req.body.startDate,
-                endDate: req.body.endDate  
+                endDate: req.body.endDate
             },
             {new: true}, (error, event) => {
                 if (error){
                     res.status(400).json(error);
                   }else{
-                      
-                    User.findOne({email: event.hostEmail}).then(host=> {
-                        if(!host){
-                            return res.status(404).json("Host not found"); 
-                        }
-                
-                        const hostInfo = {
-                            id: host.id,
-                            username: host.username,
-                            email: host.email,
-                            firstName: host.firstName,
-                            lastName: host.lastName
-                        }
-                
-                        if (event.attendeesEmail){
-                            User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
-                            .then(attendees => {
-                                res.json({
-                                    id: event.id,
-                                    city: event.city,
-                                    title: event.title,
-                                    address: event.address,
-                                    description: event.description,
-                                    mapLat: event.mapLat,
-                                    mapLng: event.mapLng,
-                                    host: hostInfo, 
-                                    attendees: attendees,
-                                    startDate: event.startDate,
-                                    endDate: event.endDate,
-                                    eventPicturesKeys: event.eventPicturesKeys,
-                                    coverPictureKey: event.coverPictureKey   
-                                })
-                            })
-                        }else{
-                            res.json({
-                                id: event.id,
-                                city: event.city,
-                                title: event.title,
-                                address: event.address,
-                                description: event.description,
-                                mapLat: event.mapLat,
-                                mapLng: event.mapLng,
-                                host: hostInfo,
-                                startDate: event.startDate,
-                                endDate: event.endDate,
-                                eventPicturesKeys: event.eventPicturesKeys,
-                                coverPictureKey: event.coverPictureKey   
-                            })
-                        }
-                    })
+                    Group.findById(req.body.groupId).then( group => {event.group = group; event.save();}).then( 
+                     User.findOne({email: event.hostEmail}).then(host=> {
+                           if(!host){
+                              return res.status(404).json("Host not found"); 
+                           }
+                  
+                           const hostInfo = {
+                              id: host.id,
+                              username: host.username,
+                              email: host.email,
+                              firstName: host.firstName,
+                              lastName: host.lastName
+                           }
+                  
+                           if (event.attendeesEmail){
+                              User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
+                              .then(attendees => {
+                                 res.json({
+                                       _id: event.id,
+                                       city: event.city,
+                                       title: event.title,
+                                       address: event.address,
+                                       description: event.description,
+                                       mapLat: event.mapLat,
+                                       mapLng: event.mapLng,
+                                       host: hostInfo, 
+                                       attendees: attendees,
+                                       startDate: event.startDate,
+                                       endDate: event.endDate,
+                                       eventPicturesKeys: event.eventPicturesKeys,
+                                       coverPictureKey: event.coverPictureKey   
+                                 })
+                              })
+                           }else{
+                              res.json({
+                                 _id: event.id,
+                                 city: event.city,
+                                 title: event.title,
+                                 address: event.address,
+                                 description: event.description,
+                                 mapLat: event.mapLat,
+                                 mapLng: event.mapLng,
+                                 host: hostInfo,
+                                 startDate: event.startDate,
+                                 endDate: event.endDate,
+                                 eventPicturesKeys: event.eventPicturesKeys,
+                                 coverPictureKey: event.coverPictureKey   
+                              })
+                           }
+                     })
+                    ).catch(err=> res.status(400).json(err))
                 }
             })
         } else{

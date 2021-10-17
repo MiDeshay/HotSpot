@@ -1,26 +1,19 @@
 import React from 'react';
 
-export default class CreateEvent extends React.Component {
+export default class UpdateEvent extends React.Component {
 
    constructor(props){
       super(props)
-      this.state = {
-         pinId: 1,
-         address: "",
-         city: "",
-         hostEmail: this.props.currentUser.email,
-         title: "",
-         description: "",
-         mapLat: this.props.pos.lat,
-         mapLng: this.props.pos.lng,
-         startDate: "",
-         endDate: "",
-         groupId: "",     
-      }
+      this.event = this.props.selectedEvent.event;
+      this.marker = this.props.selectedEvent.marker;
+      this.infoWindow = this.props.selectedEvent.infoWindow;
+      this.state = Object.assign({}, this.event, {groupId: this.event.group._id});
+      this.prevEvents = this.props.events;
       this.submitted = false;
       // Bindings
       this.handleUpdate = this.handleUpdate.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.updateMarker = this.updateMarker.bind(this);
       this.groups = [];
    }
 
@@ -34,7 +27,7 @@ export default class CreateEvent extends React.Component {
 
    handleSubmit(e){
       e.preventDefault();
-      this.props.createEvent(this.state);
+      this.props.updateEvent(this.state._id, this.state);
       this.submitted = true;
    }
 
@@ -46,7 +39,6 @@ export default class CreateEvent extends React.Component {
             this.groups.push(group);
          }
       }
-
 
       let today = new Date();
       let dd = today.getDate();
@@ -68,10 +60,37 @@ export default class CreateEvent extends React.Component {
       if (this.submitted) {
          if (this.props.errors.length === 0){
             this.props.closeModal();
+            this.updateMarker();
          }
          this.submitted = false;
       }
    }
+
+   updateMarker(){
+      this.marker.eventDetails = this.state;
+      let marker = this.marker; 
+      marker.setLabel(this.state.title[0]);
+      this.infoWindow.setContent(
+         `<div class='info-window'> `+
+            `<div class='event-header'>`+
+               `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
+               (marker.eventDetails.hostEmail !== this.props.currentUser.email ? "" :
+                  `<div class='event-buttons'> ` +
+                     `<button id='event-edit' class='button'>Edit</button>` +
+                     `<button id='event-delete' class='button'>Delete</button>`  +
+                  `</div>`
+               ) +
+               `</div>` +
+               `<p class='event-text'>${marker.eventDetails.description}</p>` +
+               `<p class='event-text'>${marker.eventDetails.address}</p>` +
+               `<p class='event-text'>${marker.eventDetails.city}</p>` +
+               `<p class='event-text'>${marker.eventDetails.startDate}</p>` +
+               `<p class='event-text'>${marker.eventDetails.endDate}</p>` +
+
+         '</div>'
+      );
+   }
+
    render(){
       return (
          <div className='form-modal animated fadeInTop'>
@@ -101,21 +120,11 @@ export default class CreateEvent extends React.Component {
                      <label htmlFor='event-end-date'>End Date </label>
                      <input className='event-date' onChange={this.handleUpdate('endDate')}type='date' value={this.state.endDate} id='event-end-date'/>
                   </li>
-                  <li className="li-split">
-
-                     <label htmlFor="groups">Choose a Group:</label>
-                     <select id="groups" onChange={this.handleUpdate('groupId')}>
-                        <option value="" selected='true' disabled='disabled'>Select a group</option>
-                        {this.groups.map( group => (
-                           <option value={group.id} >{group.name}</option>
-                        ))
-                     }
-                     </select>
-                  </li>
+                  
                </ul>
                <div className="modal-footer">
                   <button className='generic-button' onClick={this.props.closeModal}>Cancel</button>
-                  <input type='submit' value="Create Event"/>
+                  <input type='submit' value="Update Event"/>
                </div>
 
                <ul>

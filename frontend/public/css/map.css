@@ -1,6 +1,6 @@
 div#map {
   height: calc(100vh - 5.5rem);
-  width: calc(100vw - 10rem);
+  /* width: calc(100vw - 10rem); */
 }
 
 .gm-style-iw.gm-style-iw-c {

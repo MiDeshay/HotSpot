@@ -42,6 +42,7 @@ class NavBar extends React.Component {
             <Link to="/home"><h1 className="title">HotSpot</h1></Link>
             <UserSearchContainer />
             <GroupSearchContainer />
+            <Link to="/links"><h2 className="links">About</h2></Link>
             { this.getLinks() }
         </div>
       );
