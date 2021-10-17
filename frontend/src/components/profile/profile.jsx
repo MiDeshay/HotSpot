@@ -8,13 +8,13 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchUser(this.props.currentUser.id);
+    this.props.fetchUser(this.props.match.params.userId);
   }
 
   render() {
     let { user, currentUser, groups } = this.props;
     if (!user) {return null};
-    let { firstName, lastName, username } = user;
+    let { firstName, lastName, username, email } = user;
     const allGroups = Object.values(groups);
     const usersGroups = []
 
@@ -30,15 +30,20 @@ class Profile extends React.Component {
       
       <div className="first-last-name">{firstName} {lastName}</div>
   
-        <div className="username">{username}</div> 
+        <div className="username">"{username}"</div> 
 
-        <div>
+        <div className="profile-groups-container">
             <div className="groups-joined"> Groups Joined:</div>
             <ul>
               {usersGroups.map((group, i) => 
-                 <Link to={`/groups/${group.name}`} key={i}>{group.name}</Link>
+                 <Link to={`/groups/${group.name}`} className="profile-group button" key={i}>{group.name}</Link>
               )}
             </ul>
+        </div>
+
+        <div className= "profile-contact-container">           
+          <div className="profile-contact"> Contact info: </div>
+          <div className="profile-email">{email}</div>
         </div>
   
         {Boolean(currentUser.id === user.id) ? <Link to={`/profile/${currentUser.id}/edit`}><button className="button">Edit Profile</button></Link> : null}
