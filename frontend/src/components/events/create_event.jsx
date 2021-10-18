@@ -79,19 +79,19 @@ export default class CreateEvent extends React.Component {
                <ul>
                   <li>
                      <label htmlFor='event-title'>Title </label>
-                     <input autocomplete="off" onChange={this.handleUpdate('title')}type='text' value={this.state.title} id='event-title' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('title')}type='text' value={this.state.title} id='event-title' className="text-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-description'>Description </label>
-                     <textarea autocomplete="off" onChange={this.handleUpdate('description')}type='body' value={this.state.description} id='event-description' className="textarea-input"/>
+                     <textarea autoComplete="off" onChange={this.handleUpdate('description')}type='body' value={this.state.description} id='event-description' className="textarea-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-address'>Address </label>
-                     <input autocomplete="off" onChange={this.handleUpdate('address')}type='text' value={this.state.address} id='event-address' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('address')}type='text' value={this.state.address} id='event-address' className="text-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-city'>City </label>
-                     <input autocomplete="off" onChange={this.handleUpdate('city')}type='text' value={this.state.city} id='event-city' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('city')}type='text' value={this.state.city} id='event-city' className="text-input"/>
                   </li>
                   <li className="li-split">
                      <label htmlFor='event-start-date'>Start Date </label>
@@ -104,8 +104,8 @@ export default class CreateEvent extends React.Component {
                   <li className="li-split">
 
                      <label htmlFor="groups">Choose a Group:</label>
-                     <select id="groups" onChange={this.handleUpdate('groupId')}>
-                        <option value="" selected='true' disabled='disabled'>Select a group</option>
+                     <select id="groups" defaultValue={'DEFAULT'} onChange={this.handleUpdate('groupId')}>
+                        <option value="" value="DEFAULT" disabled='disabled'>Select a group</option>
                         {this.groups.map( (group, i ) => (
                            <option key={`group-${i}`} value={group.id} >{group.name}</option>
                         ))
