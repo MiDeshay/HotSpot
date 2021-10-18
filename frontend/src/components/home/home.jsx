@@ -1,7 +1,8 @@
 import React from 'react';
 import { Loader } from "@googlemaps/js-api-loader";
-import { mapsKey } from '../../config/keys';
+//import { mapsKey } from '../../config/keys';
 import Modal from '../modals/modal';
+const mapsKey = process.env.REACT_APP_MAPS_API_KEY;
 
 
 
@@ -48,8 +49,6 @@ export default class Home extends React.Component{
       this.clearMarkers = this.clearMarkers.bind(this);
       this.addEvent = this.addEvent.bind(this);
       this.initMarkerWindow = this.initMarkerWindow.bind(this);
-
-      this.eventRespondButton = "";
    }
 
    // Google maps loader
@@ -158,7 +157,6 @@ export default class Home extends React.Component{
       let leaveButton = `<button id='event-respond' class='button'>Leave</button>`; 
       
       marker.addListener("click", () => {
-         console.log(this.props.events[eventId]);
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<div class='event-header'>`+
