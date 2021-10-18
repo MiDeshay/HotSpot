@@ -15,7 +15,7 @@ export default class CreateEvent extends React.Component {
          mapLng: this.props.pos.lng,
          startDate: "",
          endDate: "",
-         groupId: "",     
+         groupId: "",
       }
       this.submitted = false;
       // Bindings
@@ -106,8 +106,8 @@ export default class CreateEvent extends React.Component {
                      <label htmlFor="groups">Choose a Group:</label>
                      <select id="groups" onChange={this.handleUpdate('groupId')}>
                         <option value="" selected='true' disabled='disabled'>Select a group</option>
-                        {this.groups.map( group => (
-                           <option value={group.id} >{group.name}</option>
+                        {this.groups.map( (group, i ) => (
+                           <option key={`group-${i}`} value={group.id} >{group.name}</option>
                         ))
                      }
                      </select>
@@ -119,8 +119,8 @@ export default class CreateEvent extends React.Component {
                </div>
 
                <ul>
-                  {this.props.errors.map( err => (
-                     <li>{err}</li>
+                  {this.props.errors.map((err, i) => (
+                     <li key={`error-${i}`}>{err}</li>
                   ))}
                </ul>
             </form>

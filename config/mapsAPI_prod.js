@@ -1,1 +1,3 @@
-export const mapsKey = process.env.MAPS_KEY
+module.exports = {
+    mapsKey: process.env.MAPS_KEY
+}
