@@ -15,3 +15,11 @@ export const updateEventApi = (eventId, eventForm) => (
 export const deleteEventApi = eventId => (
    axios.delete(`/api/events/delete/${eventId}`)
 )
+
+export const joinEventApi = (eventId, email) => (
+   axios.patch(`/api/events/join_event/${eventId}`, email)
+)
+
+export const declineEventApi = (eventId, email) => (
+   axios.patch(`/api/events/decline_event/${eventId}`, email)
+)

@@ -9,10 +9,9 @@ export default class Home extends React.Component{
    constructor(props){
       super(props)
 
-      // The map and collection of related objects/collection. Pins is only used for debugging.
+      // The map and collection of related objects/collection. 
       // this.markers contains the collection of actual markers representing events.
       this.map = null;
-      this.pins = [];
       this.markers = {}; // The list of marker objects created from currentEvents. These are references to the marker object directly created by google maps API.
       this.infoWindow = null;
       this.mousePos = {
@@ -25,14 +24,14 @@ export default class Home extends React.Component{
          marker: null,
       };
 
-      // Google Maps API loader uses the current component's React state to determine map options.
+      // Google Maps API loader uses the current component's React state as map options.
       this.loader = null;
-
       this.state = {
          center: {
             lat: 0,
             lng: 0
          },
+         clickableIcons: false,
          zoom: 11, // Hard coded default zoom value, free free to change. Lower number less zoom.
          pins: this.pins, // These pins are only used for debugging
          currentEvents: {}, // This will be the list of events that are currently marked on the map. Used for drawing markers.
@@ -49,6 +48,8 @@ export default class Home extends React.Component{
       this.clearMarkers = this.clearMarkers.bind(this);
       this.addEvent = this.addEvent.bind(this);
       this.initMarkerWindow = this.initMarkerWindow.bind(this);
+
+      this.eventRespondButton = "";
    }
 
    // Google maps loader
@@ -152,44 +153,63 @@ export default class Home extends React.Component{
 
    // Initialize a maps marker with html and event listeners.
    initMarkerWindow(marker) {
+      let eventId = marker.eventDetails._id;
+      let joinButton = `<button id='event-respond' class='button'>Join</button>`; 
+      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`; 
+      
       marker.addListener("click", () => {
+         console.log(this.props.events[eventId]);
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<div class='event-header'>`+
                   `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
-                  (marker.eventDetails.hostEmail !== this.props.user.email ? "" :
-                     `<div class='event-buttons'> ` +
+                  `<div class='event-buttons'> ` +
+                     (marker.eventDetails.hostEmail !== this.props.user.email ? 
+                        (this.props.events[eventId].attendeesEmail.includes(this.props.user.email)? leaveButton : joinButton )
+                        :
                         `<button id='event-edit' class='button'>Edit</button>` +
-                        `<button id='event-delete' class='button'>Delete</button>`  +
-                     `</div>`
-                  ) +
+                        `<button id='event-delete' class='button'>Delete</button>`  
+                     ) +
                   `</div>` +
+               `</div>` +
                   `<p class='event-text'>${marker.eventDetails.description}</p>` +
                   `<p class='event-text'>${marker.eventDetails.address}</p>` +
                   `<p class='event-text'>${marker.eventDetails.city}</p>` +
-                  `<p class='event-text'>${marker.eventDetails.startDate}</p>` +
-                  `<p class='event-text'>${marker.eventDetails.endDate}</p>` +
+                  `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
+                  `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
 
             '</div>'
          );
+
          // Event handlers for buttons in info window.
          // Delete button and Edit button dispatches their respective action using the marker's information
          this.google.maps.event.addListener(this.infoWindow, "domready", () => {
             let deleteButton = document.getElementById('event-delete');
             if (deleteButton) deleteButton.onclick = () => {
-               this.props.deleteEvent(marker.eventDetails._id)
-               this.markers[marker.eventDetails._id].setMap(null);
-               delete this.markers[marker.eventDetails._id];
+               this.props.deleteEvent(eventId)
+               this.markers[eventId].setMap(null);
+               delete this.markers[eventId];
             }
+
             let editButton = document.getElementById('event-edit');
             if (editButton) editButton.onclick=() => {
                this.selectedEvent = {
                   event: marker.eventDetails,
-                  marker: this.markers[marker.eventDetails._id],
+                  marker: this.markers[eventId],
                   infoWindow: this.infoWindow,
                }
-
                this.props.openUpdate();
+            }
+
+            let respondButton = document.getElementById('event-respond');
+            if (respondButton) respondButton.onclick=() => {
+               if (respondButton.innerHTML === 'Join'){
+                  this.props.joinEvent(eventId, {email: this.props.user.email});
+                  respondButton.innerHTML = 'Leave';
+               } else {
+                  this.props.declineEvent(eventId, {email: this.props.user.email});
+                  respondButton.innerHTML = 'Join';
+               }
             }
          });
 
