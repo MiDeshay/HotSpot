@@ -271,37 +271,10 @@ router.patch("/join_event/:eventId", (req, res) => {
                                     if (event.attendeesEmail){
                                         User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
                                         .then(attendees => {
-                                            res.json({
-                                                _id: event.id,
-                                                city: event.city,
-                                                title: event.title,
-                                                address: event.address,
-                                                description: event.description,
-                                                mapLat: event.mapLat,
-                                                mapLng: event.mapLng,
-                                                host: hostInfo, 
-                                                attendeesEmail: attendees,
-                                                startDate: event.startDate,
-                                                endDate: event.endDate,
-                                                eventPicturesKeys: event.eventPicturesKeys,
-                                                coverPictureKey: event.coverPictureKey    
-                                            })
+                                            res.json(event)
                                         })
                                     }else{
-                                        res.json({
-                                            _id: event.id,
-                                            city: event.city,
-                                            title: event.title,
-                                            address: event.address,
-                                            description: event.description,
-                                            mapLat: event.mapLat,
-                                            mapLng: event.mapLng,
-                                            host: hostInfo,
-                                            startDate: event.startDate,
-                                            endDate: event.endDate,
-                                            eventPicturesKeys: event.eventPicturesKeys,
-                                            coverPictureKey: event.coverPictureKey   
-                                        })
+                                        res.json(event)
                                     }
                                 })
                             })
