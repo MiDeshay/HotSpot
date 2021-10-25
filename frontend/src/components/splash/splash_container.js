@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { openModal } from '../../actions/modal_actions';
+import { login } from '../../actions/session_actions';
 import Splash from './splash';
 
 const mapStateToProps = state => ({
@@ -7,7 +8,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  openSignup: () => dispatch(openModal('signup'))
+  openSignup: () => dispatch(openModal('signup')),
+  login: user => dispatch(login(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Splash);

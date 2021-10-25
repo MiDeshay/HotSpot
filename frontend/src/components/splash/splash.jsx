@@ -5,7 +5,17 @@ import { Link } from "react-router-dom";
 class Splash extends React.Component {
   constructor(props) {
     super(props);
+    this.handleDemoLogin = this.handleDemoLogin.bind(this);
   }
+
+   handleDemoLogin(e){
+      e.preventDefault();
+      let user = {
+         email: "Demo@demo.test",
+         password: "123456"
+      }
+      this.props.login(user);
+   }
 
   render() {
     return (
@@ -34,7 +44,12 @@ class Splash extends React.Component {
                 </li>
               </ul>
             </div>
-          {this.props.isLoggedIn ? null : (<div className="page-body-calltoaction"><div className="button" onClick={this.props.openSignup}>Signup!</div></div>)}
+          {this.props.isLoggedIn ? null :(
+            <div className="page-body-calltoaction">
+               <div className="button" onClick={this.props.openSignup}>Signup!</div>
+               <div className="button" onClick={this.handleDemoLogin}>Demo Account</div>
+            </div>
+          )}
           </div>
         </div>
       // </Link>
