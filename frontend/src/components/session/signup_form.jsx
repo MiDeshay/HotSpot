@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Splash from '../splash/splash';
 
 
 class SignupForm extends React.Component {
@@ -63,12 +62,21 @@ class SignupForm extends React.Component {
   screenClick(e) {
     e.preventDefault();
     e.stopPropagation();
+    this.props.closeSignup();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.isLoggedIn === false && this.props.isLoggedIn) {
+      this.props.closeSignup();
+      const that = this;
+      setTimeout(() => that.props.history.push('/home'), 500);
+    }
   }
 
   render() {
     return (
       <div className="auth-form-container">
-        <div className="modal-screen" onClick={this.screenClick}></div>
+        <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop">
           <div className="auth-form-div">
             <form onSubmit={this.handleSubmit}>
@@ -121,14 +129,13 @@ class SignupForm extends React.Component {
                   <input type="submit" value="Signup" className="button submit" />
                   {this.renderErrors()}
                   <div className="modal-footer">
-                    <div className="auth-other-message">Already have an account?</div> <Link to="/login"><div className="link">Login</div></Link>
+                    <div className="auth-other-message">Already have an account?</div><div className="link" onClick={this.props.openLogin}>Login</div>
                   </div>
                 </div>
               </div>
             </form>
           </div>
         </div>
-        <Splash />
       </div>
     );
   }

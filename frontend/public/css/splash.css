@@ -1,19 +1,59 @@
 .splash-container {
-  background-image: url(../images/splash.png);
-  background-repeat: no-repeat;
-  height: 30rem;
-  width: 30rem;
-
-  position: absolute;
-  right: 50%;
-  transform: translatex(50%) translatey(1rem);
-  background-color: var(--bgc1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 30rem;
-
-  z-index: -1;
-
-  object-fit: cover;
-  height: 100%;
 }
 
+.splash-image {
+  margin-top: 3rem;
+  content: url(../images/splash.png);
+  /* max-width: 30rem; */
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+}
+
+.page-body {
+  max-width: 40rem;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--color1dark) 5%, var(--color1dark) 95%, rgba(255, 255, 255, 0));
+  opacity: 85%;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: var(--white);
+  border-top: solid 0.1rem var(--color1light);
+  border-bottom: solid 0.1rem var(--color1light);
+  padding: 0.5rem 2rem;
+}
+
+.page-body-calltoaction {
+  display: flex;
+  justify-content: center;
+  color: var(--color3light);
+}
+
+.page-body-calltoaction > .button {
+  background-color: var(--color1);
+  border: solid 0.1rem var(--white);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.page-body-calltoaction > .button:hover {
+  background-color: var(--color1light);
+}
+
+.page-body-calltoaction > .button:active {
+  background-color: var(--color1dark);
+}
+
+.list-steps {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+}
+
+.list-step {
+  margin-bottom: 1rem;
+}

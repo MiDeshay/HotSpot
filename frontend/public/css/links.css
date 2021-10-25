@@ -9,7 +9,7 @@
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
-  padding: 0.5rem;
+  padding: 0.5rem 0rem;
   margin-bottom: 1rem;
   width: 100%;
   border-bottom: solid var(--color1light) 0.1rem;
@@ -22,7 +22,7 @@
 }
 
 @media only screen and (max-width: 35rem) {
-  :root {
+  :root { 
     --flexdir: column;
   }
 }

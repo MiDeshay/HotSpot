@@ -1,8 +1,13 @@
 .auth-form-container {
-  background-color: var(--color1dark);
+  /* background-color: var(--color1dark); */
   display: flex;
   justify-content: center;
   align-content: center;
+  /* display: none; */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: var(--color2dark);
 }
 
 .form-modal {
