@@ -13,19 +13,21 @@ import GroupShowContainer from './group/group_show_container';
 import CreateGroupFormContainer from './group/group_form/create_group_form_container';
 import EditGroupFormContainer from './group/group_form/edit_group_form_container';
 import LinksShow from './links/links_show';
+import Splash from './splash/splash';
 
 const App = () => (
   <div className="app">
     <NavBarContainer />
     <Switch>
-      <AuthRoute exact path="/register" component={SignupFormContainer} />
-      <AuthRoute exact path="/login" component={LoginFormContainer} />
+      {/* <AuthRoute exact path="/register" component={SignupFormContainer} /> */}
+      {/* <AuthRoute exact path="/login" component={LoginFormContainer} /> */}
       <ProtectedRoute exact path={`/profile/:userId`} component={ProfileContainer} />
       <ProtectedRoute exact path="/profile/:userId/edit" component={EditProfileFormContainer} />
       <ProtectedRoute exact path="/groups/create" component={CreateGroupFormContainer} />
       <ProtectedRoute exact path="/groups/:groupName" component={GroupShowContainer} />
       <ProtectedRoute exact path="/groups/:groupName/edit" component={EditGroupFormContainer} />
       <ProtectedRoute exact path="/home" component={HomeContainer} />
+      <Route exact path="/splash" component={Splash} />
       <Route exact path="/links" component={LinksShow} />
       <ProtectedRoute exact path="/" component={MainPage} />
     </Switch>

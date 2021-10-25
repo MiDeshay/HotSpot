@@ -36,6 +36,10 @@ class NavBar extends React.Component {
       }
   }
 
+  renderSessionModal() {
+    
+  }
+
   render() {
       return (
         <div className="nav-bar-container">
@@ -44,6 +48,7 @@ class NavBar extends React.Component {
             <GroupSearchContainer />
             <Link to="/links"><h2 className="links">About</h2></Link>
             { this.getLinks() }
+            { this.renderSessionModal }
         </div>
       );
   }
