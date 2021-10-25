@@ -1,20 +1,44 @@
 const Product = require("../models/User");
+const Group = require('../models/Group');
+const Event = require('../models/Events');
+const bcrypt = require('bcryptjs');
 const mongoose = require("mongoose");
-const dev = require("../config/dev"); //get your mongoose string
+const dev = require('../config/keys').mongoURI
+
 //create your array. i inserted only 1 object here
 const products = [
   new Product({
-    image:
-      "https://static.seattletimes.com/wp-content/uploads/2018/01/a8e801dc-f665-11e7-bf8f-ddd02ba4a187-780x1181.jpg",
-    title: "Origin",
-    author: "Dan Brown",
-    description:
-      "2017 mystery thriller novel. Dan Brown is back with another thriller so moronic you can feel your IQ points flaking away like dandruff",
-    price: 12
-  }),]
+    username: "demo",
+    firstName: "Demo",
+    lastName: "User",
+    email: "Demo@demo.test",
+    password: "123456",
+  }),
+]
+
+const group = new Group({
+  name: "Demo Group",
+  description: "A group for the demo user ",
+  ownerId: "617726bffa8eaed0b05f2d50",
+  members: ["617726bffa8eaed0b05f2d50"],
+  events: []
+})
+
+const event = new Event({
+  address: "1234 Fake St",
+  city: "Fake City",
+  hostEmail: "Demo@demo.test",
+  title: "Demo's Event!",
+  description: "BBQ and potluck meetup.",
+  mapLat: 37.60,
+  mapLng: -122.4330609,
+  startDate: "2030-10-16",
+  endDate: "2030-10-18"
+})
+
 //connect mongoose
 mongoose
-  .connect(String(dev.db), { useNewUrlParser: true })
+  .connect(dev, { useNewUrlParser: true })
   .catch(err => {
     console.log(err.stack);
     process.exit(1);
@@ -22,13 +46,29 @@ mongoose
   .then(() => {
     console.log("connected to db in development environment");
   });
+
 //save your data. this is an async operation
 //after you make sure you seeded all the products, disconnect automatically
 products.map(async (p, index) => {
-  await p.save((err, result) => {
-    if (index === products.length - 1) {
-      console.log("DONE!");
-      mongoose.disconnect();
-    }
-  });
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(p.password, salt, (err, hash) => {
+      if (err) throw err;
+      p.password = hash;
+
+      p.save().then( user =>{
+        group.ownerId = user.id;
+        group.members = [user.id];
+        group.save().then( () =>{
+            p.groupsJoined.push(group);
+            p.save();
+            event.host.push(user);
+            event.group = group;
+            event.save().then(()=> mongoose.disconnect())
+        })
+      })
+    })
+  })
 });
+
+
+

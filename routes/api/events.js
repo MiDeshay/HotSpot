@@ -396,7 +396,6 @@ router.post("/create_event", (req, res) => {
     }
     
     const newEvent = new Event({
-        pinId: req.body.pinId,
         address: req.body.address, 
         city: req.body.city,
         hostEmail: req.body.hostEmail,
