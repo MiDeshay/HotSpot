@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
    events: state.entities.events,
    groups: state.entities.groups,
    modal: state.ui.modal,
-})
+});
 
 const mapDispatchToProps = dispatch => ({
    getEvents: () => dispatch(getEvents()),
@@ -20,6 +20,6 @@ const mapDispatchToProps = dispatch => ({
    fetchUsers: () => dispatch(fetchUsers()),
    joinEvent: (eventId, email) => dispatch(joinEvent(eventId, email)),
    declineEvent: (eventId, email) => dispatch(declineEvent(eventId, email)),
-})
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(home);

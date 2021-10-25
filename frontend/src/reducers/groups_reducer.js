@@ -21,7 +21,7 @@ const groupsReducer = (state={}, action) => {
       return nextState;
     default: return state;
   }
-}
+};
 
 export default groupsReducer;
 
@@ -31,7 +31,7 @@ const fixGroupId = action => {
     delete action.group.data._id;
   }
   return action;
-}
+};
 
 const fixGroupIds = action => {
   action.groups.data.forEach((group, i) => {
@@ -42,9 +42,9 @@ const fixGroupIds = action => {
       delete action.groups.data[i];
     }
     action.groups.data[group.name] = currentgroup;
-  })
+  });
   return action;
-}
+};
 
 const removeOldName = (nextState, action) => {
   console.log(action.group.data._id);
@@ -58,4 +58,4 @@ const removeOldName = (nextState, action) => {
     delete nextState[targetName];
   }
   // rely on side-effect mutates
-}
+};
