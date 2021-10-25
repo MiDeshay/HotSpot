@@ -41,7 +41,7 @@ router.post('/create', (req, res) => {
 
 
           newGroup.save().then(group => {
-            user.groupsJoined.push(newGroup); 
+            user.groupsJoined.push(newGroup);
             user.save();
             return res.json(group);
           });
@@ -59,14 +59,14 @@ router.get('/:groupName', (req, res) => {
       return res.status(404).json("Group not found");
     }
     res.json(group);
-  })
+  });
 });
 
 router.get('/', (req, res) => {
   Group.find({}, (err, groups) => {
-      res.json(groups)
-  })
-})
+      res.json(groups);
+  });
+});
 
 
 router.delete('/:groupId/:ownerId', (req, res) => {
@@ -89,14 +89,14 @@ router.delete('/:groupId/:ownerId', (req, res) => {
             } else {
                Event.deleteMany({group: group._id})
                .then( () => res.json(group))
-               .catch( err => res.status(400).json(err))
+               .catch( err => res.status(400).json(err));
             }
-          })
+          });
         }
-      })
+      });
     }
-  })
-})
+  });
+});
 
 router.patch('/:groupName/update', (req, res) => {
   const { errors, isValid } = validateGroupInput(req.body);
@@ -113,8 +113,8 @@ router.patch('/:groupName/update', (req, res) => {
       // group = Object.assign(group, {name: req.body.name}, {description: req.body.description});
       res.json(group);
     }
-  })
-})
+  });
+});
 
 router.patch('/members', (req, res) => {
    // res.json({ msg: "This is the groups add_member route" })
@@ -130,14 +130,14 @@ router.patch('/members', (req, res) => {
          return res.status(400).json(errors);
        }
        let { members } = group;
-       
+
        if (Boolean(req.body.isAdding === 'true')) {
          members.push(req.body.memberId);
          User.findById(req.body.memberId).then( user => {
-            user.groupsJoined.push(group); 
-            user.save() // Fix later to handle error handling.
-         })
-            
+            user.groupsJoined.push(group);
+            user.save(); // Fix later to handle error handling.
+         });
+
        } else {
          let memberIndex = members.indexOf(req.body.memberId);
          if (memberIndex > -1) {
@@ -153,10 +153,10 @@ router.patch('/members', (req, res) => {
            group = Object.assign(group, {members});
            res.json(group);
          }
-       })
+       });
      }
-   })
- })
+   });
+ });
 
 router.patch('/events', (req, res) => {
   const errors = {};
@@ -188,10 +188,10 @@ router.patch('/events', (req, res) => {
           group = Object.assign(group, {events});
           res.json(group);
         }
-      })
+      });
     }
-  })
-})
+  });
+});
 
 
 
