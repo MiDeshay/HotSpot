@@ -11,8 +11,8 @@ const modalsReducer = (state = null, action) => {
     case CLOSE_MODAL:
       return null;
 
-    case UI_SHOW_SESSION_MODAL: // action shape -- modal: {modal: "'signup' or 'login'", show: "Boolean"}
-      return action.modal;
+    // case UI_SHOW_SESSION_MODAL: // action shape -- modal: {session: {form: "'signup' or 'login'", show: "Boolean"}}
+    //   return {session: action.modal};
 
     default: return state;
   }

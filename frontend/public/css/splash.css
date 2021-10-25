@@ -19,7 +19,7 @@
 .page-body {
   max-width: 40rem;
   background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--color1dark) 5%, var(--color1dark) 95%, rgba(255, 255, 255, 0));
-  /* opacity: 80%; */
+  opacity: 85%;
   font-size: 1.5rem;
   line-height: 2rem;
   color: var(--white);
@@ -47,4 +47,13 @@
 
 .page-body-calltoaction > .button:active {
   background-color: var(--color1dark);
+}
+
+.list-steps {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+}
+
+.list-step {
+  margin-bottom: 1rem;
 }

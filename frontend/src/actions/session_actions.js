@@ -6,7 +6,7 @@ export const RECEIVE_CURRENT_USER = "RECEIVE_CURRENT_USER";
 export const RECEIVE_SESSION_ERRORS = "RECEIVE_SESSION_ERRORS";
 export const RECEIVE_USER_LOGOUT = "RECEIVE_USER_LOGOUT";
 export const RECEIVE_USER_SIGN_IN = "RECEIVE_USER_SIGN_IN";
-export const UI_SHOW_SESSION_MODAL = "UI_SHOW_SESSION_MODAL";
+// export const UI_SHOW_SESSION_MODAL = "UI_SHOW_SESSION_MODAL";
 
 // We'll dispatch this when our user signs in
 export const receiveCurrentUser = currentUser => ({
@@ -32,10 +32,10 @@ export const logoutUser = () => ({
   type: RECEIVE_USER_LOGOUT
 });
 
-export const uiShowSessionModal = modal => ({
-  type: UI_SHOW_SESSION_MODAL,
-  modal
-});
+// export const uiShowSessionModal = modal => ({
+//   type: UI_SHOW_SESSION_MODAL,
+//   modal
+// });
 
 // Upon signup, dispatch the approporiate action depending on which type of response we receieve from the backend
 export const signup = user => dispatch => {
