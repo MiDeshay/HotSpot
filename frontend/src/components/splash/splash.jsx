@@ -18,7 +18,7 @@ class Splash extends React.Component {
               HotSpot is a social media app in which users can join groups then create and share events with members of those groups.
               <ul className="list-steps">
                 <li className="list-step">
-                  Login or Signup, you'll be redirected to "/home" where you can see the world map.
+                  Login or Signup, you'll be redirected to the home page where you can see the world map.
                 </li>
                 <li className="list-step">
                   The first thing you'll want to do is use the group search bar at the top of the page.
