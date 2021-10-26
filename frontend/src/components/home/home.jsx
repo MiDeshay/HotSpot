@@ -10,7 +10,7 @@ export default class Home extends React.Component{
    constructor(props){
       super(props)
 
-      // The map and collection of related objects/collection. 
+      // The map and collection of related objects/collection.
       // this.markers contains the collection of actual markers representing events.
       this.map = null;
       this.markers = {}; // The list of marker objects created from currentEvents. These are references to the marker object directly created by google maps API.
@@ -89,7 +89,7 @@ export default class Home extends React.Component{
          this.drop();
          this.eventsLoaded = true;
          this.setState({
-            currentEvents: this.props.events,   
+            currentEvents: this.props.events,
          })
       }
    }
@@ -128,7 +128,7 @@ export default class Home extends React.Component{
          let i = 0;
          let userGroups = this.props.user.groupsJoined;
 
-         if (!this.state.currentEvents[event] && userGroups.includes(events[event].group._id)){
+         if (!this.state.currentEvents[event] && (userGroups.includes(events[event].group._id) || events[event].group.name === "Public")){ // added "Public" name to filter
             const pin = events[event];
             this.addMarkerWithTimeout(pin, i*20);
             i++;
@@ -157,20 +157,20 @@ export default class Home extends React.Component{
    // Initialize a maps marker with html and event listeners.
    initMarkerWindow(marker) {
       let eventId = marker.eventDetails._id;
-      let joinButton = `<button id='event-respond' class='button'>Join</button>`; 
-      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`; 
-      
+      let joinButton = `<button id='event-respond' class='button'>Join</button>`;
+      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`;
+
       marker.addListener("click", () => {
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<div class='event-header'>`+
                   `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
                   `<div class='event-buttons'> ` +
-                     (marker.eventDetails.hostEmail !== this.props.user.email ? 
+                     (marker.eventDetails.hostEmail !== this.props.user.email ?
                         (this.props.events[eventId].attendeesEmail.includes(this.props.user.email)? leaveButton : joinButton )
                         :
                         `<button id='event-edit' class='button'>Edit</button>` +
-                        `<button id='event-delete' class='button'>Delete</button>`  
+                        `<button id='event-delete' class='button'>Delete</button>`
                      ) +
                   `</div>` +
                `</div>` +

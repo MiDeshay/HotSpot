@@ -41,7 +41,7 @@ router.post('/create', (req, res) => {
 
 
           newGroup.save().then(group => {
-            user.groupsJoined.push(newGroup); 
+            user.groupsJoined.push(newGroup);
             user.save();
             return res.json(group);
           });
@@ -130,14 +130,14 @@ router.patch('/members', (req, res) => {
          return res.status(400).json(errors);
        }
        let { members } = group;
-       
+
        if (Boolean(req.body.isAdding === 'true')) {
          members.push(req.body.memberId);
          User.findById(req.body.memberId).then( user => {
-            user.groupsJoined.push(group); 
+            user.groupsJoined.push(group);
             user.save() // Fix later to handle error handling.
          })
-            
+
        } else {
          let memberIndex = members.indexOf(req.body.memberId);
          if (memberIndex > -1) {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Splash from '../splash/splash';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -14,16 +13,25 @@ class LoginForm extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderErrors = this.renderErrors.bind(this);
+    this.screenClick = this.screenClick.bind(this);
   }
 
   // Once the user has been authenticated, redirect to Index
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser === true) {
-      this.props.history.push('/home');
-    }
+    // if (nextProps.isLoggedIn === true) { DOP history.push() is in componentDidUpdate()
+    //   this.props.history.push('/home');
+    // }
 
     // Set or clear errors
     this.setState({errors: nextProps.errors})
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.isLoggedIn === false && this.props.isLoggedIn) {
+      this.props.closeLogin();
+      const that = this;
+      setTimeout(() => { that.props.history.push('/home') }, 500);
+    }
   }
 
   // Handle field updates (called in the render method)
@@ -45,6 +53,12 @@ class LoginForm extends React.Component {
     this.props.login(user);
   }
 
+  screenClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.closeLogin();
+  }
+
   // Render the session errors if there are any
   renderErrors() {
     return(
@@ -61,7 +75,7 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="auth-form-container">
-        <div className="modal-screen"></div>
+        <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop">
           <form onSubmit={this.handleSubmit}>
             <div className="auth-form-div">
@@ -89,13 +103,12 @@ class LoginForm extends React.Component {
                 <input type="submit" value="Login" className="button submit" />
                 {this.renderErrors()}
                 <div className="modal-footer">
-                  <div className="auth-other-message">Don't have an account?</div> <div className="link"><Link to="/register">Signup</Link></div>
+                  <div className="auth-other-message">Don't have an account?</div> <div className="link" onClick={this.props.openSignup}>Signup</div>
                 </div>
               </div>
             </div>
           </form>
         </div>
-        <Splash />
       </div>
     );
   }
