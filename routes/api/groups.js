@@ -111,7 +111,6 @@ router.patch('/:groupName/update', (req, res) => {
     if (error) {
       return res.status(400).json(error);
     } else {
-      // group = Object.assign(group, {name: req.body.name}, {description: req.body.description});
       res.json(group);
     }
   });
@@ -136,8 +135,8 @@ router.patch('/members', (req, res) => {
          members.push(req.body.memberId);
          User.findById(req.body.memberId).then( user => {
             user.groupsJoined.push(group);
-            user.save() // Fix later to handle error handling.
-         })
+            user.save(); // Fix later to handle error handling.
+         });
 
        } else {
          let memberIndex = members.indexOf(req.body.memberId);
@@ -219,7 +218,44 @@ router.post('/join_request', (req, res) => {
       });
     });
   }).catch(err => {
-    errors.group = `Failed in /join_request`;
+    errors.join = `Failed in /join_request`;
+    return res.status(400).json(errors);
+  });
+});
+
+router.patch('/join_request/response', (req, res) => {
+  const errors = {};
+  Group.findById(req.body.groupId).then(group => {
+    if (!group) {
+      errors.group = 'Failed to find group';
+      return res.status(400).json(errors);
+    }
+    User.findById(req.body.userId).then(user => {
+      // removing the userId from the group's groupJoinRequests array (this should happen regardless of case)
+      const gjrindex = group.groupJoinRequests.indexOf(req.body.userId);
+      if (gjrindex < 0) {
+        errors.join = 'Failed to find that request Id';
+        return res.status(400).json(errors);
+      } else {
+        group.groupJoinRequests.splice(gjrindex, 1);
+        group.save().then(group => {
+          if (!user) { // regular error out if we never found the user
+            errors.user = 'Failed to find user';
+            return res.status(400).json(errors);
+          }
+          if (Boolean(req.body.isAdding === 'true')) {
+            group.members.push(user);
+            user.groupsJoined.push(group);
+            user.save();
+            group.save().then(group => {
+              res.json(group);
+            });
+          }
+        });
+      }
+    });
+  }).catch(err => {
+    errors.join = 'Failed in /join_request/response';
     return res.status(400).json(errors);
   });
 });
