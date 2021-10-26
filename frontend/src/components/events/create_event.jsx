@@ -64,7 +64,7 @@ export default class CreateEvent extends React.Component {
                if (addr.types[0] === 'premise') address = addr.short_name + " "; 
                if (addr.types[0] === 'political') address += addr.short_name + " "; 
                if (addr.types[0] === 'street_number') address += addr.short_name + " "; 
-               if (addr.types[0] === 'route') address += (' ' + addr.short_name); 
+               if (addr.types[0] === 'route') address += (addr.short_name); 
                if (addr.types[0] === 'locality') city = addr.long_name; 
                this.setState({
                   address,
