@@ -37,6 +37,9 @@ export default class Home extends React.Component{
          pins: this.pins, // These pins are only used for debugging
          currentEvents: {}, // This will be the list of events that are currently marked on the map. Used for drawing markers.
       }
+
+      // Geocoder, grabs address from lat,lng 
+      this.geocoder = null;
       // Get google from the window
       this.google = window.google;
 
@@ -65,6 +68,7 @@ export default class Home extends React.Component{
          .then((google) => {
             this.google = window.google;
             this.map = new google.maps.Map(document.getElementById("map"), this.state);
+            this.geocoder = new google.maps.Geocoder();
             this.getLocation();
             this.infoWindow = new google.maps.InfoWindow({
                content: "No description provided.",
@@ -229,7 +233,7 @@ export default class Home extends React.Component{
    render(){
       return (
          <div id='map'>
-            <Modal pos={this.mousePos} event={this.selectedEvent} />
+            <Modal pos={this.mousePos} geocoder={this.geocoder} event={this.selectedEvent} />
          </div>
       )
    }
