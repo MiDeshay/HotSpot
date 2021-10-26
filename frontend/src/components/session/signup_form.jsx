@@ -20,7 +20,7 @@ class SignupForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.signedIn === true) {
+    if (nextProps.isLoggedIn === true) {
       this.props.history.push('/home');
     }
 
@@ -141,4 +141,4 @@ class SignupForm extends React.Component {
   }
 }
 
-export default withRouter(SignupForm);
+export default SignupForm;

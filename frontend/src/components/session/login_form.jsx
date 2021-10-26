@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Splash from '../splash/splash';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -19,7 +18,7 @@ class LoginForm extends React.Component {
 
   // Once the user has been authenticated, redirect to Index
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser === true) {
+    if (nextProps.isLoggedIn === true) {
       this.props.history.push('/home');
     }
 
@@ -102,10 +101,9 @@ class LoginForm extends React.Component {
             </div>
           </form>
         </div>
-        <Splash />
       </div>
     );
   }
 }
 
-export default withRouter(LoginForm);
+export default LoginForm;
