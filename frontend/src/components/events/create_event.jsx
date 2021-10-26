@@ -106,6 +106,7 @@ export default class CreateEvent extends React.Component {
                      <label htmlFor="groups">Choose a Group:</label>
                      <select id="groups" defaultValue={'DEFAULT'} onChange={this.handleUpdate('groupId')}>
                         <option value="DEFAULT" disabled='disabled'>Select a group</option>
+                        <option key={`group-Public`} value="Public" >Public</option>
                         {this.groups.map( (group, i ) => (
                            <option key={`group-${i}`} value={group.id} >{group.name}</option>
                         ))
