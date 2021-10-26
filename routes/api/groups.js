@@ -193,7 +193,7 @@ router.patch('/events', (req, res) => {
   });
 });
 
-router.post('/join_request', (req, res) => {
+router.post('/join_request', (req, res) => { // post because we are posting a groupJoinRequest
   const errors = {};
   Group.findById(req.body.groupId).then(group => {
     if (!group) {
@@ -223,7 +223,7 @@ router.post('/join_request', (req, res) => {
   });
 });
 
-router.patch('/join_request/response', (req, res) => {
+router.patch('/join_request/response', (req, res) => { // patch because we are changing the data (we are technically deleting it) and we need more info in the request
   const errors = {};
   Group.findById(req.body.groupId).then(group => {
     if (!group) {
