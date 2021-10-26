@@ -36,7 +36,8 @@ router.post('/create', (req, res) => {
             description: req.body.description,
             ownerId: req.body.ownerId,
             members: [user.id],
-            events: []
+            events: [],
+            groupJoinRequests: []
           });
 
 
@@ -190,6 +191,36 @@ router.patch('/events', (req, res) => {
         }
       });
     }
+  });
+});
+
+router.post('/join_request', (req, res) => {
+  const errors = {};
+  Group.findById(req.body.groupId).then(group => {
+    if (!group) {
+      errors.group = 'Failed to find group';
+      return res.status(400).json(errors);
+    }
+    User.findById(req.body.userId).then(user => {
+      if (!user) {
+        errors.user = 'Failed to find user';
+        return res.status(400).json(errors);
+      }
+      if (!group.groupJoinRequests) {
+        group.groupJoinRequests = [];
+      }
+      if (group.groupJoinRequests.includes(user._id)) {
+        errors.join = 'Join request pending';
+        return res.status(400).json(errors);
+      }
+      group.groupJoinRequests.push(user);
+      group.save().then(group => {
+        res.json(group);
+      });
+    });
+  }).catch(err => {
+    errors.group = `Failed in /join_request`;
+    return res.status(400).json(errors);
   });
 });
 

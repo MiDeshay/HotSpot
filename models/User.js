@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Group = require('./Group');
-const GroupJoinRequest = require('./GroupJoinRequest');
 const UserSchema = new Schema({
    username: {
       type: String,
@@ -32,7 +31,6 @@ const UserSchema = new Schema({
       type: String
    },
   groupsJoined: [{ type: Schema.Types.ObjectId, ref: 'Group' }],
-  groupJoinRequests: [{ type: Schema.Types.ObjectId, ref: 'GroupJoinRequests' }],
 }, {
    timesteamps:true
 })

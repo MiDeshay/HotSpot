@@ -7,7 +7,7 @@ const db = require('./config/keys').mongoURI;
 const users = require("./routes/api/users");
 const events = require("./routes/api/events");
 const groups = require("./routes/api/groups");
-const groupJoinRequests = require("./routes/api/groupJoinRequests");
+// const groupJoinRequests = require("./routes/api/groupJoinRequests");
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const fileRoutes = require('./routes/api/images');
@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/users", users);
 app.use("/api/events", events);
 app.use("/api/groups", groups);
-app.use("/api/groupJoinRequests", groupJoinRequests);
+// app.use("/api/groupJoinRequests", groupJoinRequests);
 
 
 const port = process.env.PORT || 5000;
