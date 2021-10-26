@@ -18,12 +18,20 @@ class LoginForm extends React.Component {
 
   // Once the user has been authenticated, redirect to Index
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isLoggedIn === true) {
-      this.props.history.push('/home');
-    }
+    // if (nextProps.isLoggedIn === true) { DOP history.push() is in componentDidUpdate()
+    //   this.props.history.push('/home');
+    // }
 
     // Set or clear errors
     this.setState({errors: nextProps.errors})
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.isLoggedIn === false && this.props.isLoggedIn) {
+      this.props.closeLogin();
+      const that = this;
+      setTimeout(() => { that.props.history.push('/home') }, 500);
+    }
   }
 
   // Handle field updates (called in the render method)
@@ -106,4 +114,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default LoginForm;
+export default withRouter(LoginForm);

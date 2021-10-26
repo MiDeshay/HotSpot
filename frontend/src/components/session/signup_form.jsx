@@ -20,11 +20,19 @@ class SignupForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isLoggedIn === true) {
-      this.props.history.push('/home');
-    }
+    // if (nextProps.isLoggedIn === true) { DOP history.push() is in componentDidUpdate()
+    //   this.props.history.push('/home');
+    // }
 
     this.setState({errors: nextProps.errors});
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.isLoggedIn === false && this.props.isLoggedIn) {
+      this.props.closeSignup();
+      const that = this;
+      setTimeout(() => that.props.history.push('/home'), 500);
+    }
   }
 
   update(field) {
@@ -65,13 +73,6 @@ class SignupForm extends React.Component {
     this.props.closeSignup();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.isLoggedIn === false && this.props.isLoggedIn) {
-      this.props.closeSignup();
-      const that = this;
-      setTimeout(() => that.props.history.push('/home'), 500);
-    }
-  }
 
   render() {
     return (
@@ -141,4 +142,4 @@ class SignupForm extends React.Component {
   }
 }
 
-export default SignupForm;
+export default withRouter(SignupForm);
