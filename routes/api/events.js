@@ -415,6 +415,13 @@ router.post("/create_event", (req, res) => {
       return res.status(404).json("Host not found");
     }
 
+    newEvent.host.push(host);
+    Group.findById(req.body.groupId).then(group => { // standard event creation
+      newEvent.group = group;
+      newEvent.save().then(event => {
+        res.json(event);
+
+
     const newEvent = new Event({
         address: req.body.address,
         city: req.body.city,

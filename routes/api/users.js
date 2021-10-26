@@ -88,8 +88,6 @@ router.patch('/change_background_picture/:userId', (req, res) => {
             }
           })
         }
-
-
       })
     }
   })
