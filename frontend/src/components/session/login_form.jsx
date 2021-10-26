@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import Splash from '../splash/splash';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -13,7 +14,6 @@ class LoginForm extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderErrors = this.renderErrors.bind(this);
-    this.screenClick = this.screenClick.bind(this);
   }
 
   // Once the user has been authenticated, redirect to Index
@@ -23,7 +23,7 @@ class LoginForm extends React.Component {
     }
 
     // Set or clear errors
-    this.setState({errors: nextProps.errors});
+    this.setState({errors: nextProps.errors})
   }
 
   // Handle field updates (called in the render method)
@@ -58,24 +58,10 @@ class LoginForm extends React.Component {
     );
   }
 
-  screenClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.props.closeLogin();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.isLoggedIn === false && this.props.isLoggedIn) {
-      this.props.closeLogin();
-      const that = this;
-      setTimeout(() => that.props.history.push('/home'), 500);
-    }
-  }
-
   render() {
     return (
       <div className="auth-form-container">
-        <div className="modal-screen" onClick={this.screenClick} />
+        <div className="modal-screen"></div>
         <div className="form-modal animated fadeInTop">
           <form onSubmit={this.handleSubmit}>
             <div className="auth-form-div">
@@ -103,12 +89,13 @@ class LoginForm extends React.Component {
                 <input type="submit" value="Login" className="button submit" />
                 {this.renderErrors()}
                 <div className="modal-footer">
-                  <div className="auth-other-message">Don't have an account?</div> <div className="link" onClick={this.props.openSignup}>Signup</div>
+                  <div className="auth-other-message">Don't have an account?</div> <div className="link"><Link to="/register">Signup</Link></div>
                 </div>
               </div>
             </div>
           </form>
         </div>
+        <Splash />
       </div>
     );
   }

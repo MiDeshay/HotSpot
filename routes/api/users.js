@@ -212,41 +212,41 @@ router.post('/register', (req, res) => {
   // Check for duplicate email
   User.findOne({ email: req.body.email })
     .then(user => {
-      if (user) {
-        errors.email = 'Email already exists';
-        return res.status(400).json(errors);
-      } else {
-        // Create new User
-        let nickname = req.body.firstName + req.body.lastName[0];
-        const newUser = new User({
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          username: nickname,
-          email: req.body.email,
-          password: req.body.password,
-        })
-        // Salt and hash password before saving.
-        bcrypt.genSalt(10, (err, salt) => {
-          // debugger;
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err;
-            newUser.password = hash;
-            newUser.save()
-              .then(user => {
-                const payload = { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, groupsJoined: user.groupsJoined };
+        if (user){
+            errors.email = 'Email already exists';
+            return res.status(400).json(errors);
+        } else {
+            // Create new User
+            let nickname = req.body.firstName + req.body.lastName[0];
+            const newUser = new User({
+               firstName: req.body.firstName,
+               lastName: req.body.lastName,
+               username: nickname,
+               email: req.body.email,
+               password: req.body.password,
+            })
+            // Salt and hash password before saving.
+            bcrypt.genSalt(10, (err, salt) => {
+                // debugger;
+                bcrypt.hash(newUser.password, salt, (err, hash) => {
+                    if (err) throw err;
+                    newUser.password = hash;
+                    newUser.save()
+                     .then(user => {
+                           const payload = { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, groupsJoined: user.groupsJoined };
 
-                jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
-                  res.json({
-                    success: true,
-                    token: "Bearer " + token
-                  });
-                });
+                           jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+                              res.json({
+                              success: true,
+                              token: "Bearer " + token
+                              });
+                           });
 
-              })
-              .catch(err => res.send(err));
-          })
-        })
-      }
+                     })
+                     .catch(err => res.send(err));
+                })
+            })
+        }
     })
 })
 
