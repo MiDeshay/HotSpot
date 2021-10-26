@@ -50,6 +50,7 @@ class GroupSearch extends React.Component {
   render() {
     let { searchTerm } = this.state;
     let { groups } = this.props;
+    delete groups.Public; // remove the "Public" group from the drop-down list
     // let isSearching = Boolean(searchTerm !== "");
     let isSearching = this.props.isActive;
     return (

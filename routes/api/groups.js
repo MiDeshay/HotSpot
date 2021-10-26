@@ -135,8 +135,8 @@ router.patch('/members', (req, res) => {
          members.push(req.body.memberId);
          User.findById(req.body.memberId).then( user => {
             user.groupsJoined.push(group);
-            user.save(); // Fix later to handle error handling.
-         });
+            user.save() // Fix later to handle error handling.
+         })
 
        } else {
          let memberIndex = members.indexOf(req.body.memberId);

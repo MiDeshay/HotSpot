@@ -10,6 +10,7 @@ class UserSearch extends React.Component {
     }
     this.filter = this.filter.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.getPublicUserId = this.getPublicUserId.bind(this);
   }
 
   componentDidMount() {
@@ -41,9 +42,22 @@ class UserSearch extends React.Component {
     }
 }
 
+  getPublicUserId() {
+    let { users } = this.props;
+    let usersArr = Object.values(users);
+    let targetId = null;
+    usersArr.forEach(user => {
+      if (user.email === "Public") {
+        targetId = user.id;
+      }
+    });
+    return targetId;
+  }
+
   render() {
     let { searchTerm } = this.state;
     let { users } = this.props;
+    delete users[this.getPublicUserId()];
     // let isSearching = Boolean(searchTerm !== "");
     let isSearching = this.props.isActive;
     return (
