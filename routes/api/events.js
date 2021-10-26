@@ -423,7 +423,7 @@ router.post("/create_event", (req, res) => {
 
 
     const newEvent = new Event({
-        address: req.body.address, 
+        address: req.body.address,
         city: req.body.city,
         hostEmail: req.body.hostEmail,
         title: req.body.title,
@@ -445,7 +445,6 @@ router.post("/create_event", (req, res) => {
          newEvent.save().then(event => {
             res.json(event);
          }).catch(err => res.send(err));
-
       }).catch(err => res.send(err));
     }).catch(err => { // did not find group by that id, try to add to public group instead...
       // console.log('GROUP ID NOT FOUND CHECK FOR PUBLIC');

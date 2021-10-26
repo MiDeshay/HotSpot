@@ -14,6 +14,7 @@ class LoginForm extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderErrors = this.renderErrors.bind(this);
+    this.screenClick = this.screenClick.bind(this);
   }
 
   // Once the user has been authenticated, redirect to Index
@@ -45,6 +46,12 @@ class LoginForm extends React.Component {
     this.props.login(user);
   }
 
+  screenClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.closeLogin();
+  }
+
   // Render the session errors if there are any
   renderErrors() {
     return(
@@ -61,7 +68,7 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="auth-form-container">
-        <div className="modal-screen"></div>
+        <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop">
           <form onSubmit={this.handleSubmit}>
             <div className="auth-form-div">
@@ -89,7 +96,7 @@ class LoginForm extends React.Component {
                 <input type="submit" value="Login" className="button submit" />
                 {this.renderErrors()}
                 <div className="modal-footer">
-                  <div className="auth-other-message">Don't have an account?</div> <div className="link"><Link to="/register">Signup</Link></div>
+                  <div className="auth-other-message">Don't have an account?</div> <div className="link" onClick={this.props.openSignup}>Signup</div>
                 </div>
               </div>
             </div>
