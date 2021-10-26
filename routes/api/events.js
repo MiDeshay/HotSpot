@@ -414,11 +414,30 @@ router.post("/create_event", (req, res) => {
     if (!host) {
       return res.status(404).json("Host not found");
     }
-    newEvent.host.push(host);
-    Group.findById(req.body.groupId).then(group => { // standard event creation
-      newEvent.group = group;
-      newEvent.save().then(event => {
-        res.json(event);
+
+    const newEvent = new Event({
+        address: req.body.address,
+        city: req.body.city,
+        hostEmail: req.body.hostEmail,
+        title: req.body.title,
+        description: req.body.description,
+        mapLat: req.body.mapLat,
+        mapLng: req.body.mapLng,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+    });
+
+
+    User.findOne({email: newEvent.hostEmail}).then(host=> {
+      if(!host){
+         return res.status(404).json("Host not found");
+      }
+      newEvent.host.push(host);
+      Group.findById(req.body.groupId).then( group => {
+         newEvent.group = group;
+         newEvent.save().then(event => {
+            res.json(event);
+         }).catch(err => res.send(err));
       }).catch(err => res.send(err));
     }).catch(err => { // did not find group by that id, try to add to public group instead...
       // console.log('GROUP ID NOT FOUND CHECK FOR PUBLIC');

@@ -5,7 +5,6 @@ export default class CreateEvent extends React.Component {
    constructor(props){
       super(props)
       this.state = {
-         pinId: 1,
          address: "",
          city: "",
          hostEmail: this.props.currentUser.email,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import Splash from '../splash/splash';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class LoginForm extends React.Component {
     }
 
     // Set or clear errors
-    this.setState({errors: nextProps.errors});
+    this.setState({errors: nextProps.errors})
   }
 
   // Handle field updates (called in the render method)
@@ -45,6 +46,12 @@ class LoginForm extends React.Component {
     this.props.login(user);
   }
 
+  screenClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.closeLogin();
+  }
+
   // Render the session errors if there are any
   renderErrors() {
     return(
@@ -56,20 +63,6 @@ class LoginForm extends React.Component {
         ))}
       </ul>
     );
-  }
-
-  screenClick(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.props.closeLogin();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.isLoggedIn === false && this.props.isLoggedIn) {
-      this.props.closeLogin();
-      const that = this;
-      setTimeout(() => that.props.history.push('/home'), 500);
-    }
   }
 
   render() {
@@ -109,6 +102,7 @@ class LoginForm extends React.Component {
             </div>
           </form>
         </div>
+        <Splash />
       </div>
     );
   }
