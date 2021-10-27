@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('./User');
 const Event = require('./Events');
-const GroupJoinRequest = require('./GroupJoinRequest');
 
 const GroupSchema = new Schema({
   name: {
@@ -22,7 +21,7 @@ const GroupSchema = new Schema({
     default: undefined
   },
   groupJoinRequests: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'GroupJoinRequest' }],
+    type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     default: undefined
   },
   events: {

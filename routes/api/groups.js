@@ -214,7 +214,7 @@ router.post('/join_request', (req, res) => { // post because we are posting a gr
       }
       group.groupJoinRequests.push(user);
       group.save().then(group => {
-        res.json(group);
+        res.json({group, user});
       });
     });
   }).catch(err => {
@@ -248,8 +248,10 @@ router.patch('/join_request/response', (req, res) => { // patch because we are c
             user.groupsJoined.push(group);
             user.save();
             group.save().then(group => {
-              res.json(group);
+              res.json({ group, user });
             });
+          } else {
+            res.json({ group, user });
           }
         });
       }

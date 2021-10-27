@@ -1,5 +1,5 @@
 import { RECEIVE_USER, RECEIVE_USERS } from '../actions/user_actions';
-import { GROUP_ADD_MEMBER, CREATE_GROUP } from '../actions/group_actions'
+import { GROUP_ADD_MEMBER, CREATE_GROUP, RECEIVE_JOIN_REQUEST } from '../actions/group_actions';
 
 const userReducer = (state={}, action) => {
   Object.freeze(state);
@@ -10,12 +10,12 @@ const userReducer = (state={}, action) => {
       nextState = Object.assign({}, state, fixedUsers);
       return nextState;
 
-    case RECEIVE_USER:
-   
+    case RECEIVE_USER: case RECEIVE_JOIN_REQUEST:
+
       if (action.user.data.id) {
         nextState = Object.assign({}, state, {[action.user.data.id]: action.user.data});
       } else {
-   
+
         let fixedUser = changeNumToId(action.user.data);
         nextState = Object.assign({}, state, fixedUser);
       }
@@ -50,6 +50,6 @@ const changeNumToId = (user) => {
   user.id = user._id;
   delete user._id;
   result[user.id] = user
-  
+
   return result;
 }

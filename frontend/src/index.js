@@ -16,7 +16,7 @@ import { setAuthToken } from './util/session_api_util';
 // We have not created this action yet, but will do so in the next step
 import { logout } from './actions/session_actions';
 
-import { createGroup, fetchGroups, fetchGroup, updateGroupMembers, updateGroupEvents, deleteGroup } from './actions/group_actions';
+import { createGroup, fetchGroups, fetchGroup, updateGroupMembers, updateGroupEvents, deleteGroup, createJoinRequest, respondToJoinRequest } from './actions/group_actions';
 import { fetchUser } from './actions/user_actions';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window.createGroup = createGroup;
 
   window.fetchUser = fetchUser;
+  window.createJoinRequest = createJoinRequest;
+  window.respondToJoinRequest = respondToJoinRequest;
 
   // Render our root component and pass in the store as a prop
   const root = document.getElementById('root');
