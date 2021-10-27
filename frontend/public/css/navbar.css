@@ -29,7 +29,29 @@
   margin-left: 1rem;
   margin-right: 1rem;
   margin-top: 0.3rem;
+  /* color: var(--color2); */
+  z-index: 5;
+  cursor: pointer;
+  text-shadow:
+   -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+}
 
+.title-bg-image {
+  background-image: url('../images/hotspotflame.png');
+  /* background-color: pink; */
+  width: 8rem;
+  height: 3.6rem;
+  /* background-size: 8rem 3.6rem; */
+  /* opacity: 70%; */
+  background-position-y: -3.5rem;
+  position: absolute;
+  /* object-fit: fill; */
+  top: 0;
+  z-index: -1;
+  cursor: pointer;
 }
 
 a > .links {

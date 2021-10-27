@@ -55,7 +55,7 @@ class NavBar extends React.Component {
   render() {
     return (
       <div className="nav-bar-container">
-        <Link to="/home"><h1 className="title">HotSpot</h1></Link>
+        <h1 className="title"><Link to="/home">HotSpot</Link><div className="title-bg-image"/></h1>
         <UserSearchContainer />
         <GroupSearchContainer />
         <Link to="/links"><h2 className="links">About</h2></Link>
