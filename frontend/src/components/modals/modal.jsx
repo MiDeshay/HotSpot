@@ -14,10 +14,9 @@ function Modal(props) {
    let component;
    switch (modal) {
       case "createEvent":
-         component = <CreateEventContainer pos={props.pos}/>;
+         component = <CreateEventContainer pos={props.pos} geocoder={props.geocoder}/>;
          break;
       case "updateEvent":
-         
          component = <UpdateEventContainer selectedEvent={props.event}/>
          break;
       default:

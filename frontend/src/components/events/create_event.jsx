@@ -1,4 +1,5 @@
 import React from 'react';
+const mapsKey = process.env.REACT_APP_MAPS_API_KEY;
 
 export default class CreateEvent extends React.Component {
 
@@ -46,6 +47,31 @@ export default class CreateEvent extends React.Component {
          }
       }
 
+      const latlng = {
+         lat: this.state.mapLat,
+         lng: this.state.mapLng,
+      };
+
+      this.props.geocoder
+         .geocode({ location: latlng })
+         .then((response) => {
+            console.log(response.results[0].address_components);
+            // console.log(response.results[0].formatted_address);
+            let address = '';
+            let city = '';
+            response.results[0].address_components.forEach( addr => {         
+               if (addr.types[0] === 'plus_code') address += addr.short_name + " "; 
+               if (addr.types[0] === 'premise') address = addr.short_name + " "; 
+               if (addr.types[0] === 'political') address += addr.short_name + " "; 
+               if (addr.types[0] === 'street_number') address += addr.short_name + " "; 
+               if (addr.types[0] === 'route') address += (addr.short_name); 
+               if (addr.types[0] === 'locality') city = addr.long_name; 
+               this.setState({
+                  address,
+                  city
+               })
+            })
+         })
 
       let today = new Date();
       let dd = today.getDate();
@@ -69,6 +95,11 @@ export default class CreateEvent extends React.Component {
             this.props.closeModal();
          }
          this.submitted = false;
+      }
+
+      // Close modal on browser back
+      window.onpopstate = e => {
+         this.props.closeModal();
       }
    }
    render(){
