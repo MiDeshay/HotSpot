@@ -405,6 +405,7 @@ router.post("/create_event", (req, res) => {
     description: req.body.description,
     mapLat: req.body.mapLat,
     mapLng: req.body.mapLng,
+    startTime: req.body.startTime,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
   });
@@ -495,6 +496,7 @@ router.patch("/:eventId", (req, res) => {
         description: req.body.description,
         mapLat: req.body.mapLat,
         mapLng: req.body.mapLng,
+        startTime: req.body.startTime,
         startDate: req.body.startDate,
         endDate: req.body.endDate
       },
@@ -594,12 +596,11 @@ router.delete("/delete/:eventId", (req, res) => {
   });
 });
 
-//returns all events
-//To save space, these events don't host info or attendee info
-//When a user selects a specific event, we can use a get :id request to get more info
+// Returns all events
+// To save space, these events don't host info or attendee info
+// When a user selects a specific event, we can use a get :id request to get more info
 router.get('/', (req, res) => {
   Event.find({}).populate('host').populate('group', 'name').exec((err, events) => {
-    //res.json(events)
     let result = {};
     Object.values(events).forEach((event, i) => {
       result[event._id] = event;
@@ -647,6 +648,7 @@ router.get("/:eventId", (req, res) => {
               host: hostInfo,
               attendees: attendees,
               startDate: event.startDate,
+              startTime: event.startTime,
               endDate: event.endDate,
               eventPicturesKeys: event.eventPicturesKeys,
               coverPictureKey: event.coverPictureKey
@@ -663,6 +665,7 @@ router.get("/:eventId", (req, res) => {
           mapLng: event.mapLng,
           host: hostInfo,
           startDate: event.startDate,
+          startTime: event.startTime,
           endDate: event.endDate,
           eventPicturesKeys: event.eventPicturesKeys,
           coverPictureKey: event.coverPictureKey

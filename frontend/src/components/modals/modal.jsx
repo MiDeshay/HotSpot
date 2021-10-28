@@ -3,6 +3,7 @@ import { closeModal } from '../../actions/modal_actions';
 import { connect } from 'react-redux';
 import CreateEventContainer from '../events/create_event_container';
 import UpdateEventContainer from '../events/update_event_container';
+import EventDetails from '../events/event_details';
 
 function Modal(props) {
    let modal = props.modal;
@@ -18,6 +19,9 @@ function Modal(props) {
          break;
       case "updateEvent":
          component = <UpdateEventContainer selectedEvent={props.event}/>
+         break;
+      case 'eventDetails': 
+         component = <EventDetails eventId={props.event}/>
          break;
       default:
          return null;
