@@ -12,9 +12,17 @@ export const createGroup = payload => {
   return axios.post('/api/groups/create', payload);
 };
 
+export const createGroupPicture = packet => {
+  return axios.post('/api/groups/create_with_picture', packet.data)
+}
+
 export const updateGroup = group => {
   return axios.patch(`/api/groups/${group.id}/update`, group);
 };
+
+export const updateGroupPicture = packet => {
+  return axios.patch(`/api/groups/${packet.id}`, packet.data)
+}
 
 export const deleteGroup = payload => {
   return axios.delete(`/api/groups/${payload.groupId}/${payload.ownerId}`);

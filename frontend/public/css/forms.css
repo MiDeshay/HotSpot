@@ -14,3 +14,9 @@
   margin: 0.2rem 0rem;
   width: calc(100% - 2rem);
 }
+
+#event-picture{
+  height: 6rem;
+  width: 10rem;
+  margin: 0 auto;
+}

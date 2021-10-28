@@ -1,11 +1,23 @@
+.modal-body-pad {
+  border-bottom: 0.1rem solid black;
+}
+
 .modal-body {
-  margin: 0rem 1rem;
+  margin: 0.5rem 1rem;
+}
+
+.modal-header-pad {
+  border-bottom: 0.1rem solid black;
 }
 
 .modal-header {
-  margin-top: 1rem 1rem 0rem 1rem;
+  margin: 1rem 1rem 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-footer {
   margin-bottom: 0rem 1rem 1rem 1rem;
+  display: flex;
+  justify-content: space-between;
 }

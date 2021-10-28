@@ -15,6 +15,10 @@ export const updateUser = (user) => {
   return axios.patch(`/api/users/${user.id}`, user);
 };
 
+export const updateUserPicture = (packet) => {
+  return axios.patch(`/api/users/picture_update/${packet.id}`, packet.data);
+}
+
 export const deleteUser = userId => {
   return axios.delete(`/api/users/${userId}`, userId);
 };

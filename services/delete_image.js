@@ -10,6 +10,7 @@ aws.config.update({
 const s3 = new aws.S3()
 
 
+
 const deleteImage = (key) => {
     const params = {
         Bucket: "hotspot-dev", 
@@ -21,4 +22,6 @@ const deleteImage = (key) => {
          else  return(data);           // successful response
        }) 
 }
+
+
 module.exports = deleteImage

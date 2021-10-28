@@ -1,4 +1,4 @@
-import { getEventsApi, createEventsApi, updateEventApi, deleteEventApi, joinEventApi, declineEventApi } 
+import { getEventsApi, createEventsApi, updateEventApi, updateEventPicture, deleteEventApi, joinEventApi, declineEventApi } 
    from '../util/event_api_util'
 
 export const RECEIVE_EVENT_ERRORS = "RECEIVE_EVENT_ERRORS";
@@ -47,6 +47,12 @@ export const createEvent = (eventForm) => dispatch => (
 
 export const updateEvent = (eventId, eventForm) => dispatch => (
    updateEventApi(eventId, eventForm)
+      .then(event => dispatch(receiveEvent(event.data)))
+      .catch(errs => dispatch(receiveErrors(errs.response.data)))
+)
+
+export const updateEventWithPicture = (packet) => dispatch => (
+   updateEventPicture(packet)
       .then(event => dispatch(receiveEvent(event.data)))
       .catch(errs => dispatch(receiveErrors(errs.response.data)))
 )

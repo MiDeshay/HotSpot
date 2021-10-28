@@ -16,23 +16,22 @@ class GroupShow extends React.Component {
   }
 
   componentDidMount() {
-    // if (this.props.group && !this.props.group.members) { // if
-      this.props.fetchGroup(this.props.match.params.groupName);
-      this.props.getEvents()
-      // this.props.uiGroupShow(this.props.group.id);
-    // }
+
+    this.props.fetchGroup(this.props.match.params.groupName);
+    this.props.getEvents()
+    this.props.fetchAllImages()
+
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('i updated')
     if (!this.props.group) return;
     if (prevProps.group && prevProps.group.id !== this.props.group.id) {
       this.props.fetchGroup(this.props.group.name);
     }
-
-    if (!this.props.groupId) {
-
+    if (this.props.group.bannerPictureKey && !this.props.images[this.props.group.bannerPictureKey]){
+      this.props.fetchAllImages()
     }
+
   }
 
   renderEditButtons() {
@@ -100,9 +99,16 @@ class GroupShow extends React.Component {
       <div className="modal-container">
         <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop red-border">
-          <button className="button close" onClick={closeModal}>𐄂</button>
-        <div className="modal-header">Are you sure you want to delete this group? This operation is destruction and cannot be reversed.</div>
-          <div className="modal-body justify-center"><button className="button red" onClick={() => { deleteGroup({ groupId: group.id, ownerId: currentUser.id })}}><BiTrash /> Destroy Group</button></div>
+          <div className="modal-header-pad">
+            <div className="modal-header">
+            <h2>WARNING</h2>
+            <button className="button close" onClick={closeModal}>𐄂</button>
+            </div>
+          </div>
+          <div className="modal-body-pad">
+            <div className="modal-body">Are you sure you want to delete this group? This operation is destruction and cannot be reversed.</div>
+          </div>
+          <div className="modal-footer justify-center"><button className="button red" onClick={() => { deleteGroup({ groupId: group.id, ownerId: currentUser.id })}}><BiTrash /> Destroy Group</button></div>
         </div>
       </div>
     )
@@ -115,11 +121,16 @@ class GroupShow extends React.Component {
       <div className="modal-container">
         <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop red-border">
-          <button className="button close" onClick={closeModal}>𐄂</button>
-          <div className="modal-div">
-            <div className="modal-header">Are you sure you want to leave this group? You'll have to ask to rejoin later!</div>
-            <div className="modal-body justify-center"><button className="button red" onClick={() => updateGroupMembers({ groupId: group.id, memberId: currentUser.id, isAdding: 'false' })}><BiTrash /> Leave Group</button></div>
+          <div className="modal-header-pad">
+            <div className="modal-header">
+              <h2>WARNING</h2>
+              <button className="button close" onClick={closeModal}>𐄂</button>
+            </div>
           </div>
+          <div className="modal-body-pad">
+            <div className="modal-body">Are you sure you want to leave this group? You'll have to ask to rejoin later!</div>
+          </div>
+          <div className="modal-footer justify-center"><button className="button red" onClick={() => updateGroupMembers({ groupId: group.id, memberId: currentUser.id, isAdding: 'false' })}><BiTrash /> Leave Group</button></div>
         </div>
       </div>
     )
@@ -127,6 +138,8 @@ class GroupShow extends React.Component {
 
   render() {
     let { group, users, events } = this.props;
+    const {images} = this.props;
+
     const allEvents = Object.values(events)
     if (!group || !group.members) return null;
     let filterredEvents = [];
@@ -135,8 +148,12 @@ class GroupShow extends React.Component {
         filterredEvents.push(event);
       }
     });
+
+    const banner = images[group.bannerPictureKey] ? <img id="group-picture" alt="group banner" src={images[group.bannerPictureKey]}/> : <img id="group-picture" src="../images/image_placeholder.png"/>
+
     return (
       <div className="group-show-div">
+          {banner}
         {this.renderDeleteWarning()}
         {this.renderLeaveWarning()}
          <div id="group-title"> {group.name}</div>

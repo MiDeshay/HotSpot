@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const deleteImage = require("../../services/delete_image");
 const getImageUrl = require("../../services/get_image");
 
 const aws = require('aws-sdk');

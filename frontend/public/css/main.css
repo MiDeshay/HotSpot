@@ -65,6 +65,10 @@ a:visited {
   font-weight: 300;
 }
 
+.button.subtle.flat {
+  background-color: rgba(128, 128, 128, 0.493);
+}
+
 input[type=text], input[type=password] {
   margin: 0.2rem 0rem;
   padding: 0.5rem;
