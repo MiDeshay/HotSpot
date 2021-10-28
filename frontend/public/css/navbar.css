@@ -73,3 +73,7 @@ a > .links {
   padding-bottom: 0rem;
   margin: 0rem;
 }
+
+.search-bar {
+  width: 100%;
+}

@@ -61,7 +61,7 @@ class UserSearch extends React.Component {
     // let isSearching = Boolean(searchTerm !== "");
     let isSearching = this.props.isActive;
     return (
-      <div>
+      <div className="search-bar">
         <div className={`${isSearching ? "modal-screen " : ""}none`} onClick={this.handleClick} />
         <input type="text" value={searchTerm} onClick={this.handleClick} onChange={this.updateInput('searchTerm')} placeholder="Search Users" />
         <ul className="drop-down-list">

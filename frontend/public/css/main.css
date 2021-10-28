@@ -19,7 +19,8 @@
 
 body {
   background-image: linear-gradient(var(--color1light),var(--color1),var(--color1), var(--color1), var(--color1dark));
-  max-height: 100vh;
+  min-height: 100vh;
+  height: 100%;
 }
 
 footer {
@@ -71,7 +72,9 @@ input[type=text], input[type=password] {
   outline: none;
 }
 
-
+a {
+  cursor: pointer;
+}
 
 /* SCROLL BAR */
 /* width */

@@ -1,13 +1,13 @@
 :root {
   --groupflexdir: row;
-  --scrollerWidth: calc(33.33vw - 1rem);
+  --scrollerWidth: calc(100% - 1rem);
   --scrollerHeight: 50vh;
 }
 
 @media only screen and (max-width: 70rem) {
   :root {
     --groupflexdir: column;
-    --scrollerWidth: 100vw;
+    --scrollerWidth: 100%;
     --scrollerHeight: 8rem;
   }
 }
@@ -15,49 +15,50 @@
 .responsive-div {
   display: flex;
   flex-direction: var(--groupflexdir);
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 
 .group-show-div{
-    /* margin: 0 auto; */
-    display: flex;
-    flex-direction: column;
-    margin: 1rem;
+  /* margin: 0 auto; */
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
 }
 
 #group-title{
-    margin: 0 auto;
-    font-size: 3rem;
+  margin: 0 auto;
+  font-size: 3rem;
 }
 
 
 .group-container{
-    margin-top: 15px;
+  margin-top: 15px;
+  width: var(--scrollerWidth)
 }
 
 .group-header{
-    font-size: 20px;
-    font-weight: 500;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .group-text{
-    margin-left: 2rem;
+  margin-left: 2rem;
 }
 
 .member-button:hover{
-    border: solid 0.1rem var(--color1dark);
-    border-radius: 0.3rem;
-    background-color: var(--color1light);
-    cursor: pointer;
-    /* padding: 5px; */
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    transition: background-color 0.2s;
+  border: solid 0.1rem var(--color1dark);
+  border-radius: 0.3rem;
+  background-color: var(--color1light);
+  cursor: pointer;
+  /* padding: 5px; */
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  transition: background-color 0.2s;
 }
 
 .group-label{
@@ -73,7 +74,7 @@
   width: var(--scrollerWidth);
   /* padding-top: 1rem;
   padding-bottom: 1rem; */
-  margin-left: -1.5rem;
+  /* margin-left: -1.5rem; */
   display: flex;
   flex-direction: column;
 }
@@ -89,6 +90,10 @@
   margin-top: 1rem;
 }
 
+.scroll-box-li {
+  width: 100%;
+}
+
 .top-scroll {
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.548));
   height: 0.8rem;
@@ -100,64 +105,76 @@
 }
 
 .bottom-scroll {
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.548));
-height: 1rem;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.548));
+  height: 1rem;
   position: absolute;
   bottom: 0;
   z-index: 2;
   width: 100%;
 }
 
+.left-scroll {
+  height: 100%;
+  width: 0.25rem;
+  background-color: rgb(199, 199, 199);
+  position: absolute;
+  border: 0.1rem solid black;
+}
+
 .inner-ul-container {
   margin-left: 2rem;
 }
 
+.scroll-box-container.events {
+  min-height: 16rem;
+}
+
 .event-info-main{
-    display: flex;
-    margin-bottom: 0.8rem ;
+  display: flex;
+  margin-bottom: 0.8rem ;
 }
 
 .event-info-sub{
-    display: flex;
-    margin-left: 1rem;
+  display: flex;
+  margin-left: 1rem;
 }
 
 .event{
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 .event-title{
   margin-bottom: 0.5rem;
 }
 
 #members-list{
-    display: flex;
-    height: 30px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    bottom: 20px;
-    padding-bottom: 0.5rem;
+  display: flex;
+  height: 30px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  bottom: 20px;
+  padding-bottom: 0.5rem;
 }
 
 #members-list:hover {
-    overflow-x: scroll;
+  overflow-x: scroll;
 }
 
 .member-list-item {
-    margin-right: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 
 .event-text{
-    font-weight: 500;
-    font-size: 17px;
+  font-weight: 500;
+  font-size: 17px;
 }
 
 .event-description{
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .event-host{
-    margin-right: 17px;
+  margin-right: 17px;
 }
 
 
@@ -192,8 +209,16 @@ height: 1rem;
 .button.red {
   background-color: rgb(179, 0, 0);
   transition: background-color 0.2s;
-  max-width: 3rem;
+  /* max-width: 3rem; */
 }
+
+.cancel-join {
+  font-size: 1rem;
+}
+
+/* .cancel-join > svg {
+  height: 100rem;
+} */
 
 .button.green:hover {
   background-color: rgb(96, 206, 96);
@@ -213,6 +238,7 @@ height: 1rem;
 
 .join-request-empty {
   font-size: 1rem;
+  margin-top: 1rem;
 }
 
 .list-empty {
@@ -220,6 +246,7 @@ height: 1rem;
   color: rgba(0, 0, 0, 0.363);
   width: 100%;
   text-align: center;
+  margin-top: 1rem
 }
 
 .group-action-buttons, .group-edit-buttons{
@@ -227,3 +254,29 @@ height: 1rem;
 }
 
 
+.justify-center {
+  display: flex;
+  justify-content: center;
+}
+
+.red-border {
+  border: solid 0.1rem var(--color2);
+  background-color: var(--color2light);
+}
+
+.modal-div {
+  margin: 1rem;
+}
+
+.button.close {
+  position: absolute;
+  top: 0rem;
+  right: 0rem;
+  background-color: rgba(0, 0, 0, 0);
+  color: rgba(0, 0, 0, 0.521);
+  outline: none;
+  border: none;
+  font-size: 1.5rem;
+  height: 1rem;
+  width: 1rem;
+}
