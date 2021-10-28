@@ -56,6 +56,7 @@ export default class Home extends React.Component{
 
    // Google maps loader
    componentDidMount(){
+      this.props.fetchAllImages()
       this.loader = new Loader({
          apiKey: mapsKey,
          version: "weekly",
@@ -82,6 +83,7 @@ export default class Home extends React.Component{
          });
 
          this.props.fetchUsers()
+        
    }
 
    componentDidUpdate() {
@@ -92,6 +94,7 @@ export default class Home extends React.Component{
             currentEvents: this.props.events,
          })
       }
+      
    }
 
    getLocation() {
@@ -157,8 +160,15 @@ export default class Home extends React.Component{
    // Initialize a maps marker with html and event listeners.
    initMarkerWindow(marker) {
       let eventId = marker.eventDetails._id;
-      let joinButton = `<button id='event-respond' class='button'>Join</button>`;
-      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`;
+      let joinButton = `<button id='event-respond' class='button'>Join</button>`; 
+      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`; 
+
+      const images = this.props.images
+      const {coverPictureKey} = this.props.events[eventId]
+
+   
+
+      const eventPicture = coverPictureKey ? `<img src=${images[coverPictureKey]} class='event-picture'/>`: ""
 
       marker.addListener("click", () => {
          let hours = parseInt(marker.eventDetails.startTime.slice(0,2));
@@ -169,15 +179,8 @@ export default class Home extends React.Component{
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<div class='event-header'>`+
+                  // `<div>${eventPicture}</div>`+
                   `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
-                  `<div class='event-buttons'> ` +
-                     (marker.eventDetails.hostEmail !== this.props.user.email ?
-                        (this.props.events[eventId].attendeesEmail.includes(this.props.user.email)? leaveButton : joinButton )
-                        :
-                        `<button id='event-edit' class='button'>Edit</button>` +
-                        `<button id='event-delete' class='button'>Delete</button>`
-                     ) +
-                  `</div>` +
                `</div>` +
                   `<p class='event-text'>${marker.eventDetails.description}</p>` +
                   `<p class='event-text'>${marker.eventDetails.address}</p>` +
@@ -185,7 +188,14 @@ export default class Home extends React.Component{
                   `<p class='event-text'>Start Time: ${time}</p>` +
                   `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
                   `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
-                  `<a id='event-details' href='details'>More Info</a>`   +
+                  `<div class='event-buttons'> ` +
+                  (marker.eventDetails.hostEmail !== this.props.user.email ? 
+                     (this.props.events[eventId].attendeesEmail.includes(this.props.user.email)? leaveButton : joinButton )
+                     :
+                     `<button id='event-edit' class='button'>Edit</button>` +
+                     `<button id='event-delete' class='button'>Delete</button>`  
+                  ) +
+               `</div>` +
             '</div>'
          );
 
@@ -246,6 +256,8 @@ export default class Home extends React.Component{
    }
 
    render(){
+
+
       return (
          <div id='map'>
             <Modal pos={this.mousePos} geocoder={this.geocoder} event={this.selectedEvent} />

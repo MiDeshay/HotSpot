@@ -28,6 +28,9 @@ const GroupSchema = new Schema({
     type: [{type: Schema.Types.ObjectId, ref: 'Event'}],
     default: undefined
   },
+  bannerPictureKey: {
+    type: String
+  }
 }, {
   timesteamps:true
 })

@@ -11,6 +11,7 @@ const mapStateToProps = (state, ownProps) => ({
   users: state.entities.users,
   groupId: state.ui.groups.id,
   currentUser: state.session.user,
+  images: state.entities.images,
   modal: state.ui.modal
 });
 
@@ -21,6 +22,7 @@ const mapDispatchToProps = dispatch => ({
   uiGroupShow: groupId => dispatch(uiGroupShow(groupId)),
   updateGroupMembers: payload => dispatch(updateGroupMembers(payload)),
   deleteGroup: payload => dispatch(deleteGroup(payload)),
+  fetchAllImages: () => dispatch(fetchAllImages()),
   createJoinRequest: payload => dispatch(createJoinRequest(payload)),
   joinRequestAction: payload => dispatch(respondToJoinRequest(payload)),
   openDeleteWarning: () => dispatch(openModal('delete-group-warning')),

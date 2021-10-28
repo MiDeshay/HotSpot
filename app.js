@@ -33,10 +33,12 @@ require('./config/passport')(passport);
 
 // Express routes
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use("/api/users", users);
 app.use("/api/events", events);
 app.use("/api/groups", groups);
+app.use("/api/images", fileRoutes)
 
 
 const port = process.env.PORT || 5000;
