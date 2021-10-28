@@ -7,13 +7,20 @@ export default class UpdateEvent extends React.Component {
       this.event = this.props.selectedEvent.event;
       this.marker = this.props.selectedEvent.marker;
       this.infoWindow = this.props.selectedEvent.infoWindow;
+
       this.state = Object.assign({}, this.event, {groupId: this.event.group._id});
+      if(this.event.coverPictureKey){
+         this.state.previewImage = this.props.images[this.event.coverPictureKey]
+      }
+
       this.prevEvents = this.props.events;
       this.submitted = false;
+      
       // Bindings
       this.handleUpdate = this.handleUpdate.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.updateMarker = this.updateMarker.bind(this);
+      this.handleFile = this.handleFile.bind(this)
       this.groups = [];
    }
 
@@ -27,7 +34,32 @@ export default class UpdateEvent extends React.Component {
 
    handleSubmit(e){
       e.preventDefault();
-      this.props.updateEvent(this.state._id, this.state);
+      if (this.state.file){
+         let formData = new FormData();
+         const {_id, picture, title, description, address, city, startDate, endDate, file, hostEmail} = this.state
+  
+         formData.append('image', file);
+         formData.append('hostEmail', hostEmail);
+         formData.append('picture', picture);
+         formData.append('title', title);
+         formData.append('address', address);
+         formData.append('city', city);
+         formData.append('startDate', startDate);
+         formData.append('endDate', endDate);
+         formData.append('description', description);
+      
+   
+         const packet = {
+           id: _id,
+           data: formData
+         }
+   
+         this.props.updateEventWithPicture(packet)
+
+
+      }else{
+         this.props.updateEvent(this.state._id, this.state);
+      }
       this.submitted = true;
    }
 
@@ -58,44 +90,87 @@ export default class UpdateEvent extends React.Component {
 
    componentDidUpdate(){
       if (this.submitted) {
+
+         // const {coverPictureKey} = this.props.events[this.state._id]
+         //    if(coverPictureKey && !this.props.images[coverPictureKey]){
+         //       this.props.fetchAllImages()
+         //    }
+        
          if (this.props.errors.length === 0){
             this.props.closeModal();
             this.updateMarker();
          }
          this.submitted = false;
       }
+
    }
 
    updateMarker(){
       this.marker.eventDetails = this.state;
       let marker = this.marker; 
       marker.setLabel(this.state.title[0]);
+
+      const images = this.props.images
+      const {coverPictureKey, pictureUrl} = this.props.events[this.state._id]
+
+      let eventPicture = ""
+
+      
+      eventPicture = coverPictureKey ? images[coverPictureKey] : ""
+      
+      if(pictureUrl){
+         eventPicture = pictureUrl 
+      }
+      
+
       this.infoWindow.setContent(
          `<div class='info-window'> `+
             `<div class='event-header'>`+
+            // `<div><img id='${this.state._id}' src=${eventPicture} class='event-picture'/></div>`+
                `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
-               (marker.eventDetails.hostEmail !== this.props.currentUser.email ? "" :
-                  `<div class='event-buttons'> ` +
-                     `<button id='event-edit' class='button'>Edit</button>` +
-                     `<button id='event-delete' class='button'>Delete</button>`  +
-                  `</div>`
-               ) +
-               `</div>` +
+            `</div>` +
                `<p class='event-text'>${marker.eventDetails.description}</p>` +
                `<p class='event-text'>${marker.eventDetails.address}</p>` +
                `<p class='event-text'>${marker.eventDetails.city}</p>` +
                `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
                `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
-
+            (marker.eventDetails.hostEmail !== this.props.currentUser.email ? "" :
+            `<div class='event-buttons'> ` +
+               `<button id='event-edit' class='button'>Edit</button>` +
+               `<button id='event-delete' class='button'>Delete</button>`  +
+            `</div>`
+         ) +
          '</div>'
       );
    }
 
+   handleFile(e){
+      let file = e.currentTarget.files[0]
+      const reader = new FileReader();
+      reader.onloadend = () => {
+      
+        this.setState({previewImage: reader.result})
+      }
+      reader.readAsDataURL(file)
+      this.setState({file: file});
+      
+
+      
+   }
+
    render(){
+      const {previewImage} = this.state;
+
+      const preview = previewImage ? <img id="event-picture" src={previewImage}/> : ""
       return (
          <div className='form-modal animated fadeInTop'>
             <form className="form" onSubmit={this.handleSubmit}>
                <ul>
+                  {/* <li>
+                     <label htmlFor='event-Picture'>Picture </label>
+                     {preview}
+                     <input type="file" name="file" onChange={(e) => this.handleFile(e)}/>
+                  </li> */}
                   <li>
                      <label htmlFor='event-title'>Title </label>
                      <input autoComplete="off" onChange={this.handleUpdate('title')}type='text' value={this.state.title} id='event-title' className="text-input"/>

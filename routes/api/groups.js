@@ -8,9 +8,10 @@ const validateGroupInput = require('../../validation/group');
 const validateGroupMembers = require('../../validation/group-members');
 const validateGroupEvents = require('../../validation/group-events');
 
-
-router.get("/test", (req, res) => res.json({ msg: "This is the groups route" }));
-
+//images 
+const upload = require('../../services/post_image');
+const singleUpload = upload.single('image');
+const deleteImage = require("../../services/delete_image");
 
 router.post('/create', (req, res) => {
   const { errors, isValid } = validateGroupInput(req.body);
@@ -50,6 +51,53 @@ router.post('/create', (req, res) => {
     }
   }).catch(err => res.send(err));
 });
+
+router.post('/create_with_picture', (req, res) => {
+ 
+    singleUpload(req, res, (error) => {
+      if(error){
+        return res.status(404).json(error);
+      }else{
+
+        Group.findOne({name: req.body.name}) // check if group name taken
+        .then(group => {
+          if (group){
+            return res.status(400).json({error: 'Group name taken'});
+          }
+        })
+
+        const { errors, isValid } = validateGroupInput(req.body);
+        if (!isValid) {
+          return res.status(400).json(errors);
+        }
+        User.findById(req.body.ownerId)
+            .then(user => {
+
+              if (!user) {
+                // errors.id = 'Could not verify owner';
+                errors.id = 'Could not verify owner';
+                return res.status(400).json(errors);
+              } else { // if user is valid
+                const newGroup = new Group({
+                  name: req.body.name,
+                  description: req.body.description,
+                  ownerId: req.body.ownerId,
+                  bannerPictureKey: req.file.key,
+                  members: [user.id],
+                  events: []
+                });
+
+                newGroup.save().then(group => {
+                  user.groupsJoined.push(newGroup); 
+                  user.save();
+                  return res.json(group);
+                });
+              }
+            }).catch(err => res.send(err));
+      }
+      }).catch(err => res.send(err));
+  })     
+
 
 
 router.get('/:groupName', (req, res) => {
@@ -115,6 +163,46 @@ router.patch('/:groupName/update', (req, res) => {
     }
   })
 })
+
+router.patch('/:groupId', (req, res) => {
+  Group.findById(req.params.groupId).then(group => {
+    if(!group){
+      return res.status(404).json("group not found");
+  } else {
+      singleUpload(req, res, (error) => {
+        if(error){
+          return res.status(404).json(error);
+        }else{
+          const { errors, isValid } = validateGroupInput(req.body);
+          if (!isValid) {
+            return res.status(400).json(errors);
+          }
+          
+          if(group.bannerPictureKey){
+            deleteImage(group.bannerPictureKey)
+          }
+          Group.findByIdAndUpdate(req.body.groupId, {
+            name: req.body.name,
+            description: req.body.description,
+            bannerPictureKey: req.file.key
+          }, {new: true}, (error, group) => {
+            if (error) {
+              return res.status(400).json(error);
+            } else {
+              res.json(group);   
+    
+            }
+          })
+        }
+      }) 
+    } 
+  })
+ 
+})
+
+
+
+
 
 router.patch('/members', (req, res) => {
    // res.json({ msg: "This is the groups add_member route" })

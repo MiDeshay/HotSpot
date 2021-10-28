@@ -8,9 +8,10 @@ const upload = require('../../services/post_image');
 const singleUpload = upload.single('image');
 const deleteImage = require("../../services/delete_image")
 const deleteImages = require("../../services/delete_images")
+const getImageUrl = require("../../services/get_image")
 
 
-router.patch('/change_cover_picture/:eventId', (req, res) => {
+router.patch('/update_with_picture/:eventId', (req, res) => {
     Event.findById(req.params.eventId).then(event => {
         if(!event){
             return res.status(404).json("Event not found");
@@ -19,11 +20,25 @@ router.patch('/change_cover_picture/:eventId', (req, res) => {
                 if (error){
                     return res.status(404).json(error);
                 }else{
+                    const {errors, isValid} = validateEventInput(req.body)
+                    if (!isValid) {
+                        return res.status(400).json(errors);
+                    }
                     if(event.coverPictureKey){
                         deleteImage(event.coverPictureKey)
                     }
                     Event.findByIdAndUpdate( req.params.eventId, {
-                        coverPictureKey: req.file.key
+                        coverPictureKey: req.file.key,
+                        address: req.body.address, 
+                        city: req.body.city,
+                        hostEmail: req.body.hostEmail,
+                        title: req.body.title,
+                        description: req.body.description,
+                        mapLat: req.body.mapLat,
+                        mapLng: req.body.mapLng,
+                        startDate: req.body.startDate,
+                        endDate: req.body.endDate
+
                     }, {new: true}, (error, event) => {
                         
                         User.findOne({email: event.hostEmail}).then(host=> {
@@ -43,7 +58,7 @@ router.patch('/change_cover_picture/:eventId', (req, res) => {
                                 User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
                                 .then(attendees => {
                                     res.json({
-                                        id: event.id,
+                                        _id: event.id,
                                         pinId: event.pinId,
                                         city: event.city,
                                         title: event.title,
@@ -55,13 +70,13 @@ router.patch('/change_cover_picture/:eventId', (req, res) => {
                                         attendees: attendees,
                                         startDate: event.startDate,
                                         endDate: event.endDate,
-                                        eventPicturesKeys: event.eventPicturesKeys,
-                                        coverPictureKey: event.coverPictureKey 
+                                        coverPictureKey: event.coverPictureKey,
+                                        pictureUrl: getImage(event.coverPictureKey) 
                                     })
                                 })
                             }else{
                                 res.json({
-                                    id: event.id,
+                                    _id: event.id,
                                     pinId: event.pinId,
                                     city: event.city,
                                     title: event.title,
@@ -72,8 +87,8 @@ router.patch('/change_cover_picture/:eventId', (req, res) => {
                                     host: hostInfo,
                                     startDate: event.startDate,
                                     endDate: event.endDate,
-                                    eventPicturesKeys: event.eventPicturesKeys,
-                                    coverPictureKey: event.coverPictureKey  
+                                    coverPictureKey: event.coverPictureKey,  
+                                    pictureUrl: getImage(event.coverPictureKey) 
                                 })
                             }
                         })
@@ -86,154 +101,6 @@ router.patch('/change_cover_picture/:eventId', (req, res) => {
     })
 })
 
-router.patch('/add_picture/:eventId', (req, res) => {
-    Event.findById(req.params.eventId).then(event => {
-        if(!event){
-            return res.status(404).json("Event not found");
-        } else {
-            singleUpload(req, res, (error) => {
-                if (error){
-                    return res.status(404).json(error);
-                }else{
-                    Event.findByIdAndUpdate( req.params.eventId, 
-                        {$push: {eventPicturesKeys: req.file.key}}, {new: true}, (error, event) => {
-                        if (error){
-                            res.status(400).json(error);
-                        }else{
-                            User.findOne({email: event.hostEmail}).then(host=> {
-                                if(!host){
-                                    return res.status(404).json("Host not found"); 
-                                }
-                        
-                                const hostInfo = {
-                                    id: host.id,
-                                    username: host.username,
-                                    email: host.email,
-                                    firstName: host.firstName,
-                                    lastName: host.lastName
-                                }
-                        
-                                if (event.attendeesEmail){
-                                    User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
-                                    .then(attendees => {
-                                        res.json({
-                                            id: event.id,
-                                            pinId: event.pinId,
-                                            city: event.city,
-                                            title: event.title,
-                                            address: event.address,
-                                            description: event.description,
-                                            mapLat: event.mapLat,
-                                            mapLong: event.mapLng,
-                                            host: hostInfo, 
-                                            attendees: attendees,
-                                            startDate: event.startDate,
-                                            endDate: event.endDate,
-                                            eventPicturesKeys: event.eventPicturesKeys,
-                                            coverPictureKey: event.coverPictureKey  
-                                        })
-                                    })
-                                }else{
-                                    res.json({
-                                        id: event.id,
-                                        pinId: event.pinId,
-                                        city: event.city,
-                                        title: event.title,
-                                        address: event.address,
-                                        description: event.description,
-                                        mapLat: event.mapLat,
-                                        mapLong: event.mapLng,
-                                        host: hostInfo,
-                                        startDate: event.startDate,
-                                        endDate: event.endDate,
-                                        eventPicturesKeys: event.eventPicturesKeys,
-                                        coverPictureKey: event.coverPictureKey  
-                                    })
-                                }
-                            })
-                        }
-                    })
-                }
-
-
-            })
-        }
-    })
-})
-
-
-//send the key of the picture to be deleted in the body under key named "imageKey"
-
-router.patch('/remove_picture/:eventId', (req, res) => {
-    Event.findById(req.params.eventId).then(event => {
-        if(!event){
-            return res.status(404).json("Event not found");
-        } else {
-            if(req.body.imageKey){
-                deleteImage(req.body.imageKey)
-            }
-            Event.findByIdAndUpdate( req.params.eventId, 
-                {$pull: {eventPicturesKeys: req.body.imageKey}}, {new: true}, (error, event) => {
-                if (error){
-                    res.status(400).json(error);
-                }else{
-                    User.findOne({email: event.hostEmail}).then(host=> {
-                        if(!host){
-                            return res.status(404).json("Host not found"); 
-                        }
-                
-                        const hostInfo = {
-                            id: host.id,
-                            username: host.username,
-                            email: host.email,
-                            firstName: host.firstName,
-                            lastName: host.lastName
-                        }
-                
-                        if (event.attendeesEmail){
-                            User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
-                            .then(attendees => {
-                                res.json({
-                                    id: event.id,
-                                    pinId: event.pinId,
-                                    city: event.city,
-                                    title: event.title,
-                                    address: event.address,
-                                    description: event.description,
-                                    mapLat: event.mapLat,
-                                    mapLong: event.mapLng,
-                                    host: hostInfo, 
-                                    attendees: attendees,
-                                    startDate: event.startDate,
-                                    endDate: event.endDate,
-                                    eventPicturesKeys: event.eventPicturesKeys,
-                                    coverPictureKey: event.coverPictureKey  
-                                })
-                            })
-                        }else{
-                            res.json({
-                                id: event.id,
-                                pinId: event.pinId,
-                                city: event.city,
-                                title: event.title,
-                                address: event.address,
-                                description: event.description,
-                                mapLat: event.mapLat,
-                                mapLong: event.mapLng,
-                                host: hostInfo,
-                                startDate: event.startDate,
-                                endDate: event.endDate,
-                                eventPicturesKeys: event.eventPicturesKeys,
-                                coverPictureKey: event.coverPictureKey  
-                            })
-                        }
-                    })
-                }
-            })
-            
-        }
-    })
-})
 
 
 //Can be used by both current user and event host to add users from events
@@ -339,7 +206,7 @@ router.patch("/decline_event/:eventId", (req, res) => {
                                                 attendeesEmail: attendees,
                                                 startDate: event.startDate,
                                                 endDate: event.endDate,
-                                                eventPicturesKeys: event.eventPicturesKeys,
+                                
                                                 coverPictureKey: event.coverPictureKey    
                                             })
                                         })
@@ -355,7 +222,7 @@ router.patch("/decline_event/:eventId", (req, res) => {
                                             host: hostInfo,
                                             startDate: event.startDate,
                                             endDate: event.endDate,
-                                            eventPicturesKeys: event.eventPicturesKeys,
+                            
                                             coverPictureKey: event.coverPictureKey   
                                         })
                                     }
@@ -425,6 +292,57 @@ router.post("/create_event", (req, res) => {
         
 })  
 
+
+router.post("/create_with_picture", (req, res) => {
+    singleUpload(req, res, (error) => {
+        if(error){
+            return res.status(404).json(error);
+        }else{
+
+            // Event.findOne({name: req.body.name}).then(event => {
+            //     if(event){
+            //         return res.status(400).json({error: "Event Name taken"});
+            //     }
+            // })
+
+            const {errors, isValid} = validateEventInput(req.body)
+            if (!isValid) {
+                return res.status(400).json(errors);
+            }
+
+            const newEvent = new Event({
+                coverPictureKey: req.file.key,
+                pinId: req.body.pinId,
+                address: req.body.address, 
+                city: req.body.city,
+                hostEmail: req.body.hostEmail,
+                title: req.body.title,
+                description: req.body.description,
+                mapLat: req.body.mapLat,
+                mapLng: req.body.mapLng,
+                startDate: req.body.startDate,
+                endDate: req.body.endDate,
+            })
+            
+            
+            User.findOne({email: newEvent.hostEmail}).then(host=> {
+              if(!host){
+                 return res.status(404).json("Host not found"); 
+              }
+              newEvent.host.push(host);
+              Group.findById(req.body.groupId).then( group => {
+                 newEvent.group = group;
+                 newEvent.save().then(event => {
+                    res.json(event);
+                 }).catch(err => res.send(err)); 
+              }).catch(err => res.send(err));
+              
+           })
+        }
+    })
+        
+})  
+
 //Updates event based on event params shown below
 //Updates an event based on event params
 //throws errors if new [startDate, endDate, title, description, city, address, or hostEmail ] params are blank
@@ -487,7 +405,7 @@ router.patch("/:eventId", (req, res) => {
                                        attendees: attendees,
                                        startDate: event.startDate,
                                        endDate: event.endDate,
-                                       eventPicturesKeys: event.eventPicturesKeys,
+                        
                                        coverPictureKey: event.coverPictureKey   
                                  })
                               })
@@ -503,7 +421,7 @@ router.patch("/:eventId", (req, res) => {
                                  host: hostInfo,
                                  startDate: event.startDate,
                                  endDate: event.endDate,
-                                 eventPicturesKeys: event.eventPicturesKeys,
+                
                                  coverPictureKey: event.coverPictureKey   
                               })
                            }
@@ -603,8 +521,7 @@ router.get("/:eventId", (req, res) => {
                         host: hostInfo, 
                         attendees: attendees,
                         startDate: event.startDate,
-                        endDate: event.endDate ,
-                        eventPicturesKeys: event.eventPicturesKeys,
+                        endDate: event.endDate,
                         coverPictureKey: event.coverPictureKey   
                     })
                 })
@@ -620,7 +537,6 @@ router.get("/:eventId", (req, res) => {
                     host: hostInfo,
                     startDate: event.startDate,
                     endDate: event.endDate,
-                    eventPicturesKeys: event.eventPicturesKeys,
                     coverPictureKey: event.coverPictureKey   
                 })
             }

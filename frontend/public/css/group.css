@@ -157,3 +157,10 @@
     position: absolute;
     transform: translateY(-1rem)
 }
+
+#group-picture{
+    height: 300px;
+    width: 500px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}

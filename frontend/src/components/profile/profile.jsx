@@ -9,14 +9,18 @@ class Profile extends React.Component {
 
   componentDidMount() {
     this.props.fetchUser(this.props.match.params.userId);
+    this.props.fetchAllImages()
   }
 
   render() {
-    let { user, currentUser, groups } = this.props;
+    let { user, currentUser, groups, images } = this.props;
     if (!user) {return null};
-    let { firstName, lastName, username, email } = user;
+    let { firstName, lastName, username, email, profilePictureKey } = user;
+    
     const allGroups = Object.values(groups);
     const usersGroups = []
+
+    const profilePic = profilePictureKey ? <img id="profile-image" src={images[profilePictureKey]}/> : <img id="profile-image" src="../images/default-user-icon-8.jpeg"/>
 
     allGroups.map(group => {
       if (group.members.includes(user.id)){
@@ -24,9 +28,10 @@ class Profile extends React.Component {
       }
     }) 
 
-    console.log(usersGroups)
     return (
       <div className="profile-block">
+
+      {profilePic}
       
       <div className="first-last-name">{firstName} {lastName}</div>
   

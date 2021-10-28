@@ -3,6 +3,7 @@ import { RECEIVE_GROUPS, RECEIVE_GROUP, REMOVE_GROUP, GROUP_ADD_MEMBER, CREATE_G
 const groupsReducer = (state={}, action) => {
   Object.freeze(state);
   let nextState = {};
+  nextState = Object.assign({}, state);
   switch (action.type) {
     case RECEIVE_GROUPS:
       fixGroupIds(action);
@@ -47,7 +48,7 @@ const fixGroupIds = action => {
 }
 
 const removeOldName = (nextState, action) => {
-  console.log(action.group.data._id);
+  // console.log(action.group.data._id);
   let targetName = '';
   Object.values(nextState).forEach((group, i) => {
     if (group.id === action.group.data._id) {

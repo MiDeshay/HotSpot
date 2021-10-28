@@ -9,23 +9,22 @@ class GroupShow extends React.Component {
   }
 
   componentDidMount() {
-    // if (this.props.group && !this.props.group.members) { // if
-      this.props.fetchGroup(this.props.match.params.groupName);
-      this.props.getEvents()
-      // this.props.uiGroupShow(this.props.group.id);
-    // }
+    
+    this.props.fetchGroup(this.props.match.params.groupName);
+    this.props.getEvents()
+    this.props.fetchAllImages()
+   
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('i updated')
     if (!this.props.group) return;
     if (prevProps.group && prevProps.group.id !== this.props.group.id) {
       this.props.fetchGroup(this.props.group.name);
     }
-
-    if (!this.props.groupId) {
-
+    if (this.props.group.bannerPictureKey && !this.props.images[this.props.group.bannerPictureKey]){
+      this.props.fetchAllImages()
     }
+  
   }
 
   renderEditButton() {
@@ -54,6 +53,8 @@ class GroupShow extends React.Component {
 
   render() {
     let { group, users, events } = this.props;
+    const {images} = this.props;
+
     const allEvents = Object.values(events)
     if (!group || !group.members) return null;
     let filterredEvents = [];
@@ -62,8 +63,12 @@ class GroupShow extends React.Component {
         filterredEvents.push(event);
       }
     });
+
+    const banner = images[group.bannerPictureKey] ? <img id="group-picture" alt="group banner" src={images[group.bannerPictureKey]}/> : <img id="group-picture" src="../images/image_placeholder.png"/>
+
     return (
       <div className="group-show-div">
+          {banner}
          <div id="group-title"> {group.name}</div>
          <div className="group-container">
             <div className="group-header">About us:</div>
@@ -83,8 +88,8 @@ class GroupShow extends React.Component {
               <li className="event-info-sub"> <div  className="event-host group-label" >Host email:</div> <div className="event-text">{event.host[0].email} </div></li>
             </div>)}
           </ul>
-            <div className="bottom-scroll" />
-        </div>
+            <div className="bottom-scroll" /> 
+        </div> 
 
 
         <div className="group-container">

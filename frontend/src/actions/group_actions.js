@@ -7,7 +7,8 @@ export const RECEIVE_GROUP_ERRORS = "RECEIVE_GROUP_ERRORS";
 export const UI_GROUP_SHOW = "UI_GROUP_SHOW";
 export const UI_GROUP_SEARCH_ISACTIVE = "UI_GROUP_SEARCH_ISACTIVE";
 export const GROUP_ADD_MEMBER = "GROUP_ADD_MEMBER"
-export const CREATE_GROUP = "CREATE_GROUP"
+export const CREATE_GROUP = "CREATE_GROUP";
+
 
 const receiveGroups = groups => ({
   type: RECEIVE_GROUPS,
@@ -18,6 +19,7 @@ const receiveGroup = group => ({
   type: RECEIVE_GROUP,
   group
 });
+
 
 const removeGroup = group => ({
   type: REMOVE_GROUP,
@@ -65,10 +67,21 @@ export const createGroup = payload => dispatch => {
     dispatch(receiveErrors(err.response.data));
 })};
 
+export const createGroupWithPicture = packet => dispatch => {
+  GroupApiUtil.createGroupPicture(packet).then(group => dispatch(groupCreate(group))).catch(err => {
+    dispatch(receiveErrors(err.response.data));
+})};
+
 export const updateGroup = group => dispatch => {
   GroupApiUtil.updateGroup(group).then(group => dispatch(receiveGroup(group))).catch(err => { // Need to fix, this actually adds a new group to the current state.
     dispatch(receiveErrors(err.response.data));
 })};
+
+export const updateGroupWithPicture = packet => dispatch => {
+  GroupApiUtil.updateGroupPicture(packet).then(group => dispatch(receiveGroup(group))).catch(err => { // Need to fix, this actually adds a new group to the current state.
+    dispatch(receiveErrors(err.response.data));
+})};
+
 
 export const updateGroupMembers = payload => dispatch => {
   GroupApiUtil.updateGroupMembers(payload).then(group => dispatch(groupAddMember(group))).catch(err => {
@@ -82,5 +95,5 @@ export const updateGroupEvents = payload => dispatch => {
 
 export const deleteGroup = payload => dispatch => {
   GroupApiUtil.deleteGroup(payload).then(groupId => dispatch(removeGroup(groupId))).catch(err => {
-    dispatch(receiveErrors(err.response.data));
+    dispatch(receiveErrors(err.response.data)); 
 })};
