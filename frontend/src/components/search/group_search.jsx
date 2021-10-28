@@ -50,10 +50,11 @@ class GroupSearch extends React.Component {
   render() {
     let { searchTerm } = this.state;
     let { groups } = this.props;
+    delete groups.Public; // remove the "Public" group from the drop-down list
     // let isSearching = Boolean(searchTerm !== "");
     let isSearching = this.props.isActive;
     return (
-      <div>
+      <div className="search-bar">
         <div className={`${isSearching ? "modal-screen " : ""}none`} onClick={this.handleClick}/>
         <input className="drop-down-input" type="text" value={searchTerm} onClick={this.handleClick} onChange={this.updateInput('searchTerm')} placeholder="Search Groups" />
         <ul className="drop-down-list">

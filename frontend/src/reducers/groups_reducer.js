@@ -1,4 +1,4 @@
-import { RECEIVE_GROUPS, RECEIVE_GROUP, REMOVE_GROUP, GROUP_ADD_MEMBER, CREATE_GROUP } from '../actions/group_actions';
+import { RECEIVE_GROUPS, RECEIVE_GROUP, REMOVE_GROUP, GROUP_ADD_MEMBER, CREATE_GROUP, RECEIVE_JOIN_REQUEST } from '../actions/group_actions';
 
 const groupsReducer = (state={}, action) => {
   Object.freeze(state);
@@ -10,7 +10,7 @@ const groupsReducer = (state={}, action) => {
       // nextState = Object.assign({}, state);
       // nextState[action.groups.data]
       return action.groups.data;
-    case RECEIVE_GROUP: case GROUP_ADD_MEMBER: case CREATE_GROUP:
+    case RECEIVE_GROUP: case GROUP_ADD_MEMBER: case CREATE_GROUP: case RECEIVE_JOIN_REQUEST:
       nextState = Object.assign({}, state);
       removeOldName(nextState, action);
       fixGroupId(action);
@@ -22,7 +22,7 @@ const groupsReducer = (state={}, action) => {
       return nextState;
     default: return state;
   }
-}
+};
 
 export default groupsReducer;
 
@@ -32,7 +32,7 @@ const fixGroupId = action => {
     delete action.group.data._id;
   }
   return action;
-}
+};
 
 const fixGroupIds = action => {
   action.groups.data.forEach((group, i) => {
@@ -43,9 +43,9 @@ const fixGroupIds = action => {
       delete action.groups.data[i];
     }
     action.groups.data[group.name] = currentgroup;
-  })
+  });
   return action;
-}
+};
 
 const removeOldName = (nextState, action) => {
   // console.log(action.group.data._id);
@@ -59,4 +59,4 @@ const removeOldName = (nextState, action) => {
     delete nextState[targetName];
   }
   // rely on side-effect mutates
-}
+};

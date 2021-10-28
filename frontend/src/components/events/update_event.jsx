@@ -103,6 +103,10 @@ export default class UpdateEvent extends React.Component {
          this.submitted = false;
       }
 
+      // Close modal on browser back
+      window.onpopstate = e => {
+         this.props.closeModal();
+      }
    }
 
    updateMarker(){

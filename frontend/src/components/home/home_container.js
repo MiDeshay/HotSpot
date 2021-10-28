@@ -20,9 +20,10 @@ const mapDispatchToProps = dispatch => ({
    openCreate: () => dispatch(openModal("createEvent")),
    openUpdate: () => dispatch(openModal("updateEvent")),
    fetchAllImages: () => dispatch(fetchAllImages()),
+   openEventDetails: () => dispatch(openModal("eventDetails")),
    fetchUsers: () => dispatch(fetchUsers()),
    joinEvent: (eventId, email) => dispatch(joinEvent(eventId, email)),
    declineEvent: (eventId, email) => dispatch(declineEvent(eventId, email)),
-})
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(home);

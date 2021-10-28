@@ -9,7 +9,7 @@ const events = require("./routes/api/events");
 const groups = require("./routes/api/groups");
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const fileRoutes = require('./routes/api/images')
+const fileRoutes = require('./routes/api/images');
 
 
 const app = express();

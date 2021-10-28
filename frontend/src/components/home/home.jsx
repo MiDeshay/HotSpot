@@ -10,7 +10,7 @@ export default class Home extends React.Component{
    constructor(props){
       super(props)
 
-      // The map and collection of related objects/collection. 
+      // The map and collection of related objects/collection.
       // this.markers contains the collection of actual markers representing events.
       this.map = null;
       this.markers = {}; // The list of marker objects created from currentEvents. These are references to the marker object directly created by google maps API.
@@ -37,6 +37,9 @@ export default class Home extends React.Component{
          pins: this.pins, // These pins are only used for debugging
          currentEvents: {}, // This will be the list of events that are currently marked on the map. Used for drawing markers.
       }
+
+      // Geocoder, grabs address from lat,lng 
+      this.geocoder = null;
       // Get google from the window
       this.google = window.google;
 
@@ -66,6 +69,7 @@ export default class Home extends React.Component{
          .then((google) => {
             this.google = window.google;
             this.map = new google.maps.Map(document.getElementById("map"), this.state);
+            this.geocoder = new google.maps.Geocoder();
             this.getLocation();
             this.infoWindow = new google.maps.InfoWindow({
                content: "No description provided.",
@@ -87,7 +91,7 @@ export default class Home extends React.Component{
          this.drop();
          this.eventsLoaded = true;
          this.setState({
-            currentEvents: this.props.events,   
+            currentEvents: this.props.events,
          })
       }
       
@@ -110,7 +114,7 @@ export default class Home extends React.Component{
    }
 
    // Place a marker at cursor position
-   addEvent(){
+   addEvent() {
       this.map.addListener("click", (mapsMouseEvent) => {
          this.mousePos.lat = mapsMouseEvent.latLng.lat();
          this.mousePos.lng = mapsMouseEvent.latLng.lng();
@@ -127,7 +131,7 @@ export default class Home extends React.Component{
          let i = 0;
          let userGroups = this.props.user.groupsJoined;
 
-         if (!this.state.currentEvents[event] && userGroups.includes(events[event].group._id)){
+         if (!this.state.currentEvents[event] && (userGroups.includes(events[event].group._id) || events[event].group.name === "Public")){ // added "Public" name to filter
             const pin = events[event];
             this.addMarkerWithTimeout(pin, i*20);
             i++;
@@ -167,6 +171,11 @@ export default class Home extends React.Component{
       const eventPicture = coverPictureKey ? `<img src=${images[coverPictureKey]} class='event-picture'/>`: ""
 
       marker.addListener("click", () => {
+         let hours = parseInt(marker.eventDetails.startTime.slice(0,2));
+         let amPm = (hours >= 12)? "PM" : "AM"; 
+         hours = (hours % 12) ? hours % 12 : 12;
+         let minutes = marker.eventDetails.startTime.slice(2); 
+         let time = `${hours}${minutes} ${amPm}`; 
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<div class='event-header'>`+
@@ -176,6 +185,7 @@ export default class Home extends React.Component{
                   `<p class='event-text'>${marker.eventDetails.description}</p>` +
                   `<p class='event-text'>${marker.eventDetails.address}</p>` +
                   `<p class='event-text'>${marker.eventDetails.city}</p>` +
+                  `<p class='event-text'>Start Time: ${time}</p>` +
                   `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
                   `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
                   `<div class='event-buttons'> ` +
@@ -191,6 +201,8 @@ export default class Home extends React.Component{
 
          // Event handlers for buttons in info window.
          // Delete button and Edit button dispatches their respective action using the marker's information
+         // Why we don't create seperate functions for edit and delete? Because above html doesn't support jsx syntax to pass along our functions.
+         // So we have to use this workaround for now until a more elegant solution is found.
          this.google.maps.event.addListener(this.infoWindow, "domready", () => {
             let deleteButton = document.getElementById('event-delete');
             if (deleteButton) deleteButton.onclick = () => {
@@ -219,6 +231,13 @@ export default class Home extends React.Component{
                   respondButton.innerHTML = 'Join';
                }
             }
+
+            let eventDetails = document.getElementById('event-details');
+            if (eventDetails) eventDetails.onclick=(e) => {
+               e.preventDefault();
+               this.selectedEvent = marker.eventDetails._id;
+               this.props.openEventDetails();   
+            }
          });
 
          this.infoWindow.open({
@@ -241,7 +260,7 @@ export default class Home extends React.Component{
 
       return (
          <div id='map'>
-            <Modal pos={this.mousePos} event={this.selectedEvent} />
+            <Modal pos={this.mousePos} geocoder={this.geocoder} event={this.selectedEvent} />
          </div>
       )
    }

@@ -20,6 +20,10 @@ const GroupSchema = new Schema({
     type: [{type: Schema.Types.ObjectId, ref: 'User'}],
     default: undefined
   },
+  groupJoinRequests: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    default: undefined
+  },
   events: {
     type: [{type: Schema.Types.ObjectId, ref: 'Event'}],
     default: undefined

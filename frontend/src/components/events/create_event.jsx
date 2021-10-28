@@ -1,11 +1,11 @@
 import React from 'react';
+const mapsKey = process.env.REACT_APP_MAPS_API_KEY;
 
 export default class CreateEvent extends React.Component {
 
    constructor(props){
       super(props)
       this.state = {
-         pinId: 1,
          address: "",
          city: "",
          hostEmail: this.props.currentUser.email,
@@ -13,6 +13,7 @@ export default class CreateEvent extends React.Component {
          description: "",
          mapLat: this.props.pos.lat,
          mapLng: this.props.pos.lng,
+         startTime: "",
          startDate: "",
          endDate: "",
          groupId: "",
@@ -47,6 +48,29 @@ export default class CreateEvent extends React.Component {
          }
       }
 
+      const latlng = {
+         lat: this.state.mapLat,
+         lng: this.state.mapLng,
+      };
+
+      this.props.geocoder
+         .geocode({ location: latlng })
+         .then((response) => {
+            let address = '';
+            let city = '';
+            response.results[0].address_components.forEach( addr => {         
+               if (addr.types[0] === 'plus_code') address += addr.short_name + " "; 
+               if (addr.types[0] === 'premise') address = addr.short_name + " "; 
+               if (addr.types[0] === 'political') address += addr.short_name + " "; 
+               if (addr.types[0] === 'street_number') address += addr.short_name + " "; 
+               if (addr.types[0] === 'route') address += (addr.short_name); 
+               if (addr.types[0] === 'locality') city = addr.long_name; 
+               this.setState({
+                  address,
+                  city
+               })
+            })
+         })
 
       let today = new Date();
       let dd = today.getDate();
@@ -71,6 +95,11 @@ export default class CreateEvent extends React.Component {
          }
          this.submitted = false;
       }
+
+      // Close modal on browser back
+      window.onpopstate = e => {
+         this.props.closeModal();
+      }
    }
    render(){
       return (
@@ -79,33 +108,37 @@ export default class CreateEvent extends React.Component {
                <ul>
                   <li>
                      <label htmlFor='event-title'>Title </label>
-                     <input autoComplete="off" onChange={this.handleUpdate('title')}type='text' value={this.state.title} id='event-title' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('title')} type='text' value={this.state.title} id='event-title' className="text-input" />
                   </li>
                   <li>
                      <label htmlFor='event-description'>Description </label>
-                     <textarea autoComplete="off" onChange={this.handleUpdate('description')}type='body' value={this.state.description} id='event-description' className="textarea-input"/>
+                     <textarea autoComplete="off" onChange={this.handleUpdate('description')} type='body' value={this.state.description} id='event-description' className="textarea-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-address'>Address </label>
-                     <input autoComplete="off" onChange={this.handleUpdate('address')}type='text' value={this.state.address} id='event-address' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('address')} type='text' value={this.state.address} id='event-address' className="text-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-city'>City </label>
-                     <input autoComplete="off" onChange={this.handleUpdate('city')}type='text' value={this.state.city} id='event-city' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('city')} type='text' value={this.state.city} id='event-city' className="text-input"/>
                   </li>
                   <li className="li-split">
                      <label htmlFor='event-start-date'>Start Date </label>
-                     <input className='event-date' onChange={this.handleUpdate('startDate')}type='date' value={this.state.startDate} id='event-start-date'/>
+                     <input className='event-date' onChange={this.handleUpdate('startDate')} type='date' value={this.state.startDate} id='event-start-date'/>
                   </li>
                   <li className="li-split">
                      <label htmlFor='event-end-date'>End Date </label>
-                     <input className='event-date' onChange={this.handleUpdate('endDate')}type='date' value={this.state.endDate} id='event-end-date'/>
+                     <input className='event-date' onChange={this.handleUpdate('endDate')} type='date' value={this.state.endDate} id='event-end-date'/>
                   </li>
                   <li className="li-split">
-
+                  <label htmlFor="event-start-time">Start Time</label>
+                     <input type="time" id="event-start-time" onChange={this.handleUpdate('startTime')} value={this.state.startTime} required/>
+                  </li>
+                  <li className="li-split">
                      <label htmlFor="groups">Choose a Group:</label>
                      <select id="groups" defaultValue={'DEFAULT'} onChange={this.handleUpdate('groupId')}>
                         <option value="DEFAULT" disabled='disabled'>Select a group</option>
+                        <option key={`group-Public`} value="Public" >Public</option>
                         {this.groups.map( (group, i ) => (
                            <option key={`group-${i}`} value={group.id} >{group.name}</option>
                         ))
