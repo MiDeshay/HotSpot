@@ -3,6 +3,7 @@ import GroupShow from "./group_show";
 import { getEvents } from '../../actions/event_actions';
 import { fetchGroup, uiGroupShow, updateGroupMembers, deleteGroup, createJoinRequest, respondToJoinRequest } from "../../actions/group_actions";
 import { closeModal, openModal } from "../../actions/modal_actions";
+import { fetchAllImages } from "../../actions/image_actions";
 
 const mapStateToProps = (state, ownProps) => ({
   groups: state.entities.groups,

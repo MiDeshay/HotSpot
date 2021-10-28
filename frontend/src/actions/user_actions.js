@@ -51,8 +51,10 @@ export const updateUser = user => dispatch => {
 
 export const updateUserWithPicture = user => dispatch => {
   return UserApiUtil.updateUserPicture(user).then(user => dispatch(receiveUser(user))).catch(err => {
+    delete err.response.data.originalError;
     dispatch(receiveErrors(err.response.data));
-})}
+  })
+}
 
 export const deleteUser = userId => dispatch => (
   UserApiUtil.deleteUser(userId).then(() => dispatch(removeUser(userId))).catch(err => {

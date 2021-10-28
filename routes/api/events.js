@@ -30,7 +30,7 @@ router.patch('/update_with_picture/:eventId', (req, res) => {
                     }
                     Event.findByIdAndUpdate( req.params.eventId, {
                         coverPictureKey: req.file.key,
-                        address: req.body.address, 
+                        address: req.body.address,
                         city: req.body.city,
                         hostEmail: req.body.hostEmail,
                         title: req.body.title,
@@ -41,12 +41,12 @@ router.patch('/update_with_picture/:eventId', (req, res) => {
                         endDate: req.body.endDate
 
                     }, {new: true}, (error, event) => {
-                        
+
                         User.findOne({email: event.hostEmail}).then(host=> {
                             if(!host){
-                                return res.status(404).json("Host not found"); 
+                                return res.status(404).json("Host not found");
                             }
-                    
+
                             const hostInfo = {
                                 id: host.id,
                                 username: host.username,
@@ -54,7 +54,7 @@ router.patch('/update_with_picture/:eventId', (req, res) => {
                                 firstName: host.firstName,
                                 lastName: host.lastName
                             }
-                    
+
                             if (event.attendeesEmail){
                                 User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
                                 .then(attendees => {
@@ -67,12 +67,12 @@ router.patch('/update_with_picture/:eventId', (req, res) => {
                                         description: event.description,
                                         mapLat: event.mapLat,
                                         mapLong: event.mapLng,
-                                        host: hostInfo, 
+                                        host: hostInfo,
                                         attendees: attendees,
                                         startDate: event.startDate,
                                         endDate: event.endDate,
                                         coverPictureKey: event.coverPictureKey,
-                                        pictureUrl: getImage(event.coverPictureKey) 
+                                        pictureUrl: getImage(event.coverPictureKey)
                                     })
                                 })
                             }else{
@@ -88,8 +88,8 @@ router.patch('/update_with_picture/:eventId', (req, res) => {
                                     host: hostInfo,
                                     startDate: event.startDate,
                                     endDate: event.endDate,
-                                    coverPictureKey: event.coverPictureKey,  
-                                    pictureUrl: getImage(event.coverPictureKey) 
+                                    coverPictureKey: event.coverPictureKey,
+                                    pictureUrl: getImage(event.coverPictureKey)
                                 })
                             }
                         })
@@ -506,7 +506,7 @@ router.post("/create_with_picture", (req, res) => {
             const newEvent = new Event({
                 coverPictureKey: req.file.key,
                 pinId: req.body.pinId,
-                address: req.body.address, 
+                address: req.body.address,
                 city: req.body.city,
                 hostEmail: req.body.hostEmail,
                 title: req.body.title,
@@ -516,25 +516,25 @@ router.post("/create_with_picture", (req, res) => {
                 startDate: req.body.startDate,
                 endDate: req.body.endDate,
             })
-            
-            
+
+
             User.findOne({email: newEvent.hostEmail}).then(host=> {
               if(!host){
-                 return res.status(404).json("Host not found"); 
+                 return res.status(404).json("Host not found");
               }
               newEvent.host.push(host);
               Group.findById(req.body.groupId).then( group => {
                  newEvent.group = group;
                  newEvent.save().then(event => {
                     res.json(event);
-                 }).catch(err => res.send(err)); 
+                 }).catch(err => res.send(err));
               }).catch(err => res.send(err));
-              
+
            })
         }
     })
-        
-})  
+
+})
 
 //Updates event based on event params shown below
 //Updates an event based on event params
@@ -544,18 +544,18 @@ router.post("/create_with_picture", (req, res) => {
 
 //returns the updated event with host info and attendees info if there are any
 router.patch("/:eventId", (req, res) => {
-    
+
     const {errors, isValid} = validateEventInput(req.body)
-    
+
     if (!isValid) {
         return res.status(400).json(errors);
     }
 
     Event.findById(req.params.eventId).then( event => {
         if(event){
-            
+
             Event.findOneAndUpdate({title: event.title}, {
-                address: req.body.address, 
+                address: req.body.address,
                 city: req.body.city,
                 hostEmail: req.body.hostEmail,
                 title: req.body.title,
@@ -569,12 +569,12 @@ router.patch("/:eventId", (req, res) => {
                 if (error){
                     res.status(400).json(error);
                   }else{
-                    Group.findById(req.body.groupId).then( group => {event.group = group; event.save();}).then( 
+                    Group.findById(req.body.groupId).then( group => {event.group = group; event.save();}).then(
                      User.findOne({email: event.hostEmail}).then(host=> {
                            if(!host){
-                              return res.status(404).json("Host not found"); 
+                              return res.status(404).json("Host not found");
                            }
-                  
+
                            const hostInfo = {
                               id: host.id,
                               username: host.username,
@@ -582,7 +582,7 @@ router.patch("/:eventId", (req, res) => {
                               firstName: host.firstName,
                               lastName: host.lastName
                            }
-                  
+
                            if (event.attendeesEmail){
                               User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
                               .then(attendees => {
@@ -594,12 +594,12 @@ router.patch("/:eventId", (req, res) => {
                                        description: event.description,
                                        mapLat: event.mapLat,
                                        mapLng: event.mapLng,
-                                       host: hostInfo, 
+                                       host: hostInfo,
                                        attendees: attendees,
                                        startDate: event.startDate,
                                        endDate: event.endDate,
-                        
-                                       coverPictureKey: event.coverPictureKey   
+
+                                       coverPictureKey: event.coverPictureKey
                                  })
                               })
                            }else{
@@ -614,8 +614,8 @@ router.patch("/:eventId", (req, res) => {
                                  host: hostInfo,
                                  startDate: event.startDate,
                                  endDate: event.endDate,
-                
-                                 coverPictureKey: event.coverPictureKey   
+
+                                 coverPictureKey: event.coverPictureKey
                               })
                            }
                      })
@@ -623,126 +623,11 @@ router.patch("/:eventId", (req, res) => {
                 }
             })
         } else{
-            return res.status(404).json("event not found"); 
-        } 
-    })
-})
-
-//deletes and event based on its id
-//throws and error if the event does not exist
-router.delete("/delete/:eventId", (req, res) => {
-    Event.findById(req.params.eventId).then(event => {
-        if(event){
-            if(event.coverPictureKey){
-                deleteImage(event.coverPictureKey)
-            }
-
-            if(event.eventPicturesKeys){
-                const obj = []
-                event.eventPicturesKeys.map( imgKey => {
-                    obj.push({Key: imgKey})
-                })
-
-                deleteImages(obj)
-            }
-
-    
-            Event.findByIdAndDelete(req.params.eventId, (err, obj) => {
-                if (err){
-                    return res.status(400).json(err);
-                  } else{
-                    return res.json({id: req.params.eventId})
-                  }  
-            })
-        }else{ 
-            return res.status(404).json("Event not found"); 
-             
+            return res.status(404).json("event not found");
         }
     })
 })
 
-  const { errors, isValid } = validateEventInput(req.body);
-
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
-
-  Event.findById(req.params.eventId).then(event => {
-    if (event) {
-
-      Event.findOneAndUpdate({ title: event.title }, {
-        address: req.body.address,
-        city: req.body.city,
-        hostEmail: req.body.hostEmail,
-        title: req.body.title,
-        description: req.body.description,
-        mapLat: req.body.mapLat,
-        mapLng: req.body.mapLng,
-        startTime: req.body.startTime,
-        startDate: req.body.startDate,
-        endDate: req.body.endDate
-      },
-        { new: true }, (error, event) => {
-          if (error) {
-            res.status(400).json(error);
-          } else {
-            Group.findById(req.body.groupId).then(group => { event.group = group; event.save(); }).then(
-              User.findOne({ email: event.hostEmail }).then(host => {
-                if (!host) {
-                  return res.status(404).json("Host not found");
-                }
-
-                const hostInfo = {
-                  id: host.id,
-                  username: host.username,
-                  email: host.email,
-                  firstName: host.firstName,
-                  lastName: host.lastName
-                };
-
-                if (event.attendeesEmail) {
-                  User.find({ email: { $in: event.attendeesEmail } }, { _id: 1, username: 1, firstName: 1, lastName: 1, email: 1 })
-                    .then(attendees => {
-                      res.json({
-                        _id: event.id,
-                        city: event.city,
-                        title: event.title,
-                        address: event.address,
-                        description: event.description,
-                        mapLat: event.mapLat,
-                        mapLng: event.mapLng,
-                        host: hostInfo,
-                        attendees: attendees,
-                        startDate: event.startDate,
-                        endDate: event.endDate,
-                        coverPictureKey: event.coverPictureKey   
-                    })
-                })
-            }else{
-                res.json({
-                    id: event.id,
-                    title: event.title,
-                    city: event.city,
-                    title: event.title,
-                    address: event.address,
-                    description: event.description,
-                    mapLat: event.mapLat,
-                    mapLng: event.mapLng,
-                    host: hostInfo,
-                    startDate: event.startDate,
-                    endDate: event.endDate,
-                    eventPicturesKeys: event.eventPicturesKeys,
-                    coverPictureKey: event.coverPictureKey
-                  });
-                }
-              })
-            ).catch(err => res.status(400).json(err));
-          }
-        });
-    } else {
-      return res.status(404).json("event not found");
-    }
-  });
 
 //deletes and event based on its id
 //throws and error if the event does not exist
