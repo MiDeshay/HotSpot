@@ -19,9 +19,26 @@ export default class UpdateEvent extends React.Component {
 
    handleUpdate(input){
       return (e) => {
+         // Check end time is after start time 
+         if (input === 'endTime' && this.state.startDate === this.state.endDate){
+            var end = parseInt(e.currentTarget.value.replace(':',''));
+            var begin = parseInt(this.state.startTime.replace(':',''));
+            if (!begin || end < begin) return;
+         }
+
          this.setState({
             [input]: e.currentTarget.value,
          })
+         if (input === 'startTime'){
+            let time = e.currentTarget.value.split(':').map(Number); 
+            time[0] += 1; 
+            if (time[0] > 23) time[0] = "00";
+            if (time[1] < 10) time[1] = '0' + time[1];
+            this.setState({
+               endTime: time.join(':'),
+            })
+         }
+         
       }
    }
 
@@ -124,6 +141,14 @@ export default class UpdateEvent extends React.Component {
                   <li className="li-split">
                      <label htmlFor='event-end-date'>End Date </label>
                      <input className='event-date' onChange={this.handleUpdate('endDate')}type='date' value={this.state.endDate} id='event-end-date'/>
+                  </li>
+                  <li className="li-split">
+                  <label htmlFor="event-start-time">Start Time</label>
+                     <input type="time" id="event-start-time" onChange={this.handleUpdate('startTime')} value={this.state.startTime} required/>
+                  </li>
+                  <li className="li-split">
+                  <label htmlFor="event-end-time">End Time</label>
+                     <input type="time" id="event-end-time" onChange={this.handleUpdate('endTime')} value={this.state.endTime} required/>
                   </li>
                   
                </ul>
