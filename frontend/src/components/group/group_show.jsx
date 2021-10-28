@@ -35,7 +35,7 @@ class GroupShow extends React.Component {
   }
 
   renderEditButtons() {
-    let { group, currentUser, deleteGroup, openDeleteWarning} = this.props;
+    let { group, currentUser, deleteGroup, openDeleteWarning } = this.props;
     if (group && group.ownerId && currentUser.id === group.ownerId) {
       return (
         <div className="group-edit-buttons">
@@ -62,29 +62,30 @@ class GroupShow extends React.Component {
   }
 
   renderJoinRequests() {
-    let { users, currentUser, group, joinRequestAction} = this.props;
+    let { users, currentUser, group, joinRequestAction } = this.props;
     if (currentUser.id !== group.ownerId) { return null }
     return (
       <div className="group-container">
         <div className={`group-header ${group.groupJoinRequests.length > 0 ? 'has-requests' : 'no-requests'}`}>Join Requests:</div>
         <ul className="scroll-box-container" id="join-requests">
           <div className="top-scroll" />
-            <div className="bottom-scroll" />
-            <div className="left-scroll" />
-            <div className="scroll-box">
-              {group.groupJoinRequests.map(joinerId =>
-                <li key={`join-request-${joinerId}`} className="join-request group-text scroll-box-li">
-                  <button className="button green" onClick={() => joinRequestAction({ groupId: group.id, userId: joinerId, isAdding: 'true' })}>✓</button>
-                  <button className="button red" onClick={() => joinRequestAction({ groupId: group.id, userId: joinerId, isAdding: 'false' })}>𐄂</button>
-                  <Link to={`/profile/${joinerId}`} className="group-text member-button member-list-item" key={joinerId}>{users[joinerId].username}</Link>
-                </li>
-              )}
+          <div className="bottom-scroll" />
+          <div className="left-scroll" />
+          <div className="scroll-box">
+            {group.groupJoinRequests.map(joinerId =>
+              <li key={`join-request-${joinerId}`} className="join-request group-text scroll-box-li">
+                <button className="button green" onClick={() => joinRequestAction({ groupId: group.id, userId: joinerId, isAdding: 'true' })}>✓</button>
+                <button className="button red" onClick={() => joinRequestAction({ groupId: group.id, userId: joinerId, isAdding: 'false' })}>𐄂</button>
+                <Link to={`/profile/${joinerId}`} className="group-text member-button member-list-item" key={joinerId}>{users[joinerId].username}</Link>
+              </li>
+            )}
             <div className="list-empty">{group.groupJoinRequests.length > 0 ? '' : 'There are no pending join requests!'}</div>
           </div>
         </ul>
       </div>
     );
   }
+
 
   screenClick(e) {
     e.preventDefault();
