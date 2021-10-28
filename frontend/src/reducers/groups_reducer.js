@@ -1,4 +1,4 @@
-import { RECEIVE_GROUPS, RECEIVE_GROUP, REMOVE_GROUP, GROUP_ADD_MEMBER, CREATE_GROUP } from '../actions/group_actions';
+import { RECEIVE_GROUPS, RECEIVE_GROUP, REMOVE_GROUP, GROUP_ADD_MEMBER, CREATE_GROUP, RECEIVE_JOIN_REQUEST } from '../actions/group_actions';
 
 const groupsReducer = (state={}, action) => {
   Object.freeze(state);
@@ -9,7 +9,7 @@ const groupsReducer = (state={}, action) => {
       // nextState = Object.assign({}, state);
       // nextState[action.groups.data]
       return action.groups.data;
-    case RECEIVE_GROUP: case GROUP_ADD_MEMBER: case CREATE_GROUP:
+    case RECEIVE_GROUP: case GROUP_ADD_MEMBER: case CREATE_GROUP: case RECEIVE_JOIN_REQUEST:
       nextState = Object.assign({}, state);
       removeOldName(nextState, action);
       fixGroupId(action);

@@ -17,7 +17,7 @@
   transform: translateX(50%) translateY(10%);
   background-color: var(--bgc1);
   width: 20rem;
-  max-width: 30rem;
+  max-width: 100vw;
   background-color: var(--color3light);
   border: solid 0.1rem var(--color1dark);
   border-radius: 0.25rem;

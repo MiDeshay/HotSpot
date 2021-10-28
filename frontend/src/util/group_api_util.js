@@ -27,3 +27,11 @@ export const updateGroupMembers = payload => {
 export const updateGroupEvents = payload => {
   return axios.patch('/api/groups/events', payload);
 };
+
+export const createJoinRequest = payload => {
+  return axios.post('/api/groups/join_request', payload);
+};
+
+export const respondToJoinRequest = payload => {
+  return axios.patch('/api/groups/join_request/response', payload);
+};
