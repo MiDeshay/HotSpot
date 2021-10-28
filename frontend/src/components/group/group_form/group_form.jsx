@@ -132,7 +132,7 @@ class GroupForm extends React.Component {
     const {previewImage} = this.state
 
     const preview = previewImage ? <img id="group-picture" src={previewImage}/> : <img id="group-picture" src="../images/Mountains_in_fall.jpeg"/>
-
+    
     return (
       <div className="group-form-div">
         <form onSubmit={this.handleSubmit}>
