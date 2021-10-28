@@ -22,7 +22,7 @@ const GroupSchema = new Schema({
   },
   groupJoinRequests: {
     type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    default: undefined
+    default: []
   },
   events: {
     type: [{type: Schema.Types.ObjectId, ref: 'Event'}],

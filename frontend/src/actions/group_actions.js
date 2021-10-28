@@ -104,12 +104,10 @@ export const updateGroupEvents = payload => dispatch => {
 
 export const deleteGroup = payload => dispatch => {
   GroupApiUtil.deleteGroup(payload).then(groupId => dispatch(removeGroup(groupId))).catch(err => {
-<<<<<<< HEAD
-    dispatch(receiveErrors(err.response.data)); 
-})};
-=======
+
     dispatch(receiveErrors(err.response.data));
-});};
+})};
+
 
 export const createJoinRequest = payload => dispatch => {
   GroupApiUtil.createJoinRequest(payload).then(payload =>
@@ -122,4 +120,4 @@ export const respondToJoinRequest = payload => dispatch =>
   GroupApiUtil.respondToJoinRequest(payload).then(payload =>
     dispatch(receiveJoinRequest(payload))).catch(err =>
       dispatch(receiveErrors(err.response.data)));
->>>>>>> 22fbc9b3317583c39fecb0e977aabb88f7eae364
+
