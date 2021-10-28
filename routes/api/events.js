@@ -406,6 +406,7 @@ router.post("/create_event", (req, res) => {
     mapLat: req.body.mapLat,
     mapLng: req.body.mapLng,
     startTime: req.body.startTime,
+    endTime: req.body.endTime,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
   });
@@ -497,6 +498,7 @@ router.patch("/:eventId", (req, res) => {
         mapLat: req.body.mapLat,
         mapLng: req.body.mapLng,
         startTime: req.body.startTime,
+        endTime: req.body.endTime,
         startDate: req.body.startDate,
         endDate: req.body.endDate
       },
@@ -649,6 +651,7 @@ router.get("/:eventId", (req, res) => {
               attendees: attendees,
               startDate: event.startDate,
               startTime: event.startTime,
+              endTime: event.endTime,
               endDate: event.endDate,
               eventPicturesKeys: event.eventPicturesKeys,
               coverPictureKey: event.coverPictureKey
@@ -666,6 +669,7 @@ router.get("/:eventId", (req, res) => {
           host: hostInfo,
           startDate: event.startDate,
           startTime: event.startTime,
+          endTime: event.endTime,
           endDate: event.endDate,
           eventPicturesKeys: event.eventPicturesKeys,
           coverPictureKey: event.coverPictureKey

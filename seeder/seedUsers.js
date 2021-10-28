@@ -32,6 +32,7 @@ const event = new Event({
   mapLat: 37.60,
   mapLng: -122.4330609,
   startTime: "12:45",
+  endTime: "13:45",
   startDate: "2030-10-16",
   endDate: "2030-10-18"
 })
