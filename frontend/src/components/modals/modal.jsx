@@ -21,7 +21,7 @@ function Modal(props) {
          component = <UpdateEventContainer selectedEvent={props.event}/>
          break;
       case 'eventDetails': 
-         component = <EventDetails event={props.event}/>
+         component = <EventDetails eventId={props.event}/>
          break;
       default:
          return null;

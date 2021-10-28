@@ -225,7 +225,7 @@ export default class Home extends React.Component{
             let eventDetails = document.getElementById('event-details');
             if (eventDetails) eventDetails.onclick=(e) => {
                e.preventDefault();
-               this.selectedEvent = marker.eventDetails;
+               this.selectedEvent = marker.eventDetails._id;
                this.props.openEventDetails();   
             }
          });

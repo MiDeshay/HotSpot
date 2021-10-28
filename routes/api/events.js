@@ -648,6 +648,7 @@ router.get("/:eventId", (req, res) => {
               host: hostInfo,
               attendees: attendees,
               startDate: event.startDate,
+              startTime: event.startTime,
               endDate: event.endDate,
               eventPicturesKeys: event.eventPicturesKeys,
               coverPictureKey: event.coverPictureKey
@@ -664,6 +665,7 @@ router.get("/:eventId", (req, res) => {
           mapLng: event.mapLng,
           host: hostInfo,
           startDate: event.startDate,
+          startTime: event.startTime,
           endDate: event.endDate,
           eventPicturesKeys: event.eventPicturesKeys,
           coverPictureKey: event.coverPictureKey
