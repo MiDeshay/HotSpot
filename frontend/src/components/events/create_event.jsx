@@ -13,6 +13,7 @@ export default class CreateEvent extends React.Component {
          description: "",
          mapLat: this.props.pos.lat,
          mapLng: this.props.pos.lng,
+         startTime: "",
          startDate: "",
          endDate: "",
          groupId: "",
@@ -25,6 +26,7 @@ export default class CreateEvent extends React.Component {
    }
 
    handleUpdate(input){
+      
       return (e) => {
          this.setState({
             [input]: e.currentTarget.value,
@@ -55,8 +57,6 @@ export default class CreateEvent extends React.Component {
       this.props.geocoder
          .geocode({ location: latlng })
          .then((response) => {
-            console.log(response.results[0].address_components);
-            // console.log(response.results[0].formatted_address);
             let address = '';
             let city = '';
             response.results[0].address_components.forEach( addr => {         
@@ -133,7 +133,7 @@ export default class CreateEvent extends React.Component {
                   </li>
                   <li className="li-split">
                   <label htmlFor="event-start-time">Start Time</label>
-                     <input type="time" id="event-start-time" onChange={this.handleUpdate('startTime')} required/>
+                     <input type="time" id="event-start-time" onChange={this.handleUpdate('startTime')} value={this.state.startTime} required/>
                   </li>
                   <li className="li-split">
                      <label htmlFor="groups">Choose a Group:</label>

@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 const mongoose = require("mongoose");
 const dev = require('../config/keys').mongoURI
 
-//create your array. i inserted only 1 object here
 const products = [
   new Product({
     username: "demo",
@@ -19,8 +18,8 @@ const products = [
 const group = new Group({
   name: "Demo Group",
   description: "A group for the demo user ",
-  ownerId: "617726bffa8eaed0b05f2d50",
-  members: ["617726bffa8eaed0b05f2d50"],
+  ownerId: "",
+  members: [],
   events: []
 })
 
@@ -32,6 +31,7 @@ const event = new Event({
   description: "BBQ and potluck meetup.",
   mapLat: 37.60,
   mapLng: -122.4330609,
+  startTime: "12:45",
   startDate: "2030-10-16",
   endDate: "2030-10-18"
 })

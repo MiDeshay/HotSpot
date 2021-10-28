@@ -161,6 +161,11 @@ export default class Home extends React.Component{
       let leaveButton = `<button id='event-respond' class='button'>Leave</button>`;
 
       marker.addListener("click", () => {
+         let hours = parseInt(marker.eventDetails.startTime.slice(0,2));
+         let amPm = (hours >= 12)? "PM" : "AM"; 
+         hours = (hours % 12) ? hours % 12 : 12;
+         let minutes = marker.eventDetails.startTime.slice(2); 
+         let time = `${hours}${minutes} ${amPm}`; 
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<div class='event-header'>`+
@@ -177,6 +182,7 @@ export default class Home extends React.Component{
                   `<p class='event-text'>${marker.eventDetails.description}</p>` +
                   `<p class='event-text'>${marker.eventDetails.address}</p>` +
                   `<p class='event-text'>${marker.eventDetails.city}</p>` +
+                  `<p class='event-text'>Start Time: ${time}</p>` +
                   `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
                   `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
 
