@@ -1,9 +1,16 @@
 import React from "react";
+import { withRouter } from "react-router";
+
 
 class GroupForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = Object.assign({}, this.props.group, {errors: {}});
+
+    if (this.props.group.bannerPictureKey){
+      this.state.previewImage = this.props.images[this.props.group.bannerPictureKey]
+    }
+
     this.update = this.update.bind(this);
     this.renderErrors = this.renderErrors.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,6 +37,17 @@ class GroupForm extends React.Component {
   //     this.props.fetchGroup(this.state.name);
   //   }
   // }
+
+  handleFile(e){
+    let file = e.currentTarget.files[0]
+    const reader = new FileReader();
+    reader.onloadend = () => {
+    
+      this.setState({previewImage: reader.result})
+    }
+    reader.readAsDataURL(file)
+    this.setState({file: file})
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.formType === "Create Group") {
@@ -62,19 +80,59 @@ class GroupForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let group = {
-      name: this.state.name,
-      description: this.state.description,
-      ownerId: this.state.ownerId,
+    const {formType} = this.props;
+    const {name, description, ownerId, file, id} = this.state;
+
+
+    if(formType === "Edit Group" && file){
+      let formData = new FormData();
+  
+      formData.append('image', file)
+      formData.append('name', name);
+      formData.append("groupId", id)
+      formData.append('description', description);
+   
+
+      const packet = {
+        id: id,
+        data: formData
+      }
+      this.props.updateGroupWithPicture(packet)
+
+    } else if (formType === "Create Group" && file){
+        let formData = new FormData();
+    
+        formData.append('image', file)
+        formData.append('name', name);
+        formData.append("groupId", id);
+        formData.append("ownerId", ownerId);
+        formData.append('description', description);
+    
+        const packet = {
+          id: id,
+          data: formData
+        }
+        this.props.createGroupWithPicture(packet)
+    }else{
+      let group = {
+        name: name,
+        description: description,
+        ownerId: ownerId,
+      }
+      if (this.props.formType === 'Edit Group') {
+        group.groupId = this.props.group.id;
+      }
+      this.props.action(group)
     }
-    if (this.props.formType === 'Edit Group') {
-      group.groupId = this.props.group.id;
-    }
-    this.props.action(group)
+
   }
 
   render() {
     if (!this.props.group) {return null};
+    const {previewImage} = this.state
+
+    const preview = previewImage ? <img id="group-picture" src={previewImage}/> : <img id="group-picture" src="../images/Mountains_in_fall.jpeg"/>
+
     return (
       <div className="group-form-div">
         <form onSubmit={this.handleSubmit}>
@@ -84,6 +142,11 @@ class GroupForm extends React.Component {
               <div className="header-details">{this.props.formDetails}</div>
             </div>
             <div className="modal-body">
+                <label>Picture
+                  {preview}
+                  <input type="file" name="file" onChange={(e) => this.handleFile(e)}/>
+                </label>
+
                 <label>Group Name
                 <input type="text"
                   value={this.state.name}
@@ -110,4 +173,4 @@ class GroupForm extends React.Component {
   }
 }
 
-export default GroupForm;
+export default withRouter(GroupForm);

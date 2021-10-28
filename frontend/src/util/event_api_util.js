@@ -12,6 +12,10 @@ export const updateEventApi = (eventId, eventForm) => (
    axios.patch(`/api/events/${eventId}`, eventForm)
 )
 
+export const updateEventPicture = (packet) => (
+   axios.patch(`/api/events/update_with_picture/${packet.id}`, packet.data)
+)
+
 export const deleteEventApi = eventId => (
    axios.delete(`/api/events/delete/${eventId}`)
 )

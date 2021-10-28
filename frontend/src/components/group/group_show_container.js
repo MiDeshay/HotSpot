@@ -3,6 +3,7 @@ import GroupShow from "./group_show";
 import { getEvents } from '../../actions/event_actions';
 import { fetchGroup, uiGroupShow, updateGroupMembers, deleteGroup, createJoinRequest, respondToJoinRequest } from "../../actions/group_actions";
 import { closeModal, openModal } from "../../actions/modal_actions";
+import { fetchAllImages } from "../../actions/image_actions";
 
 const mapStateToProps = (state, ownProps) => ({
   groups: state.entities.groups,
@@ -11,6 +12,7 @@ const mapStateToProps = (state, ownProps) => ({
   users: state.entities.users,
   groupId: state.ui.groups.id,
   currentUser: state.session.user,
+  images: state.entities.images,
   modal: state.ui.modal
 });
 
@@ -21,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   uiGroupShow: groupId => dispatch(uiGroupShow(groupId)),
   updateGroupMembers: payload => dispatch(updateGroupMembers(payload)),
   deleteGroup: payload => dispatch(deleteGroup(payload)),
+  fetchAllImages: () => dispatch(fetchAllImages()),
   createJoinRequest: payload => dispatch(createJoinRequest(payload)),
   joinRequestAction: payload => dispatch(respondToJoinRequest(payload)),
   openDeleteWarning: () => dispatch(openModal('delete-group-warning')),

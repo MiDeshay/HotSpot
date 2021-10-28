@@ -16,93 +16,69 @@ const validateEditProfile = require('../../validation/profile');
 //images
 const upload = require('../../services/post_image');
 const singleUpload = upload.single('image');
-const deleteImage = require("../../services/delete_image")
+const deleteImage = require("../../services/delete_image");
 
 
-router.patch('/change_profile_picture/:userId', (req, res) => {
-  User.findById(req.params.userId).then(user => {
-    if (!user) {
-      return res.status(404).json("User not found");
-    } else {
-      singleUpload(req, res, (error) => {
-        if (error) {
-          return res.status(404).json(error);
+router.patch('/picture_update/:userId', (req, res) => {
+
+    User.findById(req.params.userId).then(user => {
+        if(!user){
+            return res.status(404).json("User not found");
         } else {
-          if (user.profilePictureKey) {
-            deleteImage(user.profilePictureKey)
-          }
-          User.findByIdAndUpdate(req.params.userId, {
-            profilePictureKey: req.file.key
-          }, { new: true }, (error, user) => {
-            if (error) {
-              res.status(400).json(error);
-            } else {
-              res.json({
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                username: user.username,
-                email: user.email,
-                profilePictureKey: user.profilePictureKey,
-                backgroundPictureKey: user.backgroundPictureKey,
-                groupsJoined: user.groupsJoined
-              })
-            }
-          })
-        }
+            
+            singleUpload(req, res, (error) => {
+                if (error){
+                    return res.status(404).json(error);
+                }else{
+                    const { errors, isValid } = validateEditProfile(req.body);
+                    if (!isValid) {
+                        return res.status(400).json(errors);
+                    }
+                    if(user.profilePictureKey){
+                        deleteImage(user.profilePictureKey)
+                    }
+                    User.findByIdAndUpdate( req.params.userId, {
+                        profilePictureKey: req.file.key,
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        username: req.body.username,
+                        email: req.body.email
+                    }, {new: true}, (error, user) => {
+                        if (error){
+                            res.status(400).json(error);
+                        }else{
+                            res.json({
+                                id: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                username: user.username,
+                                email: user.email, 
+                                profilePictureKey: user.profilePictureKey,
+                                groupsJoined: user.groupsJoined
+                            })
+                        }
+                    })
+                }
 
 
-      })
-    }
-  })
-})
-
-router.patch('/change_background_picture/:userId', (req, res) => {
-  User.findById(req.params.userId).then(user => {
-    if (!user) {
-      return res.status(404).json("User not found");
-    } else {
-      singleUpload(req, res, (error) => {
-        if (error) {
-          return res.status(404).json(error);
-        } else {
-          if (user.backgroundPictureKey) {
-            deleteImage(user.backgroundPictureKey)
-          }
-          User.findByIdAndUpdate(req.params.userId, {
-            backgroundPictureKey: req.file.key
-          }, { new: true }, (error, user) => {
-            if (error) {
-              res.status(400).json(error);
-            } else {
-              res.json({
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                username: user.username,
-                email: user.email,
-                profilePictureKey: user.profilePictureKey,
-                backgroundPictureKey: user.backgroundPictureKey,
-                groupsJoined: user.groupsJoined
-              })
-            }
-          })
+            })
         }
       })
     }
-  })
-})
+  )
 
-router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.json({
-    id: req.user.id,
-    firstName: req.user.firstName,
-    lastName: req.user.lastName,
-    username: req.user.username,
-    email: req.user.email,
-    groupsJoined: req.user.groupsJoined
-  });
-})
+
+router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
+    res.json({
+      id: req.user.id,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      username: req.user.username,
+      email: req.user.email,
+      profilePictureKey: req.user.profilePictureKey,
+      groupsJoined: req.user.groupsJoined
+    });
+  })
 
 
 router.get("/:userId", (req, res) => {
@@ -114,14 +90,15 @@ router.get("/:userId", (req, res) => {
       return res.status(404).json("User not found");
     }
 
-    res.json({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      email: user.email,
-      groupsJoined: user.groupsJoined
-    })
+        res.json({
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            email: user.email,
+            profilePictureKey: user.profilePictureKey,
+            groupsJoined: user.groupsJoined
+            })
 
   })
 
@@ -130,74 +107,72 @@ router.get("/:userId", (req, res) => {
 
 router.patch("/:userId", (req, res) => {
 
-  const { errors, isValid } = validateEditProfile(req.body);
+    const { errors, isValid } = validateEditProfile(req.body);
 
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
 
-  User.findByIdAndUpdate(req.params.userId,
-    {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      username: req.body.username,
-      email: req.body.email,
-    }, { new: true }, (error, user) => {
-      if (error) {
-        res.status(400).json(error);
-      } else {
-        res.json({
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
-          email: user.email,
-          groupsJoined: user.groupsJoined
-        })
-      }
-    })
+    User.findByIdAndUpdate( req.params.userId,
+        {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            username: req.body.username,
+            email: req.body.email
+        }, {new: true}, (error, user) => {
+        if (error){
+            res.status(400).json(error);
+        }else{
+            res.json({
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username,
+                email: user.email,
+                profilePictureKey: user.profilePictureKey,
+                groupsJoined: user.groupsJoined
+            })
+        }
+    } )
 })
 
 router.delete("/:userId", (req, res) => {
 
-  let user = User.findById(req.params.userId).then(user => {
+      User.findById(req.params.userId).then( user => {
 
-    if (user) {
-      if (user.profilePictureKey) {
-        deleteImage(user.profilePictureKey)
-      }
-      if (user.backgroundPictureKey) {
-        deleteImage(user.backgroundPictureKey)
-      }
-      User.deleteOne({ _id: req.params.userId }, (err, obj) => {
-        if (err) {
-          res.status(400).json(err);
-        } else {
-          res.json({ id: req.params.userId })
-        }
+        if (user){
+            if(user.profilePictureKey){
+                deleteImage(user.profilePictureKey)
+            }
+            User.deleteOne({_id: req.params.userId}, (err, obj) => {
+                if (err){
+                    res.status(400).json(err);
+                  } else{
+                      res.json({id: req.params.userId})
+                  }
+              })
+          }else{
+              return res.status(404).json("User not found");
+
+          }
       })
-    } else {
-      return res.status(404).json("User not found");
+    })
 
-    }
-  })
-})
 
 
 
 router.get('/', (req, res) => {
-  User.find({}, {
-    firstName: 1,
-    lastName: 1,
-    username: 1,
-    email: 1,
-    id: 1,
-    profilePictureKey: 1,
-    backgroundPictureKey: 1,
-    groupsJoined: 1
-  }, (err, users) => {
-    res.json(users)
-  })
+    User.find({}, {
+        firstName: 1,
+        lastName: 1,
+        username: 1,
+        email: 1,
+        id: 1,
+        profilePictureKey: 1,
+        groupsJoined: 1
+    }, (err, users) => {
+        res.json(users)
+    })
 })
 
 router.post('/register', (req, res) => {
