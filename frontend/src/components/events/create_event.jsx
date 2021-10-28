@@ -109,30 +109,33 @@ export default class CreateEvent extends React.Component {
                <ul>
                   <li>
                      <label htmlFor='event-title'>Title </label>
-                     <input autoComplete="off" onChange={this.handleUpdate('title')}type='text' value={this.state.title} id='event-title' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('title')} type='text' value={this.state.title} id='event-title' className="text-input" />
                   </li>
                   <li>
                      <label htmlFor='event-description'>Description </label>
-                     <textarea autoComplete="off" onChange={this.handleUpdate('description')}type='body' value={this.state.description} id='event-description' className="textarea-input"/>
+                     <textarea autoComplete="off" onChange={this.handleUpdate('description')} type='body' value={this.state.description} id='event-description' className="textarea-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-address'>Address </label>
-                     <input autoComplete="off" onChange={this.handleUpdate('address')}type='text' value={this.state.address} id='event-address' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('address')} type='text' value={this.state.address} id='event-address' className="text-input"/>
                   </li>
                   <li>
                      <label htmlFor='event-city'>City </label>
-                     <input autoComplete="off" onChange={this.handleUpdate('city')}type='text' value={this.state.city} id='event-city' className="text-input"/>
+                     <input autoComplete="off" onChange={this.handleUpdate('city')} type='text' value={this.state.city} id='event-city' className="text-input"/>
                   </li>
                   <li className="li-split">
                      <label htmlFor='event-start-date'>Start Date </label>
-                     <input className='event-date' onChange={this.handleUpdate('startDate')}type='date' value={this.state.startDate} id='event-start-date'/>
+                     <input className='event-date' onChange={this.handleUpdate('startDate')} type='date' value={this.state.startDate} id='event-start-date'/>
                   </li>
                   <li className="li-split">
                      <label htmlFor='event-end-date'>End Date </label>
-                     <input className='event-date' onChange={this.handleUpdate('endDate')}type='date' value={this.state.endDate} id='event-end-date'/>
+                     <input className='event-date' onChange={this.handleUpdate('endDate')} type='date' value={this.state.endDate} id='event-end-date'/>
                   </li>
                   <li className="li-split">
-
+                  <label htmlFor="event-start-time">Start Time</label>
+                     <input type="time" id="event-start-time" onChange={this.handleUpdate('startTime')} required/>
+                  </li>
+                  <li className="li-split">
                      <label htmlFor="groups">Choose a Group:</label>
                      <select id="groups" defaultValue={'DEFAULT'} onChange={this.handleUpdate('groupId')}>
                         <option value="DEFAULT" disabled='disabled'>Select a group</option>
