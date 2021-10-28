@@ -17,6 +17,7 @@ const mapDispatchToProps = dispatch => ({
    deleteEvent: eventId => dispatch(deleteEvent(eventId)),
    openCreate: () => dispatch(openModal("createEvent")),
    openUpdate: () => dispatch(openModal("updateEvent")),
+   openEventDetails: () => dispatch(openModal("eventDetails")),
    fetchUsers: () => dispatch(fetchUsers()),
    joinEvent: (eventId, email) => dispatch(joinEvent(eventId, email)),
    declineEvent: (eventId, email) => dispatch(declineEvent(eventId, email)),

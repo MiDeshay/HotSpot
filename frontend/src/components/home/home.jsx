@@ -111,7 +111,7 @@ export default class Home extends React.Component{
    }
 
    // Place a marker at cursor position
-   addEvent(){
+   addEvent() {
       this.map.addListener("click", (mapsMouseEvent) => {
          this.mousePos.lat = mapsMouseEvent.latLng.lat();
          this.mousePos.lng = mapsMouseEvent.latLng.lng();
@@ -185,12 +185,14 @@ export default class Home extends React.Component{
                   `<p class='event-text'>Start Time: ${time}</p>` +
                   `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
                   `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
-
+                  `<a id='event-details' href='details'>More Info</a>`   +
             '</div>'
          );
 
          // Event handlers for buttons in info window.
          // Delete button and Edit button dispatches their respective action using the marker's information
+         // Why we don't create seperate functions for edit and delete? Because above html doesn't support jsx syntax to pass along our functions.
+         // So we have to use this workaround for now until a more elegant solution is found.
          this.google.maps.event.addListener(this.infoWindow, "domready", () => {
             let deleteButton = document.getElementById('event-delete');
             if (deleteButton) deleteButton.onclick = () => {
@@ -218,6 +220,13 @@ export default class Home extends React.Component{
                   this.props.declineEvent(eventId, {email: this.props.user.email});
                   respondButton.innerHTML = 'Join';
                }
+            }
+
+            let eventDetails = document.getElementById('event-details');
+            if (eventDetails) eventDetails.onclick=(e) => {
+               e.preventDefault();
+               this.selectedEvent = marker.eventDetails;
+               this.props.openEventDetails();   
             }
          });
 

@@ -26,7 +26,6 @@ export default class CreateEvent extends React.Component {
    }
 
    handleUpdate(input){
-      
       return (e) => {
          this.setState({
             [input]: e.currentTarget.value,
