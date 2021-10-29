@@ -91,6 +91,9 @@ export default class Home extends React.Component{
 
    componentDidUpdate() {
       if (this.state.currentEvents !== this.props.events){
+         if(!this.google){
+            return
+         }
          this.drop();
          this.eventsLoaded = true;
          this.setState({
