@@ -79,13 +79,15 @@ class SignupForm extends React.Component {
       <div className="auth-form-container">
         <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop">
-          <div className="auth-form-div">
-            <form onSubmit={this.handleSubmit}>
-              <div className="signup-form">
+          <form onSubmit={this.handleSubmit}>
+            <div className="signup-form">
+              <div className="modal-header-pad">
                 <div className="modal-header">
                   <h2>HotSpot</h2>
                   <div className="header-details">Join billions of users looking for a party</div>
                 </div>
+              </div>
+              <div className="modal-body-pad">
                 <div className="modal-body">
                     <label>Email
                     <input type="text"
@@ -129,13 +131,13 @@ class SignupForm extends React.Component {
                   <br/>
                   <input type="submit" value="Signup" className="button submit" />
                   {this.renderErrors()}
-                  <div className="modal-footer">
-                    <div className="auth-other-message">Already have an account?</div><div className="link" onClick={this.props.openLogin}>Login</div>
-                  </div>
                 </div>
               </div>
-            </form>
-          </div>
+              <div className="modal-footer">
+                <div className="auth-other-message">Already have an account?</div><div className="link" onClick={this.props.openLogin}>Login</div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     );

@@ -16,11 +16,11 @@ class GroupShow extends React.Component {
   }
 
   componentDidMount() {
-    
+
     this.props.fetchGroup(this.props.match.params.groupName);
     this.props.getEvents()
     this.props.fetchAllImages()
-   
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -31,11 +31,11 @@ class GroupShow extends React.Component {
     if (this.props.group.bannerPictureKey && !this.props.images[this.props.group.bannerPictureKey]){
       this.props.fetchAllImages()
     }
-  
+
   }
 
   renderEditButtons() {
-    let { group, currentUser, deleteGroup, openDeleteWarning} = this.props;
+    let { group, currentUser, deleteGroup, openDeleteWarning } = this.props;
     if (group && group.ownerId && currentUser.id === group.ownerId) {
       return (
         <div className="group-edit-buttons">
@@ -62,29 +62,30 @@ class GroupShow extends React.Component {
   }
 
   renderJoinRequests() {
-    let { users, currentUser, group, joinRequestAction} = this.props;
+    let { users, currentUser, group, joinRequestAction } = this.props;
     if (currentUser.id !== group.ownerId) { return null }
     return (
       <div className="group-container">
         <div className={`group-header ${group.groupJoinRequests.length > 0 ? 'has-requests' : 'no-requests'}`}>Join Requests:</div>
         <ul className="scroll-box-container" id="join-requests">
           <div className="top-scroll" />
-            <div className="bottom-scroll" />
-            <div className="left-scroll" />
-            <div className="scroll-box">
-              {group.groupJoinRequests.map(joinerId =>
-                <li key={`join-request-${joinerId}`} className="join-request group-text scroll-box-li">
-                  <button className="button green" onClick={() => joinRequestAction({ groupId: group.id, userId: joinerId, isAdding: 'true' })}>✓</button>
-                  <button className="button red" onClick={() => joinRequestAction({ groupId: group.id, userId: joinerId, isAdding: 'false' })}>𐄂</button>
-                  <Link to={`/profile/${joinerId}`} className="group-text member-button member-list-item" key={joinerId}>{users[joinerId].username}</Link>
-                </li>
-              )}
+          <div className="bottom-scroll" />
+          <div className="left-scroll" />
+          <div className="scroll-box">
+            {group.groupJoinRequests.map(joinerId =>
+              <li key={`join-request-${joinerId}`} className="join-request group-text scroll-box-li">
+                <button className="button green" onClick={() => joinRequestAction({ groupId: group.id, userId: joinerId, isAdding: 'true' })}>✓</button>
+                <button className="button red" onClick={() => joinRequestAction({ groupId: group.id, userId: joinerId, isAdding: 'false' })}>𐄂</button>
+                <Link to={`/profile/${joinerId}`} className="group-text member-button member-list-item" key={joinerId}>{users[joinerId].username}</Link>
+              </li>
+            )}
             <div className="list-empty">{group.groupJoinRequests.length > 0 ? '' : 'There are no pending join requests!'}</div>
           </div>
         </ul>
       </div>
     );
   }
+
 
   screenClick(e) {
     e.preventDefault();
@@ -99,9 +100,16 @@ class GroupShow extends React.Component {
       <div className="modal-container">
         <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop red-border">
-          <button className="button close" onClick={closeModal}>𐄂</button>
-        <div className="modal-header">Are you sure you want to delete this group? This operation is destruction and cannot be reversed.</div>
-          <div className="modal-body justify-center"><button className="button red" onClick={() => { deleteGroup({ groupId: group.id, ownerId: currentUser.id })}}><BiTrash /> Destroy Group</button></div>
+          <div className="modal-header-pad">
+            <div className="modal-header">
+            <h2>WARNING</h2>
+            <button className="button close" onClick={closeModal}>𐄂</button>
+            </div>
+          </div>
+          <div className="modal-body-pad">
+            <div className="modal-body">Are you sure you want to delete this group? This operation is destruction and cannot be reversed.</div>
+          </div>
+          <div className="modal-footer justify-center"><button className="button red" onClick={() => { deleteGroup({ groupId: group.id, ownerId: currentUser.id })}}><BiTrash /> Destroy Group</button></div>
         </div>
       </div>
     )
@@ -114,11 +122,16 @@ class GroupShow extends React.Component {
       <div className="modal-container">
         <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop red-border">
-          <button className="button close" onClick={closeModal}>𐄂</button>
-          <div className="modal-div">
-            <div className="modal-header">Are you sure you want to leave this group? You'll have to ask to rejoin later!</div>
-            <div className="modal-body justify-center"><button className="button red" onClick={() => updateGroupMembers({ groupId: group.id, memberId: currentUser.id, isAdding: 'false' })}><BiTrash /> Leave Group</button></div>
+          <div className="modal-header-pad">
+            <div className="modal-header">
+              <h2>WARNING</h2>
+              <button className="button close" onClick={closeModal}>𐄂</button>
+            </div>
           </div>
+          <div className="modal-body-pad">
+            <div className="modal-body">Are you sure you want to leave this group? You'll have to ask to rejoin later!</div>
+          </div>
+          <div className="modal-footer justify-center"><button className="button red" onClick={() => updateGroupMembers({ groupId: group.id, memberId: currentUser.id, isAdding: 'false' })}><BiTrash /> Leave Group</button></div>
         </div>
       </div>
     )

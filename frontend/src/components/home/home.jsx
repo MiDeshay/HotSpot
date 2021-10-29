@@ -38,7 +38,7 @@ export default class Home extends React.Component{
          currentEvents: {}, // This will be the list of events that are currently marked on the map. Used for drawing markers.
       }
 
-      // Geocoder, grabs address from lat,lng 
+      // Geocoder, grabs address from lat,lng
       this.geocoder = null;
       // Get google from the window
       this.google = window.google;
@@ -83,7 +83,7 @@ export default class Home extends React.Component{
          });
 
          this.props.fetchUsers()
-        
+
    }
 
    componentDidUpdate() {
@@ -94,7 +94,7 @@ export default class Home extends React.Component{
             currentEvents: this.props.events,
          })
       }
-      
+
    }
 
    getLocation() {
@@ -131,7 +131,7 @@ export default class Home extends React.Component{
          let i = 0;
          let userGroups = this.props.user.groupsJoined;
 
-         if (!this.state.currentEvents[event] && (userGroups.includes(events[event].group._id) || events[event].group.name === "Public")){ // added "Public" name to filter
+        if (!this.state.currentEvents[event] && events[event] && (userGroups.includes(events[event].group._id) || events[event].group.name === "Public")){ // added "Public" name to filter
             const pin = events[event];
             this.addMarkerWithTimeout(pin, i*20);
             i++;
@@ -160,13 +160,13 @@ export default class Home extends React.Component{
    // Initialize a maps marker with html and event listeners.
    initMarkerWindow(marker) {
       let eventId = marker.eventDetails._id;
-      let joinButton = `<button id='event-respond' class='button'>Join</button>`; 
-      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`; 
+      let joinButton = `<button id='event-respond' class='button'>Join</button>`;
+      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`;
 
       const images = this.props.images
       const {coverPictureKey} = this.props.events[eventId]
 
-   
+
 
       const eventPicture = coverPictureKey ? `<img src=${images[coverPictureKey]} class='event-picture'/>`: ""
 
@@ -189,7 +189,7 @@ export default class Home extends React.Component{
                      (this.props.events[eventId].attendeesEmail.includes(this.props.user.email)? leaveButton : joinButton )
                      :
                      `<button id='event-edit' class='button'>Edit</button>` +
-                     `<button id='event-delete' class='button'>Delete</button>`  
+                     `<button id='event-delete' class='button'>Delete</button>`
                   ) +
                `</div>` +
                `<a id='event-details' href='details'>More Info</a>`   +
@@ -233,7 +233,7 @@ export default class Home extends React.Component{
             if (eventDetails) eventDetails.onclick=(e) => {
                e.preventDefault();
                this.selectedEvent = marker.eventDetails._id;
-               this.props.openEventDetails();   
+               this.props.openEventDetails();
             }
          });
 

@@ -96,7 +96,7 @@ router.post('/create_with_picture', (req, res) => {
               }
             }).catch(err => res.send(err));
       }
-      }).catch(err => res.send(err));
+      })
   })     
 
 
