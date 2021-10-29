@@ -13,6 +13,7 @@ export default class CreateEvent extends React.Component {
       description: "",
       mapLat: this.props.pos.lat,
       mapLng: this.props.pos.lng,
+      startTime: "",
       startDate: "",
       endDate: "",
       groupId: "",
@@ -104,66 +105,56 @@ export default class CreateEvent extends React.Component {
     return (
       <div className='form-modal animated fadeInTop'>
         <form className="form" onSubmit={this.handleSubmit}>
-          <div className="modal-header-pad">
-            <div className="modal-header">
-              <h2>Organize an Event</h2>
-              <button className="button close" onClick={this.props.closeModal}>𐄂</button>
-            </div>
-          </div>
-          <div className="modal-body-pad">
-            <div className="modal-body">
-              <ul>
-                <li>
-                  <label htmlFor='event-title'>Title </label>
-                  <input autoComplete="off" onChange={this.handleUpdate('title')} type='text' value={this.state.title} id='event-title' className="text-input" />
-                </li>
-                <li>
-                  <label htmlFor='event-description'>Description </label>
-                  <textarea autoComplete="off" onChange={this.handleUpdate('description')} type='body' value={this.state.description} id='event-description' className="textarea-input" />
-                </li>
-                <li>
-                  <label htmlFor='event-address'>Address </label>
-                  <input autoComplete="off" onChange={this.handleUpdate('address')} type='text' value={this.state.address} id='event-address' className="text-input" />
-                </li>
-                <li>
-                  <label htmlFor='event-city'>City </label>
-                  <input autoComplete="off" onChange={this.handleUpdate('city')} type='text' value={this.state.city} id='event-city' className="text-input" />
-                </li>
-                <li className="li-split">
-                  <label htmlFor='event-start-date'>Start Date </label>
-                  <input className='event-date' onChange={this.handleUpdate('startDate')} type='date' value={this.state.startDate} id='event-start-date' />
-                </li>
-                <li className="li-split">
-                  <label htmlFor='event-end-date'>End Date </label>
-                  <input className='event-date' onChange={this.handleUpdate('endDate')} type='date' value={this.state.endDate} id='event-end-date' />
-                </li>
-                <li className="li-split">
-
-                  <label htmlFor="groups">Choose a Group:</label>
-                  <select id="groups" defaultValue={'DEFAULT'} onChange={this.handleUpdate('groupId')}>
-                    <option value="DEFAULT" disabled='disabled'>Select a group</option>
-                    <option key={`group-Public`} value="Public" >Public</option>
-                    {this.groups.map((group, i) => (
-                      <option key={`group-${i}`} value={group.id} >{group.name}</option>
-                    ))
-                    }
-                  </select>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="modal-footer">
-            <button className='button subtle flat' onClick={this.props.closeModal}>Cancel</button>
-            <input type='submit' className="button" value="Create Event" />
-          </div>
-
           <ul>
-            {this.props.errors.map((err, i) => (
-              <li key={`error-${i}`}>{err}</li>
-            ))}
+            <li>
+              <label htmlFor='event-title'>Title </label>
+              <input autoComplete="off" onChange={this.handleUpdate('title')} type='text' value={this.state.title} id='event-title' className="text-input" />
+            </li>
+            <li>
+              <label htmlFor='event-description'>Description </label>
+              <textarea autoComplete="off" onChange={this.handleUpdate('description')} type='body' value={this.state.description} id='event-description' className="textarea-input" />
+            </li>
+            <li>
+              <label htmlFor='event-address'>Address </label>
+              <input autoComplete="off" onChange={this.handleUpdate('address')} type='text' value={this.state.address} id='event-address' className="text-input" />
+            </li>
+            <li>
+              <label htmlFor='event-city'>City </label>
+              <input autoComplete="off" onChange={this.handleUpdate('city')} type='text' value={this.state.city} id='event-city' className="text-input" />
+            </li>
+            <li className="li-split">
+              <label htmlFor='event-start-date'>Start Date </label>
+              <input className='event-date' onChange={this.handleUpdate('startDate')} type='date' value={this.state.startDate} id='event-start-date' />
+            </li>
+            <li className="li-split">
+              <label htmlFor='event-end-date'>End Date </label>
+              <input className='event-date' onChange={this.handleUpdate('endDate')} type='date' value={this.state.endDate} id='event-end-date' />
+            </li>
+            <li className="li-split">
+              <label htmlFor="event-start-time">Start Time</label>
+              <input type="time" id="event-start-time" onChange={this.handleUpdate('startTime')} value={this.state.startTime} required />
+            </li>
+            <li className="li-split">
+              <label htmlFor="groups">Choose a Group:</label>
+              <select id="groups" defaultValue={'DEFAULT'} onChange={this.handleUpdate('groupId')}>
+                <option value="DEFAULT" disabled='disabled'>Select a group</option>
+                <option key={`group-Public`} value="Public" >Public</option>
+                {this.groups.map((group, i) => (
+                  <option key={`group-${i}`} value={group.id} >{group.name}</option>
+                ))}
+              </select>
+            </li>
           </ul>
-        </form>
-      </div>
+        <div className="modal-footer">
+          <button className='button subtle flat' onClick={this.props.closeModal}>Cancel</button>
+          <input type='submit' className="button" value="Create Event" />
+        </div>
+          <ul>
+              {this.props.errors.map((err, i) => (
+                <li key={`error-${i}`}>{err}</li>))}
+          </ul>
+        </form >
+      </div >
     )
   }
 }
