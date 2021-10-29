@@ -104,8 +104,15 @@ export default class CreateEvent extends React.Component {
   render() {
     return (
       <div className='form-modal animated fadeInTop'>
+        <div className="modal-header-pad">
+          <div className="modal-header">
+            <h2>Organize an Event</h2>
+            <button className="button close" onClick={this.props.closeModal}>𐄂</button>
+          </div>
+        </div>
         <form className="form" onSubmit={this.handleSubmit}>
-          <ul>
+          <div className="modal-body-pad">
+          <ul className="modal-body">
             <li>
               <label htmlFor='event-title'>Title </label>
               <input autoComplete="off" onChange={this.handleUpdate('title')} type='text' value={this.state.title} id='event-title' className="text-input" />
@@ -145,6 +152,7 @@ export default class CreateEvent extends React.Component {
               </select>
             </li>
           </ul>
+          </div>
         <div className="modal-footer">
           <button className='button subtle flat' onClick={this.props.closeModal}>Cancel</button>
           <input type='submit' className="button" value="Create Event" />
