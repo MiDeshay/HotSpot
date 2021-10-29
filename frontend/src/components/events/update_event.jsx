@@ -26,7 +26,7 @@ export default class UpdateEvent extends React.Component {
 
    handleUpdate(input){
       return (e) => {
-         // Check end time is after start time 
+         // Check end time is after start time
          if (input === 'endTime' && this.state.startDate === this.state.endDate){
             var end = parseInt(e.currentTarget.value.replace(':',''));
             var begin = parseInt(this.state.startTime.replace(':',''));
@@ -37,15 +37,15 @@ export default class UpdateEvent extends React.Component {
             [input]: e.currentTarget.value,
          })
          if (input === 'startTime'){
-            let time = e.currentTarget.value.split(':').map(Number); 
-            time[0] += 1; 
+            let time = e.currentTarget.value.split(':').map(Number);
+            time[0] += 1;
             if (time[0] > 23) time[0] = "00";
             if (time[1] < 10) time[1] = '0' + time[1];
             this.setState({
                endTime: time.join(':'),
             })
          }
-         
+
       }
    }
 
@@ -128,10 +128,10 @@ export default class UpdateEvent extends React.Component {
 
    formatTime(time){
       let hours = parseInt(time.slice(0,2));
-      let amPm = (hours >= 12)? "PM" : "AM"; 
+      let amPm = (hours >= 12)? "PM" : "AM";
       hours = (hours % 12) ? hours % 12 : 12;
-      let minutes = time.slice(2); 
-      return `${hours}${minutes} ${amPm}`; 
+      let minutes = time.slice(2);
+      return `${hours}${minutes} ${amPm}`;
    }
 
    updateMarker(){
@@ -152,25 +152,33 @@ export default class UpdateEvent extends React.Component {
       }
       let start = this.formatTime(marker.eventDetails.startTime);
       let end = this.formatTime(marker.eventDetails.endTime);
+     let { description, title } = marker.eventDetails;
+     if (description.length > 20) { description = description.slice(0, 40).concat('...') }
 
       this.infoWindow.setContent(
          `<div class='info-window'> `+
-            `<div class='event-header'>`+
             // `<div><img id='${this.state._id}' src=${eventPicture} class='event-picture'/></div>`+
-               `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
-            `</div>` +
-            `<p class='event-text'>${marker.eventDetails.description}</p>` +
-            `<p class='event-text'>${marker.eventDetails.address}</p>` +
-            `<p class='event-text'>${marker.eventDetails.city}</p>` +
-            `<p class='event-text'>Begin: ${marker.eventDetails.startDate} AT ${start}</p>` +
-            `<p class='event-text'>End: ${marker.eventDetails.endDate} UNTIL ${end}</p>` +
+            `<div class="modal-header-pad"><div class='modal-header'><h2 class='event-title'>${title}</h2></div></div>` +
+            `<div class='modal-body-pad'><div class='modal-body'>` +
+            `<div class='event-text'>${description}</div>` +
+            `</div></div>`+
+            `<div class='modal-body-pad'><div class='modal-body'>` +
+            `<div class='details-columns'><ul class='details-labels'><li>Address:</li>`+
+            `<li>City:</li>`+
+            `<li>Begin:</li>`+
+            `<li>End:</li></ul>`+
+            `<ul class='details-details'><li>${marker.eventDetails.city}</li>` +
+            `<li>${marker.eventDetails.address}</li>` +
+            `<li'>${marker.eventDetails.startDate} AT ${start}</li>` +
+            `<li>${marker.eventDetails.endDate} UNTIL ${end}</li></ul></div>` +
+            `</div></div>`+
+            `<div class='modal-footer'><div class='event-buttons'> ` +
+            `<a id='event-details' href='details' class='button flat'>More Info</a>`+
             (marker.eventDetails.hostEmail !== this.props.currentUser.email ? "" :
-               `<div class='event-buttons'> ` +
                   `<button id='event-edit' class='button'>Edit</button>` +
-                  `<button id='event-delete' class='button'>Delete</button>`  +
-               `</div>`
-            ) +
-            `<a id='event-details' href='details'>More Info</a>` +
+                  `<button id='event-delete' class='button red'>Delete</button>`
+                  ) +
+            `</div></div>`+
          '</div>'
       );
    }
@@ -201,7 +209,7 @@ export default class UpdateEvent extends React.Component {
               <button className="button close" onClick={this.props.closeModal}>𐄂</button>
             </div>
            </div>
-            <form className="form" onSubmit={this.handleSubmit}>
+            <form className="form" >
               <div className="modal-body-pad">
                <ul className="modal-body">
                   {/* <li>
@@ -246,7 +254,7 @@ export default class UpdateEvent extends React.Component {
                  </form>
                <div className="modal-footer">
                   <button className='button subtle flat' onClick={this.props.closeModal}>Cancel</button>
-                  <input type='submit' value="Update Event" className="button" />
+            <input type='submit' value="Update Event" className="button" onClick={this.handleSubmit}/>
                </div>
                <ul>
                   {this.props.errors.map( err => (

@@ -77,7 +77,6 @@ class LoginForm extends React.Component {
       <div className="auth-form-container">
         <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop">
-          <form onSubmit={this.handleSubmit}>
               <div className="modal-header-pad">
                 <div className="modal-header">
                   <h2>Login</h2>
@@ -85,6 +84,7 @@ class LoginForm extends React.Component {
                   <div className="header-details">Welcome back to HotSpot</div>
                 </div>
               </div>
+          <form onSubmit={this.handleSubmit}>
               <div className="modal-body-pad">
                 <div className="modal-body">
                   <label>Email

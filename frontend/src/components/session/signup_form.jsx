@@ -79,8 +79,6 @@ class SignupForm extends React.Component {
       <div className="auth-form-container">
         <div className="modal-screen" onClick={this.screenClick} />
         <div className="form-modal animated fadeInTop">
-          <form onSubmit={this.handleSubmit}>
-            <div className="signup-form">
               <div className="modal-header-pad">
                 <div className="modal-header">
                   <h2>HotSpot</h2>
@@ -88,6 +86,8 @@ class SignupForm extends React.Component {
                   <div className="header-details">Join billions of users looking for a party</div>
                 </div>
               </div>
+          <form onSubmit={this.handleSubmit}>
+            <div className="signup-form">
               <div className="modal-body-pad">
                 <div className="modal-body">
                     <label>Email

@@ -64,6 +64,7 @@ class GroupShow extends React.Component {
   renderJoinRequests() {
     let { users, currentUser, group, joinRequestAction } = this.props;
     if (currentUser.id !== group.ownerId) { return null }
+    console.log(group.groupJoinRequests);
     return (
       <div className="group-container">
         <div className={`group-header ${group.groupJoinRequests.length > 0 ? 'has-requests' : 'no-requests'}`}>Join Requests:</div>

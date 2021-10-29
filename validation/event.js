@@ -4,7 +4,7 @@ const validText = require('./valid-text');
 module.exports = function validateEventInput(data) {
    let errors = {};
 
-   
+
    data.address = validText(data.address) ? data.address : '';
    data.hostEmail = validText(data.hostEmail) ? data.hostEmail : '';
    data.city = validText(data.city) ? data.city : '';
@@ -13,11 +13,11 @@ module.exports = function validateEventInput(data) {
    data.startDate = validText(data.startDate) ? data.startDate : '';
    data.endDate = validText(data.endDate) ? data.endDate : '';
 
-   if (!Validator.isLength(data.title, { min: 1, max: 150 })) {
-      errors.title = 'Title must be between 1 and 60 characters';
+   if (!Validator.isLength(data.title, { min: 1, max: 64 })) {
+      errors.title = 'Title must be between 1 and 64 characters';
    }
    if (!Validator.isLength(data.description, { min: 1, max: 400 })) {
-      errors.description = 'Description must be between 1 and 60 characters';
+      errors.description = 'Description must be between 1 and 400 characters';
    }
 
    if (Validator.isEmpty(data.hostEmail)) {

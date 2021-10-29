@@ -27,7 +27,10 @@ const UserSchema = new Schema({
    profilePictureKey: {
       type: String
    },
-   groupsJoined: [{ type: Schema.Types.ObjectId, ref: 'Group'}],
+   groupsJoined: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'Group'}],
+    default: [],
+    },
 }, {
    timesteamps:true
 })
