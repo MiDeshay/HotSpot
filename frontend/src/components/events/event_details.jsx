@@ -17,21 +17,27 @@ class EventDetails extends React.Component {
       })
    }
 
+   formatTime(time){
+      let hours = parseInt(time.slice(0,2));
+      let amPm = (hours >= 12)? "PM" : "AM"; 
+      hours = (hours % 12) ? hours % 12 : 12;
+      let minutes = time.slice(2); 
+      return `${hours}${minutes} ${amPm}`; 
+   }
+
    render() {
       if (!this.state.event) return null;
       // Time formatting
       let event = this.state.event;
-      let hours = parseInt(event.startTime.slice(0,2));
-      let amPm = (hours >= 12)? "PM" : "AM"; 
-      hours = (hours % 12) ? hours % 12 : 12;
-      let minutes = event.startTime.slice(2); 
-      let time = `${hours}${minutes} ${amPm}`; 
+
+      let start = this.formatTime(event.startTime);
+      let end = this.formatTime(event.endTime);
 
       return (
          <div className='form-modal animated fadeInTop' id='event-details-modal'>
             <h1>{event.title}</h1>
             <p>{event.address}, {event.city}</p>
-            <p>{event.startDate} AT {time} UNTIL {event.endDate}</p>
+            <p>{event.startDate} AT {start} UNTIL {event.endDate} {end}</p>
             <p>{event.description}</p>
 
             {/* <p>Event by: {event.host.map( user => " " + user.firstName + " " )}
