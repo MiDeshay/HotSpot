@@ -1,5 +1,6 @@
 .modal-body-pad {
   border-bottom: 0.1rem solid black;
+  width: 100%;
 }
 
 .modal-body {
@@ -8,6 +9,7 @@
 
 .modal-header-pad {
   border-bottom: 0.1rem solid black;
+  width: 100%;
 }
 
 .modal-header {

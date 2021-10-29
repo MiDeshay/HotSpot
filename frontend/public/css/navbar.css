@@ -77,3 +77,22 @@ a > .links {
 .search-bar {
   width: 100%;
 }
+
+.search-bar:first-child {
+  margin-right: 2rem;
+}
+
+.search-bar > input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  outline: none;
+  border: solid 0.1rem black;
+}
+
+.searchbars {
+  display: flex;
+  width: 100%;
+  margin: 0rem 1rem;
+}
+

@@ -22,13 +22,13 @@ class EditProfileForm extends React.Component {
     let file = e.currentTarget.files[0]
     const reader = new FileReader();
     reader.onloadend = () => {
-    
+
       this.setState({previewImage: reader.result})
     }
     reader.readAsDataURL(file)
     this.setState({file: file})
 
-    
+
   }
 
   update(field) {
@@ -43,11 +43,11 @@ class EditProfileForm extends React.Component {
     if (this.state.file){
 
       const {file, firstName, lastName, username, id, email } = this.state
-  
+
       let formData = new FormData();
-  
-      
-    
+
+
+
       formData.append('image', file);
       formData.append('firstName', firstName);
       formData.append('lastName', lastName);
@@ -58,7 +58,7 @@ class EditProfileForm extends React.Component {
         id: id,
         data: formData
       }
-  
+
       this.props.updateUserWithPicture(packet)
     } else {
 
@@ -69,11 +69,11 @@ class EditProfileForm extends React.Component {
         username: this.state.username,
         id: this.props.user.id,
       };
-  
+
       // console.log(user);
       this.props.updateUser(user);
     }
-    
+
 
 
 
@@ -91,9 +91,9 @@ class EditProfileForm extends React.Component {
   renderErrors() {
     // console.log(this.state.errors);
     return(
-      <ul>
+      <ul className="errors">
         {Object.keys(this.state.errors).map((error, i) => (
-          <li key={`error-${i}`}>
+          <li key={`error-${i}`} className="error">
             {this.state.errors[error]}
           </li>
         ))}
@@ -109,46 +109,56 @@ class EditProfileForm extends React.Component {
 
     const profilePic = previewImage ? <img id="profile-image" src={previewImage}/> : <img id="profile-image" src="../images/default-user-icon-8.jpeg"/>
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-        edit profile
-          <label>Picture
-            {profilePic}
-            <input type="file" name="file" onChange={(e) => this.handleFile(e)}/>
-          </label>
-          <label>Email
-          <input type="text"
-            value={this.state.email}
-            onChange={this.update('email')}
-            placeholder="JohnDoe@sbemail.com"
-            className="auth-form-input"
-          /></label>
-        <br/>
-          <label>First Name
-          <input type="text"
-            value={this.state.firstName}
-            onChange={this.update('firstName')}
-            placeholder="John"
-            className="auth-form-input"
-          /></label>
-        <br/>
-          <label>Last Name
-          <input type="text"
-            value={this.state.lastName}
-            onChange={this.update('lastName')}
-            placeholder="Doe"
-            className="auth-form-input"
-          /></label>
-          <label>Username
-          <input type="text"
-            value={this.state.username}
-            onChange={this.update('username')}
-            placeholder="JohnD"
-            className="auth-form-input"
-          /></label>
-          <button className="edit button">Save Changes</button> <Link to={`/profile/${user.id}`}><div className="button cancel">Cancel</div></Link>
-          {this.renderErrors()}
-        </form>
+      <div className="profile-info-container">
+        <div className="profile-info">
+          <form onSubmit={this.handleSubmit}>
+            <div className="modal-header-pad">
+              <div className="modal-header">
+            <h2>Edit Profile</h2>
+            <label>
+              <div className="justify-center">{profilePic}</div>
+              <input type="file" name="file" onChange={(e) => this.handleFile(e)}/>
+            </label>
+            </div>
+            </div>
+            <div className="modal-body-pad"><div className="modal-body">
+            <label>Email
+            <input type="text"
+              value={this.state.email}
+              onChange={this.update('email')}
+              placeholder="JohnDoe@sbemail.com"
+              className="auth-form-input"
+            /></label>
+          <br/>
+            <label>First Name
+            <input type="text"
+              value={this.state.firstName}
+              onChange={this.update('firstName')}
+              placeholder="John"
+              className="auth-form-input"
+            /></label>
+          <br/>
+            <label>Last Name
+            <input type="text"
+              value={this.state.lastName}
+              onChange={this.update('lastName')}
+              placeholder="Doe"
+              className="auth-form-input"
+            /></label>
+            <label>Username
+            <input type="text"
+              value={this.state.username}
+              onChange={this.update('username')}
+              placeholder="JohnD"
+              className="auth-form-input"
+            /></label>
+            </div></div>
+            <div className="modal-footer">
+              <div onClick={(e) => {e.preventDefault(); this.props.history.push(`/profile/${user.id}`)}} className="button subtle flat">Cancel</div><input className="edit button" type="submit" value="Save Changes"/>
+            </div>
+            {this.renderErrors()}
+          </form>
+        </div>
       </div>
     )
   }

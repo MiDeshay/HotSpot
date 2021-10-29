@@ -25,7 +25,7 @@ router.patch('/picture_update/:userId', (req, res) => {
         if(!user){
             return res.status(404).json("User not found");
         } else {
-            
+
             singleUpload(req, res, (error) => {
                 if (error){
                     return res.status(404).json(error);
@@ -52,7 +52,7 @@ router.patch('/picture_update/:userId', (req, res) => {
                                 firstName: user.firstName,
                                 lastName: user.lastName,
                                 username: user.username,
-                                email: user.email, 
+                                email: user.email,
                                 profilePictureKey: user.profilePictureKey,
                                 groupsJoined: user.groupsJoined
                             })
@@ -82,7 +82,7 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
 
 
 router.get("/:userId", (req, res) => {
-  console.log(req);
+  // console.log(req);
 
   User.findById(req.params.userId).then(user => {
 

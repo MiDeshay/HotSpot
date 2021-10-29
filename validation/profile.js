@@ -11,25 +11,25 @@ module.exports = function validateSignupInput(data) {
    console.log(Validator.isEmail(data.email+''));
 
    if (!Validator.isLength(data.firstName, { min: 1, max: 60 })) {
-      errors.firstName = 'firstName must be between 1 and 60 characters';
+      errors.firstName = 'First Name must be between 1 and 60 characters';
    }
    if (!Validator.isLength(data.lastName, { min: 1, max: 60 })) {
-      errors.lastName = 'lastName must be between 1 and 60 characters';
+      errors.lastName = 'Last Name must be between 1 and 60 characters';
    }
    if (!Validator.isLength(data.username, { min: 1, max: 60 })) {
-      errors.username = 'username must be between 1 and 60 characters';
+      errors.username = 'Username must be between 1 and 60 characters';
    }
 
    if (Validator.isEmpty(data.firstName)) {
-      errors.firstName = 'firstName field is required';
+      errors.firstName = 'First Name field is required';
    }
 
    if (Validator.isEmpty(data.lastName)) {
-      errors.firstName = 'firstName field is required';
+      errors.lastName = 'Last Name field is required';
    }
 
    if (Validator.isEmpty(data.username)) {
-      errors.username = 'username field is required';
+      errors.username = 'Username field is required';
    }
 
    if (Validator.isEmpty(data.email)) {

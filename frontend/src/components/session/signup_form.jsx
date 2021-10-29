@@ -57,9 +57,9 @@ class SignupForm extends React.Component {
 
   renderErrors() {
     return(
-      <ul>
+      <ul className="errors">
         {Object.keys(this.state.errors).map((error, i) => (
-          <li key={`error-${i}`}>
+          <li key={`error-${i}`} className="error">
             {this.state.errors[error]}
           </li>
         ))}
@@ -97,7 +97,6 @@ class SignupForm extends React.Component {
                       placeholder="JohnDoe@yahoo.com"
                       className="text-input"
                     /></label>
-                  <br/>
                     <label>First Name
                     <input type="text"
                       value={this.state.firstName}
@@ -105,7 +104,6 @@ class SignupForm extends React.Component {
                       placeholder="John"
                       className="text-input"
                     /></label>
-                  <br/>
                     <label>Last Name
                     <input type="text"
                       value={this.state.lastName}
@@ -113,7 +111,6 @@ class SignupForm extends React.Component {
                       placeholder="Doe"
                       className="text-input"
                     /></label>
-                  <br/>
                     <label>Password
                     <input type="password"
                       value={this.state.password}
@@ -121,7 +118,6 @@ class SignupForm extends React.Component {
                       placeholder="*****"
                       className="text-input"
                     /></label>
-                  <br/>
                     <label>Confirm Password
                     <input type="password"
                       value={this.state.password2}
@@ -129,7 +125,6 @@ class SignupForm extends React.Component {
                       placeholder="*****"
                       className="text-input"
                     /></label>
-                  <br/>
                   <input type="submit" value="Signup" className="button submit" />
                   {this.renderErrors()}
                 </div>

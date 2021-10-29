@@ -133,20 +133,24 @@ export default class CreateEvent extends React.Component {
               <div className="modal-body-pad">
                <ul className="modal-body">
                   <li>
-                     <label htmlFor='event-title'>Title </label>
+                     <label htmlFor='event-title'>Title
                      <input autoComplete="off" onChange={this.handleUpdate('title')} type='text' value={this.state.title} id='event-title' className="text-input" />
+                     </label>
                   </li>
                   <li>
-                     <label htmlFor='event-description'>Description </label>
+                     <label htmlFor='event-description'>Description
                      <textarea autoComplete="off" onChange={this.handleUpdate('description')} type='body' value={this.state.description} id='event-description' className="textarea-input" />
+                     </label>
                   </li>
                   <li>
-                     <label htmlFor='event-address'>Address </label>
+                     <label htmlFor='event-address'>Address
                      <input autoComplete="off" onChange={this.handleUpdate('address')} type='text' value={this.state.address} id='event-address' className="text-input" />
+                     </label>
                   </li>
                   <li>
-                     <label htmlFor='event-city'>City </label>
+                     <label htmlFor='event-city'>City
                      <input autoComplete="off" onChange={this.handleUpdate('city')} type='text' value={this.state.city} id='event-city' className="text-input" />
+                     </label>
                   </li>
                   <li className="li-split">
                      <label htmlFor='event-start-date'>Start Date </label>

@@ -39,8 +39,8 @@ class GroupShow extends React.Component {
     if (group && group.ownerId && currentUser.id === group.ownerId) {
       return (
         <div className="group-edit-buttons">
-          <Link to={`/groups/${group.name}/edit`}><button className="button"><FiEdit /></button></Link>
-          <button className="button red" onClick={() => openDeleteWarning('delete-group-warning')}><BiTrash /></button>
+          <Link to={`/groups/${group.name}/edit`}><button className="button big"><FiEdit /></button></Link>
+          <button className="button red big" onClick={() => openDeleteWarning('delete-group-warning')}><BiTrash /></button>
         </div>
       )
     }
@@ -52,11 +52,11 @@ class GroupShow extends React.Component {
     if (currentUser.id !== group.ownerId) { // if you don't own the group
       // <button className="button" onClick={() => {updateGroupMembers({groupId: group.id, memberId: currentUser.id, isAdding: (!isInGroup).toString()})}}>{isInGroup ? "Leave Group" : "Join Group"}</button>
       if (isInGroup) { // if you are part of the group
-        return <button className="button red" onClick={openLeaveWarning}><ImExit /> Leave Group</button>
+        return <button className="button red big" onClick={openLeaveWarning}><ImExit className="rightSpace"/> Leave Group</button>
         } else if (group.groupJoinRequests && group.groupJoinRequests.includes(currentUser.id) || (group.groupJoinRequests && group.groupJoinRequests[0] && group.groupJoinRequests[0]._id ? (group.groupJoinRequests[0]._id === currentUser.id) : false)) { // if you are not part of the group
-        return <button className="button red cancel-join" onClick={() => joinRequestAction({ groupId: group.id, userId: currentUser.id, isAdding: 'false' })}><BiTrash />Cancel Join</button>
+        return <button className="button red cancel-join big" onClick={() => joinRequestAction({ groupId: group.id, userId: currentUser.id, isAdding: 'false' })}><BiTrash className="rightSpace"/>Cancel Join</button>
         } else {
-        return <button className="button" onClick={() => createJoinRequest({ groupId: group.id, userId: currentUser.id })}><GoMailRead />Request to Join Group</button>
+        return <button className="button big" onClick={() => createJoinRequest({ groupId: group.id, userId: currentUser.id })}><GoMailRead className="rightSpace"/>Request to Join Group</button>
         }
     }
   }
@@ -160,58 +160,65 @@ class GroupShow extends React.Component {
     const banner = images[group.bannerPictureKey] ? <img id="group-picture" alt="group banner" src={images[group.bannerPictureKey]}/> : <img id="group-picture" src="../images/image_placeholder.png"/>
 
     return (
-      <div className="group-show-div">
-          {banner}
-        {this.renderDeleteWarning()}
-        {this.renderLeaveWarning()}
-         <div id="group-title"> {group.name}</div>
-         <div className="group-container">
-          <div className="group-header"><div className="about-us">About us:</div>{this.renderEditButtons()}</div>
-            <div className="group-text">{group.description} </div>
-         </div>
+      <div className="group-show-container">
+        <div className="group-show">
+          <div className="modal-header-pad"><div className="modal-header">
+            {banner}
+          {this.renderDeleteWarning()}
+          {this.renderLeaveWarning()}
+          <div id="group-title"> {group.name}</div>
+            </div></div>
+            <div className="modal-body-pad"><div className="modal-body">
+          <div className="group-container">
+            <div className="group-header"><div className="about-us">About us:</div>{this.renderEditButtons()}</div>
+              <div className="group-text">{group.description} </div>
+          </div>
 
-        <div className="responsive-div">
-          <div className="group-container" id="events-container">
-            <div className="group-header"> Events: </div>
-            <ul className="scroll-box-container events" id="group-events-list">
-              <div className="top-scroll" />
+          <div className="responsive-div">
+            <div className="group-container" id="events-container">
+              <div className="group-header"> Events: </div>
+              <ul className="scroll-box-container events" id="group-events-list">
+                <div className="top-scroll" />
+                  <div className="bottom-scroll" />
+                  <div className="left-scroll" />
+                  <div className="scroll-box">
+                    {filterredEvents.map((event, i) =>
+                      <li key={`group-${i}`} className="scroll-box-li">
+                        <ul className="group-text event" >
+                          <li className="event-info-main"><div className="event-title" className="event-text">{event.title}</div></li>
+                          <li className="event-info-sub" ><div className="event-description group-label" >Date:</div> <div className="event-text">{event.startDate}</div></li>
+                          <li className="event-info-sub"> <div  className="event-host group-label" >Host email:</div> <div className="event-text">{event.host[0].email} </div></li>
+                          <li className="event-info-sub" ><div className="event-description group-label" >Description:</div> <div className="event-text">{event.description}</div></li>
+                        </ul>
+                      </li>
+                    )}
+                  <div className="list-empty">{filterredEvents.length > 0 ? '' : 'There are no scheduled events'}</div>
+                </div>
+              </ul>
+            </div>
+
+
+            <div className="group-container">
+              <div className="group-header">Members:</div>
+              <ul className="scroll-box-container">
+                <div className="top-scroll" />
                 <div className="bottom-scroll" />
                 <div className="left-scroll" />
                 <div className="scroll-box">
-                  {filterredEvents.map((event, i) =>
-                    <li key={`group-${i}`} className="scroll-box-li">
-                      <ul className="group-text event" >
-                        <li className="event-info-main"><div className="event-title" className="event-text">{event.title}</div></li>
-                        <li className="event-info-sub" ><div className="event-description group-label" >Date:</div> <div className="event-text">{event.startDate}</div></li>
-                        <li className="event-info-sub"> <div  className="event-host group-label" >Host email:</div> <div className="event-text">{event.host[0].email} </div></li>
-                        <li className="event-info-sub" ><div className="event-description group-label" >Description:</div> <div className="event-text">{event.description}</div></li>
-                      </ul>
-                    </li>
-                  )}
-                <div className="list-empty">{filterredEvents.length > 0 ? '' : 'There are no scheduled events'}</div>
-              </div>
-            </ul>
+                  {!users ? null : group.members.map(memberId =>
+                    <Link to={`/profile/${memberId}`} className="profile-group button" >{users[memberId].username}</Link>)}
+                </div>
+              </ul>
+            </div>
+            {this.renderJoinRequests()}
           </div>
+          </div></div>
 
-
-          <div className="group-container">
-            <div className="group-header">Members:</div>
-            <ul className="scroll-box-container">
-              <div className="top-scroll" />
-              <div className="bottom-scroll" />
-              <div className="left-scroll" />
-              <div className="scroll-box">
-                {!users ? null : group.members.map(memberId =>
-                  <li key={memberId} className="scroll-box-li"><Link to={`/profile/${memberId}`} className="group-text member-button member-list-item" >{users[memberId].username}</Link></li>)}
-              </div>
-            </ul>
+            <div className="modal-footer">
+            <div className="justify-center">
+              {this.renderJoinButton()}
+            </div>
           </div>
-
-          {this.renderJoinRequests()}
-        </div>
-
-        <div className="group-action-buttons">
-          {this.renderJoinButton()}
         </div>
       </div>
     )

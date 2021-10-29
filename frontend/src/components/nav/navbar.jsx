@@ -56,8 +56,10 @@ class NavBar extends React.Component {
     return (
       <div className="nav-bar-container">
         <h1 className="title"><Link to="/home">HotSpot</Link><div className="title-bg-image"/></h1>
+        <div className="searchbars">
         <UserSearchContainer />
         <GroupSearchContainer />
+        </div>
         <Link to="/links"><h2 className="links">About</h2></Link>
         { this.getLinks() }
         { this.renderSessionModal() }

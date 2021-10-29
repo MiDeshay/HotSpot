@@ -1,0 +1,20 @@
+.error {
+  color: var(--colorError);
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  margin-bottom: .5rem;
+}
+
+.error:first-child {
+  margin-top: 1rem;
+}
+
+.errors {
+  list-style: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 1rem;
+  line-height: 1.25rem;
+}
