@@ -107,9 +107,16 @@ export default class Home extends React.Component{
                }
             })
             this.map.setCenter(this.state.center)
-         });
-      } else {
-         // Improve error messages later
+         },
+         err => {
+            this.setState({
+               center: {
+                  lat: 37.7749,
+                  lng: -122.4194,
+               }
+            })
+            this.map.setCenter(this.state.center);
+         })
       }
    }
 
