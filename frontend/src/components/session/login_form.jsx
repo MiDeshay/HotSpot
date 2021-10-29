@@ -81,6 +81,7 @@ class LoginForm extends React.Component {
               <div className="modal-header-pad">
                 <div className="modal-header">
                   <h2>Login</h2>
+                  <button className="button close" onClick={this.screenClick}>𐄂</button>
                   <div className="header-details">Welcome back to HotSpot</div>
                 </div>
               </div>

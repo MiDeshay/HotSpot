@@ -109,7 +109,10 @@ class GroupShow extends React.Component {
           <div className="modal-body-pad">
             <div className="modal-body">Are you sure you want to delete this group? This operation is destruction and cannot be reversed.</div>
           </div>
-          <div className="modal-footer justify-center"><button className="button red" onClick={() => { deleteGroup({ groupId: group.id, ownerId: currentUser.id })}}><BiTrash /> Destroy Group</button></div>
+          <div className="modal-footer">
+            <button className="button" onClick={closeModal}>Cancel</button>
+            <button className="button red" onClick={() => { deleteGroup({ groupId: group.id, ownerId: currentUser.id })}}><BiTrash /> Destroy Group</button>
+            </div>
         </div>
       </div>
     )
@@ -131,7 +134,10 @@ class GroupShow extends React.Component {
           <div className="modal-body-pad">
             <div className="modal-body">Are you sure you want to leave this group? You'll have to ask to rejoin later!</div>
           </div>
-          <div className="modal-footer justify-center"><button className="button red" onClick={() => updateGroupMembers({ groupId: group.id, memberId: currentUser.id, isAdding: 'false' })}><BiTrash /> Leave Group</button></div>
+          <div className="modal-footer">
+            <button className="button" onClick={closeModal}>Cancel</button>
+            <button className="button red" onClick={() => updateGroupMembers({ groupId: group.id, memberId: currentUser.id, isAdding: 'false' })}><BiTrash /> Leave Group</button>
+            </div>
         </div>
       </div>
     )

@@ -84,6 +84,7 @@ class SignupForm extends React.Component {
               <div className="modal-header-pad">
                 <div className="modal-header">
                   <h2>HotSpot</h2>
+                  <button className="button close" onClick={this.screenClick}>𐄂</button>
                   <div className="header-details">Join billions of users looking for a party</div>
                 </div>
               </div>

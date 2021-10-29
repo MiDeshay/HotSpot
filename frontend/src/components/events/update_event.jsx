@@ -15,7 +15,7 @@ export default class UpdateEvent extends React.Component {
 
       this.prevEvents = this.props.events;
       this.submitted = false;
-      
+
       // Bindings
       this.handleUpdate = this.handleUpdate.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -54,7 +54,7 @@ export default class UpdateEvent extends React.Component {
       if (this.state.file){
          let formData = new FormData();
          const {_id, picture, title, description, address, city, startDate, endDate, file, hostEmail} = this.state
-  
+
          formData.append('image', file);
          formData.append('hostEmail', hostEmail);
          formData.append('picture', picture);
@@ -64,13 +64,13 @@ export default class UpdateEvent extends React.Component {
          formData.append('startDate', startDate);
          formData.append('endDate', endDate);
          formData.append('description', description);
-      
-   
+
+
          const packet = {
            id: _id,
            data: formData
          }
-   
+
          this.props.updateEventWithPicture(packet)
 
 
@@ -112,7 +112,7 @@ export default class UpdateEvent extends React.Component {
          //    if(coverPictureKey && !this.props.images[coverPictureKey]){
          //       this.props.fetchAllImages()
          //    }
-        
+
          if (this.props.errors.length === 0){
             this.props.closeModal();
             this.updateMarker();
@@ -136,7 +136,7 @@ export default class UpdateEvent extends React.Component {
 
    updateMarker(){
       this.marker.eventDetails = this.state;
-      let marker = this.marker; 
+      let marker = this.marker;
       marker.setLabel(this.state.title[0]);
 
       const images = this.props.images
@@ -144,11 +144,11 @@ export default class UpdateEvent extends React.Component {
 
       let eventPicture = ""
 
-      
+
       eventPicture = coverPictureKey ? images[coverPictureKey] : ""
-      
+
       if(pictureUrl){
-         eventPicture = pictureUrl 
+         eventPicture = pictureUrl
       }
       let start = this.formatTime(marker.eventDetails.startTime);
       let end = this.formatTime(marker.eventDetails.endTime);
@@ -179,14 +179,14 @@ export default class UpdateEvent extends React.Component {
       let file = e.currentTarget.files[0]
       const reader = new FileReader();
       reader.onloadend = () => {
-      
+
         this.setState({previewImage: reader.result})
       }
       reader.readAsDataURL(file)
       this.setState({file: file});
-      
 
-      
+
+
    }
 
    render(){
@@ -195,8 +195,15 @@ export default class UpdateEvent extends React.Component {
       const preview = previewImage ? <img id="event-picture" src={previewImage}/> : ""
       return (
          <div className='form-modal animated fadeInTop'>
+           <div className="modal-header-pad">
+            <div className="modal-header">
+              <h2>Edit Event Info</h2>
+              <button className="button close" onClick={this.props.closeModal}>𐄂</button>
+            </div>
+           </div>
             <form className="form" onSubmit={this.handleSubmit}>
-               <ul>
+              <div className="modal-body-pad">
+               <ul className="modal-body">
                   {/* <li>
                      <label htmlFor='event-Picture'>Picture </label>
                      {preview}
@@ -234,20 +241,19 @@ export default class UpdateEvent extends React.Component {
                   <label htmlFor="event-end-time">End Time</label>
                      <input type="time" id="event-end-time" onChange={this.handleUpdate('endTime')} value={this.state.endTime} required/>
                   </li>
-                  
                </ul>
-               <div className="modal-footer">
-                  <button className='generic-button' onClick={this.props.closeModal}>Cancel</button>
-                  <input type='submit' value="Update Event"/>
                </div>
-
+                 </form>
+               <div className="modal-footer">
+                  <button className='button subtle flat' onClick={this.props.closeModal}>Cancel</button>
+                  <input type='submit' value="Update Event" className="button" />
+               </div>
                <ul>
                   {this.props.errors.map( err => (
                      <li>{err}</li>
                   ))}
                </ul>
-            </form>
-         </div>
+        </div>
       )
    }
 }
