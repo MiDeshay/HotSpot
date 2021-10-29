@@ -421,6 +421,7 @@ router.post("/create_event", (req, res) => {
     mapLat: req.body.mapLat,
     mapLng: req.body.mapLng,
     startTime: req.body.startTime,
+    endTime: req.body.endTime,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
   });
@@ -551,7 +552,7 @@ router.patch("/:eventId", (req, res) => {
         return res.status(400).json(errors);
     }
 
-    Event.findById(req.params.eventId).then( event => {
+    Event.findById(req.params.eventId).populate('host').populate('group', 'name').then( event => {
         if(event){
 
             Event.findOneAndUpdate({title: event.title}, {
@@ -562,6 +563,8 @@ router.patch("/:eventId", (req, res) => {
                 description: req.body.description,
                 mapLat: req.body.mapLat,
                 mapLng: req.body.mapLng,
+                startTime: req.body.startTime,
+                endTime: req.body.endTime,
                 startDate: req.body.startDate,
                 endDate: req.body.endDate
             },
@@ -586,37 +589,11 @@ router.patch("/:eventId", (req, res) => {
                            if (event.attendeesEmail){
                               User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
                               .then(attendees => {
-                                 res.json({
-                                       _id: event.id,
-                                       city: event.city,
-                                       title: event.title,
-                                       address: event.address,
-                                       description: event.description,
-                                       mapLat: event.mapLat,
-                                       mapLng: event.mapLng,
-                                       host: hostInfo,
-                                       attendees: attendees,
-                                       startDate: event.startDate,
-                                       endDate: event.endDate,
-
-                                       coverPictureKey: event.coverPictureKey
-                                 })
+                                 event.attendees = attendees;
+                                 res.json(event);
                               })
                            }else{
-                              res.json({
-                                 _id: event.id,
-                                 city: event.city,
-                                 title: event.title,
-                                 address: event.address,
-                                 description: event.description,
-                                 mapLat: event.mapLat,
-                                 mapLng: event.mapLng,
-                                 host: hostInfo,
-                                 startDate: event.startDate,
-                                 endDate: event.endDate,
-
-                                 coverPictureKey: event.coverPictureKey
-                              })
+                              res.json(event)
                            }
                      })
                     ).catch(err=> res.status(400).json(err))
@@ -627,7 +604,6 @@ router.patch("/:eventId", (req, res) => {
         }
     })
 })
-
 
 //deletes and event based on its id
 //throws and error if the event does not exist
@@ -715,6 +691,7 @@ router.get("/:eventId", (req, res) => {
               attendees: attendees,
               startDate: event.startDate,
               startTime: event.startTime,
+              endTime: event.endTime,
               endDate: event.endDate,
               eventPicturesKeys: event.eventPicturesKeys,
               coverPictureKey: event.coverPictureKey
@@ -732,6 +709,7 @@ router.get("/:eventId", (req, res) => {
           host: hostInfo,
           startDate: event.startDate,
           startTime: event.startTime,
+          endTime: event.endTime,
           endDate: event.endDate,
           eventPicturesKeys: event.eventPicturesKeys,
           coverPictureKey: event.coverPictureKey
