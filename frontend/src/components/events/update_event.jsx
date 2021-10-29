@@ -126,6 +126,14 @@ export default class UpdateEvent extends React.Component {
       }
    }
 
+   formatTime(time){
+      let hours = parseInt(time.slice(0,2));
+      let amPm = (hours >= 12)? "PM" : "AM"; 
+      hours = (hours % 12) ? hours % 12 : 12;
+      let minutes = time.slice(2); 
+      return `${hours}${minutes} ${amPm}`; 
+   }
+
    updateMarker(){
       this.marker.eventDetails = this.state;
       let marker = this.marker; 
@@ -142,7 +150,8 @@ export default class UpdateEvent extends React.Component {
       if(pictureUrl){
          eventPicture = pictureUrl 
       }
-      
+      let start = this.formatTime(marker.eventDetails.startTime);
+      let end = this.formatTime(marker.eventDetails.endTime);
 
       this.infoWindow.setContent(
          `<div class='info-window'> `+
@@ -150,17 +159,18 @@ export default class UpdateEvent extends React.Component {
             // `<div><img id='${this.state._id}' src=${eventPicture} class='event-picture'/></div>`+
                `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
             `</div>` +
-               `<p class='event-text'>${marker.eventDetails.description}</p>` +
-               `<p class='event-text'>${marker.eventDetails.address}</p>` +
-               `<p class='event-text'>${marker.eventDetails.city}</p>` +
-               `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
-               `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
+            `<p class='event-text'>${marker.eventDetails.description}</p>` +
+            `<p class='event-text'>${marker.eventDetails.address}</p>` +
+            `<p class='event-text'>${marker.eventDetails.city}</p>` +
+            `<p class='event-text'>Begin: ${marker.eventDetails.startDate} AT ${start}</p>` +
+            `<p class='event-text'>End: ${marker.eventDetails.endDate} UNTIL ${end}</p>` +
             (marker.eventDetails.hostEmail !== this.props.currentUser.email ? "" :
-            `<div class='event-buttons'> ` +
-               `<button id='event-edit' class='button'>Edit</button>` +
-               `<button id='event-delete' class='button'>Delete</button>`  +
-            `</div>`
-         ) +
+               `<div class='event-buttons'> ` +
+                  `<button id='event-edit' class='button'>Edit</button>` +
+                  `<button id='event-delete' class='button'>Delete</button>`  +
+               `</div>`
+            ) +
+            `<a id='event-details' href='details'>More Info</a>` +
          '</div>'
       );
    }

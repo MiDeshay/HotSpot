@@ -171,24 +171,20 @@ export default class Home extends React.Component{
       const eventPicture = coverPictureKey ? `<img src=${images[coverPictureKey]} class='event-picture'/>`: ""
 
       marker.addListener("click", () => {
-         let hours = parseInt(marker.eventDetails.startTime.slice(0,2));
-         let amPm = (hours >= 12)? "PM" : "AM"; 
-         hours = (hours % 12) ? hours % 12 : 12;
-         let minutes = marker.eventDetails.startTime.slice(2); 
-         let time = `${hours}${minutes} ${amPm}`; 
+         let start = this.formatTime(marker.eventDetails.startTime);
+         let end = this.formatTime(marker.eventDetails.endTime);
          this.infoWindow.setContent(
             `<div class='info-window'> `+
                `<div class='event-header'>`+
                   // `<div>${eventPicture}</div>`+
                   `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
                `</div>` +
-                  `<p class='event-text'>${marker.eventDetails.description}</p>` +
-                  `<p class='event-text'>${marker.eventDetails.address}</p>` +
-                  `<p class='event-text'>${marker.eventDetails.city}</p>` +
-                  `<p class='event-text'>Start Time: ${time}</p>` +
-                  `<p class='event-text'>Begin: ${marker.eventDetails.startDate}</p>` +
-                  `<p class='event-text'>End: ${marker.eventDetails.endDate}</p>` +
-                  `<div class='event-buttons'> ` +
+               `<p class='event-text'>${marker.eventDetails.description}</p>` +
+               `<p class='event-text'>${marker.eventDetails.address}</p>` +
+               `<p class='event-text'>${marker.eventDetails.city}</p>` +
+               `<p class='event-text'>Begin: ${marker.eventDetails.startDate} AT ${start}</p>` +
+               `<p class='event-text'>End: ${marker.eventDetails.endDate} UNTIL ${end}</p>` +
+               `<div class='event-buttons'> ` +
                   (marker.eventDetails.hostEmail !== this.props.user.email ? 
                      (this.props.events[eventId].attendeesEmail.includes(this.props.user.email)? leaveButton : joinButton )
                      :
@@ -196,6 +192,7 @@ export default class Home extends React.Component{
                      `<button id='event-delete' class='button'>Delete</button>`  
                   ) +
                `</div>` +
+               `<a id='event-details' href='details'>More Info</a>`   +
             '</div>'
          );
 
@@ -246,6 +243,14 @@ export default class Home extends React.Component{
             shouldFocus: false,
           });
       })
+   }
+
+   formatTime(time){
+      let hours = parseInt(time.slice(0,2));
+      let amPm = (hours >= 12)? "PM" : "AM"; 
+      hours = (hours % 12) ? hours % 12 : 12;
+      let minutes = time.slice(2); 
+      return `${hours}${minutes} ${amPm}`; 
    }
 
    clearMarkers() {
