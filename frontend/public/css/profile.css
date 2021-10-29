@@ -1,10 +1,11 @@
 .profile-block{
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 50px;
-    margin-top: 15px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 50px;
+  margin-top: 15px;
+  background-color: var(--color1light);
 }
 
 .username{
@@ -18,22 +19,37 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 200px;
+    height: 20rem;
     overflow: auto;
 }
 
 .groups-joined{
-    margin-top: 25px;
-    font-size: 40px;
-    
-    
+  margin-top: 25px;
+  font-size: 40px;
+  margin-bottom: 1rem;
 }
 
 .profile-group{
-    margin-top: 15px;
-    font-size: 25px;
-    font-weight: 400;
+  margin-top: 0.8rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 25px;
+  font-weight: 400;
+  min-width: 18rem;
+  width: calc(100% - 10rem);
+
+  /* max-width: auto; */
+  /* margin: auto; */
 }
+
+.profile-group:first-child {
+  margin-top: 1rem;
+}
+
+.profile-group:last-child {
+  margin-bottom: 1rem;
+}
+
 
 .profile-contact-container{
     margin-bottom: 20px;
@@ -58,4 +74,50 @@
 .profile-email{
     margin-top: 15px;
     font-size: 25px;
+}
+
+.profile-info-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-info {
+  width: 30rem;
+  background-color: var(--color1light);
+  margin-top: 2rem;
+  border-radius: 0.4rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.295), 0 8px 16px rgba(0, 0, 0, 0.37);
+}
+
+.modal-body > label > input {
+  /* margin-bottom: 1.5rem; */
+  border-radius: 0.3rem;
+  outline: none;
+  border: solid 0.1rem black;
+}
+
+.modal-body > label:last-child > input {
+  margin-bottom: 0rem;
+}
+
+.scroll-box {
+  background-color: var(--color1light);
+  height: 100%;
+}
+
+.scroll-box > .button {
+  background-color: var(--color1);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.514), 0 8px 16px rgba(0, 0, 0, 0.521); */
+  transition: background-color 0.2s;
+
+}
+
+.scroll-box > .button:hover {
+  background-color: var(--color1light);
+}
+
+.scroll-box > .button:active {
+  background-color: var(--color1dark);
 }
