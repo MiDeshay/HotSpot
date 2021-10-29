@@ -13,242 +13,102 @@ const getImageUrl = require("../../services/get_image")
 
 
 router.patch('/update_with_picture/:eventId', (req, res) => {
-    Event.findById(req.params.eventId).then(event => {
-        if(!event){
-            return res.status(404).json("Event not found");
-        } else {
-            singleUpload(req, res, (error) => {
-                if (error){
-                    return res.status(404).json(error);
-                }else{
-                    const {errors, isValid} = validateEventInput(req.body)
-                    if (!isValid) {
-                        return res.status(400).json(errors);
-                    }
-                    if(event.coverPictureKey){
-                        deleteImage(event.coverPictureKey)
-                    }
-                    Event.findByIdAndUpdate( req.params.eventId, {
-                        coverPictureKey: req.file.key,
-                        address: req.body.address,
-                        city: req.body.city,
-                        hostEmail: req.body.hostEmail,
-                        title: req.body.title,
-                        description: req.body.description,
-                        mapLat: req.body.mapLat,
-                        mapLng: req.body.mapLng,
-                        startDate: req.body.startDate,
-                        endDate: req.body.endDate
+   Event.findById(req.params.eventId).then(event => {
+      if (!event) {
+         return res.status(404).json("Event not found");
+      } else {
+         singleUpload(req, res, (error) => {
+            if (error) {
+               return res.status(404).json(error);
+            } else {
+               const { errors, isValid } = validateEventInput(req.body)
+               if (!isValid) {
+                  return res.status(400).json(errors);
+               }
+               if (event.coverPictureKey) {
+                  deleteImage(event.coverPictureKey)
+               }
+               Event.findByIdAndUpdate(req.params.eventId, {
+                  coverPictureKey: req.file.key,
+                  address: req.body.address,
+                  city: req.body.city,
+                  hostEmail: req.body.hostEmail,
+                  title: req.body.title,
+                  description: req.body.description,
+                  mapLat: req.body.mapLat,
+                  mapLng: req.body.mapLng,
+                  startDate: req.body.startDate,
+                  endDate: req.body.endDate
 
-                    }, {new: true}, (error, event) => {
+               }, { new: true }, (error, event) => {
 
-                        User.findOne({email: event.hostEmail}).then(host=> {
-                            if(!host){
-                                return res.status(404).json("Host not found");
-                            }
-
-                            const hostInfo = {
-                                id: host.id,
-                                username: host.username,
-                                email: host.email,
-                                firstName: host.firstName,
-                                lastName: host.lastName
-                            }
-
-                            if (event.attendeesEmail){
-                                User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
-                                .then(attendees => {
-                                    res.json({
-                                        _id: event.id,
-                                        pinId: event.pinId,
-                                        city: event.city,
-                                        title: event.title,
-                                        address: event.address,
-                                        description: event.description,
-                                        mapLat: event.mapLat,
-                                        mapLong: event.mapLng,
-                                        host: hostInfo,
-                                        attendees: attendees,
-                                        startDate: event.startDate,
-                                        endDate: event.endDate,
-                                        coverPictureKey: event.coverPictureKey,
-                                        pictureUrl: getImage(event.coverPictureKey)
-                                    })
-                                })
-                            }else{
-                                res.json({
-                                    _id: event.id,
-                                    pinId: event.pinId,
-                                    city: event.city,
-                                    title: event.title,
-                                    address: event.address,
-                                    description: event.description,
-                                    mapLat: event.mapLat,
-                                    mapLong: event.mapLng,
-                                    host: hostInfo,
-                                    startDate: event.startDate,
-                                    endDate: event.endDate,
-                                    coverPictureKey: event.coverPictureKey,
-                                    pictureUrl: getImage(event.coverPictureKey)
-                                })
-                            }
-                        })
-                    })
-                }
-
-
-      });
-    }
-  });
+                  User.findOne({ email: event.hostEmail }).then(host => {
+                     if (!host) {
+                        return res.status(404).json("Host not found");
+                     }
+                     event.pictureUrl = getImage(event.coverPictureKey);
+                     res.join(event)
+                  })
+               })
+            }
+         });
+      }
+   });
 });
 
 router.patch('/add_picture/:eventId', (req, res) => {
-  Event.findById(req.params.eventId).then(event => {
-    if (!event) {
-      return res.status(404).json("Event not found");
-    } else {
-      singleUpload(req, res, (error) => {
-        if (error) {
-          return res.status(404).json(error);
-        } else {
-          Event.findByIdAndUpdate(req.params.eventId,
-            { $push: { eventPicturesKeys: req.file.key } }, { new: true }, (error, event) => {
-              if (error) {
-                res.status(400).json(error);
-              } else {
-                User.findOne({ email: event.hostEmail }).then(host => {
-                  if (!host) {
-                    return res.status(404).json("Host not found");
-                  }
-
-                  const hostInfo = {
-                    id: host.id,
-                    username: host.username,
-                    email: host.email,
-                    firstName: host.firstName,
-                    lastName: host.lastName
-                  };
-
-                  if (event.attendeesEmail) {
-                    User.find({ email: { $in: event.attendeesEmail } }, { _id: 1, username: 1, firstName: 1, lastName: 1, email: 1 })
-                      .then(attendees => {
-                        res.json({
-                          id: event.id,
-                          pinId: event.pinId,
-                          city: event.city,
-                          title: event.title,
-                          address: event.address,
-                          description: event.description,
-                          mapLat: event.mapLat,
-                          mapLong: event.mapLng,
-                          host: hostInfo,
-                          attendees: attendees,
-                          startDate: event.startDate,
-                          endDate: event.endDate,
-                          eventPicturesKeys: event.eventPicturesKeys,
-                          coverPictureKey: event.coverPictureKey
+   Event.findById(req.params.eventId).then(event => {
+      if (!event) {
+         return res.status(404).json("Event not found");
+      } else {
+         singleUpload(req, res, (error) => {
+            if (error) {
+               return res.status(404).json(error);
+            } else {
+               Event.findByIdAndUpdate(req.params.eventId,
+                  { $push: { eventPicturesKeys: req.file.key } }, { new: true }, (error, event) => {
+                     if (error) {
+                        res.status(400).json(error);
+                     } else {
+                        User.findOne({ email: event.hostEmail }).then(host => {
+                           if (!host) return res.status(404).json("Host not found");
+                           res.json(event);
                         });
-                      });
-                  } else {
-                    res.json({
-                      id: event.id,
-                      pinId: event.pinId,
-                      city: event.city,
-                      title: event.title,
-                      address: event.address,
-                      description: event.description,
-                      mapLat: event.mapLat,
-                      mapLong: event.mapLng,
-                      host: hostInfo,
-                      startDate: event.startDate,
-                      endDate: event.endDate,
-                      eventPicturesKeys: event.eventPicturesKeys,
-                      coverPictureKey: event.coverPictureKey
-                    });
-                  }
-                });
-              }
-            });
-        }
-
-
-      });
-    }
-  });
+                     }
+                  });
+            }
+         });
+      }
+   });
 });
 
 
 //send the key of the picture to be deleted in the body under key named "imageKey"
 
 router.patch('/remove_picture/:eventId', (req, res) => {
-  Event.findById(req.params.eventId).then(event => {
-    if (!event) {
-      return res.status(404).json("Event not found");
-    } else {
-      if (req.body.imageKey) {
-        deleteImage(req.body.imageKey);
-      }
-      Event.findByIdAndUpdate(req.params.eventId,
-        { $pull: { eventPicturesKeys: req.body.imageKey } }, { new: true }, (error, event) => {
-          if (error) {
-            res.status(400).json(error);
-          } else {
-            User.findOne({ email: event.hostEmail }).then(host => {
-              if (!host) {
-                return res.status(404).json("Host not found");
-              }
-
-              const hostInfo = {
-                id: host.id,
-                username: host.username,
-                email: host.email,
-                firstName: host.firstName,
-                lastName: host.lastName
-              };
-
-              if (event.attendeesEmail) {
-                User.find({ email: { $in: event.attendeesEmail } }, { _id: 1, username: 1, firstName: 1, lastName: 1, email: 1 })
-                  .then(attendees => {
-                    res.json({
-                      id: event.id,
-                      pinId: event.pinId,
-                      city: event.city,
-                      title: event.title,
-                      address: event.address,
-                      description: event.description,
-                      mapLat: event.mapLat,
-                      mapLong: event.mapLng,
-                      host: hostInfo,
-                      attendees: attendees,
-                      startDate: event.startDate,
-                      endDate: event.endDate,
-                      eventPicturesKeys: event.eventPicturesKeys,
-                      coverPictureKey: event.coverPictureKey
-                    });
+   Event.findById(req.params.eventId).then(event => {
+      if (!event) {
+         return res.status(404).json("Event not found");
+      } else {
+         if (req.body.imageKey) {
+            deleteImage(req.body.imageKey);
+         }
+         Event.findByIdAndUpdate(req.params.eventId,
+            { $pull: { eventPicturesKeys: req.body.imageKey } }, { new: true }, (error, event) => {
+               if (error) {
+                  res.status(400).json(error);
+               } else {
+                  User.findOne({ email: event.hostEmail }).then(host => {
+                     if (!host) {
+                        return res.status(404).json("Host not found");
+                     }
+                     res.json(event);
                   });
-              } else {
-                res.json({
-                  id: event.id,
-                  pinId: event.pinId,
-                  city: event.city,
-                  title: event.title,
-                  address: event.address,
-                  description: event.description,
-                  mapLat: event.mapLat,
-                  mapLong: event.mapLng,
-                  host: hostInfo,
-                  startDate: event.startDate,
-                  endDate: event.endDate,
-                  eventPicturesKeys: event.eventPicturesKeys,
-                  coverPictureKey: event.coverPictureKey
-                });
-              }
+               }
             });
-          }
-        });
 
-    }
-  });
+      }
+   });
 });
 
 
@@ -259,53 +119,36 @@ router.patch('/remove_picture/:eventId', (req, res) => {
 //throws an error if the event doesn't exist or email is already on the attendee email list
 //returns the event with its attendees information
 router.patch("/join_event/:eventId", (req, res) => {
-  Event.findById(req.params.eventId).then(event => {
-    if (!event) {
-      return res.status(404).json("Event not found");
-    } else {
-      User.findOne({ email: req.body.email }).then(user => {
-        if (user) {
-          if (event.attendeesEmail.includes(user.email)) {
-            res.status(404).json("You are already registered for this event.");
-          } else {
-            Event.findByIdAndUpdate(req.params.eventId,
-              { $push: { attendeesEmail: req.body.email } },
-              { new: true }, (error, event) => {
-                User.findOne({ email: event.hostEmail }).then(host => {
-                  if (!host) {
-                    return res.status(404).json("Host not found");
-                  }
+   console.log(req.body);
+   Event.findById(req.params.eventId).then(event => {
+      if (!event) {
+         return res.status(404).json("Event not found");
+      } else {
+         User.findOne({ id: req.body.userId }).then(user => {
+            if (user) {
+               if (event.attendeesEmail.includes(user._id)) {
+                  res.status(404).json("You are already registered for this event.");
+               } else {
+                  Event.findByIdAndUpdate(req.params.eventId,
+                     { $push: { attendeesEmail: req.body.userId } },
+                     { new: true }, (error, event) => {
+                        User.findOne({ email: event.hostEmail }).then(host => {
+                           if (!host) {
+                              return res.status(404).json("Host not found");
+                           }
+                           res.json(event);
+                        });
+                     });
+               }
+            } else {
+               return res.status(404).json("User not found");
+            }
 
-                  const hostInfo = {
-                    id: host.id,
-                    username: host.username,
-                    email: host.email,
-                    firstName: host.firstName,
-                    lastName: host.lastName
-                  };
+         });
 
-                  if (event.attendeesEmail) {
-                    User.find({ email: { $in: event.attendeesEmail } }, { _id: 1, username: 1, firstName: 1, lastName: 1, email: 1 })
-                      .then(attendees => {
-                        res.json(event);
-                      });
-                  } else {
-                    res.json(event);
-                  }
-                });
-              });
-          }
+      }
 
-
-        } else {
-          return res.status(404).json("User not found");
-        }
-
-      });
-
-    }
-
-  });
+   });
 });
 
 //Can be used by both current user and event host to remove users from events
@@ -315,80 +158,37 @@ router.patch("/join_event/:eventId", (req, res) => {
 //throws an error if the event doesn't exist or email is already not on the attendee email list
 //returns the event with its updated attendees information
 router.patch("/decline_event/:eventId", (req, res) => {
-  Event.findById(req.params.eventId).then(event => {
-    if (!event) {
-      return res.status(404).json("Event not found");
-    } else {
-      User.findOne({ email: req.body.email }).then(user => {
-        if (user) {
-          if (!event.attendeesEmail.includes(user.email)) {
-            res.status(404).json("You are already unregistered for the event");
-          } else {
-            Event.findByIdAndUpdate(req.params.eventId,
-              { $pull: { attendeesEmail: req.body.email } },
-              { new: true }, (error, event) => {
-                User.findOne({ email: event.hostEmail }).then(host => {
-                  if (!host) {
-                    return res.status(404).json("Host not found");
-                  }
-
-                  const hostInfo = {
-                    id: host.id,
-                    username: host.username,
-                    email: host.email,
-                    firstName: host.firstName,
-                    lastName: host.lastName
-                  };
-
-                  if (event.attendeesEmail) {
-                    User.find({ email: { $in: event.attendeesEmail } }, { _id: 1, username: 1, firstName: 1, lastName: 1, email: 1 })
-                      .then(attendees => {
-                        res.json({
-                          _id: event.id,
-                          city: event.city,
-                          title: event.title,
-                          address: event.address,
-                          description: event.description,
-                          mapLat: event.mapLat,
-                          mapLng: event.mapLng,
-                          host: hostInfo,
-                          attendeesEmail: attendees,
-                          startDate: event.startDate,
-                          endDate: event.endDate,
-                          eventPicturesKeys: event.eventPicturesKeys,
-                          coverPictureKey: event.coverPictureKey
+   Event.findById(req.params.eventId).then(event => {
+      if (!event) {
+         return res.status(404).json("Event not found");
+      } else {
+         User.findOne({ _id: req.body.userId }).then(user => {
+            if (user) {
+               if (!event.attendeesEmail.includes(user._id)) {
+                  res.status(404).json("You are already unregistered for the event");
+               } else {
+                  Event.findByIdAndUpdate(req.params.eventId,
+                     { $pull: { attendeesEmail: req.body.userId } },
+                     { new: true }, (error, event) => {
+                        User.findOne({ email: event.hostEmail }).then(host => {
+                           if (!host) {
+                              return res.status(404).json("Host not found");
+                           }
+                           res.json(event);
                         });
-                      });
-                  } else {
-                    res.json({
-                      _id: event.id,
-                      city: event.city,
-                      title: event.title,
-                      address: event.address,
-                      description: event.description,
-                      mapLat: event.mapLat,
-                      mapLng: event.mapLng,
-                      host: hostInfo,
-                      startDate: event.startDate,
-                      endDate: event.endDate,
-                      eventPicturesKeys: event.eventPicturesKeys,
-                      coverPictureKey: event.coverPictureKey
-                    });
-                  }
-                });
-              });
-          }
+                     });
+               }
 
 
-        } else {
-          return res.status(404).json("User not found");
-        }
+            } else {
+               return res.status(404).json("User not found");
+            }
 
-      });
-    }
+         });
+      }
 
 
-  });
+   });
 });
 
 
@@ -405,135 +205,134 @@ router.patch("/decline_event/:eventId", (req, res) => {
 //There are no attendees by default, users have to add themselves manually
 //  (So a host can't say anyone they want is coming)
 router.post("/create_event", (req, res) => {
-  const { errors, isValid } = validateEventInput(req.body);
+   const { errors, isValid } = validateEventInput(req.body);
 
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
+   if (!isValid) {
+      return res.status(400).json(errors);
+   }
 
-  const newEvent = new Event({
-    pinId: req.body.pinId,
-    address: req.body.address,
-    city: req.body.city,
-    hostEmail: req.body.hostEmail,
-    title: req.body.title,
-    description: req.body.description,
-    mapLat: req.body.mapLat,
-    mapLng: req.body.mapLng,
-    startTime: req.body.startTime,
-    endTime: req.body.endTime,
-    startDate: req.body.startDate,
-    endDate: req.body.endDate,
-  });
+   const newEvent = new Event({
+      address: req.body.address,
+      city: req.body.city,
+      hostEmail: req.body.hostEmail,
+      title: req.body.title,
+      description: req.body.description,
+      mapLat: req.body.mapLat,
+      mapLng: req.body.mapLng,
+      startTime: req.body.startTime,
+      endTime: req.body.endTime,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+   });
 
 
-  User.findOne({ email: newEvent.hostEmail }).then(host => {
-    if (!host) {
-      return res.status(404).json("Host not found");
-    }
-    newEvent.host.push(host);
-    Group.findById(req.body.groupId).then(group => { // standard event creation
-      newEvent.group = group;
-      newEvent.save().then(event => {
-        res.json(event);
-      }).catch(err => res.send(err));
-    }).catch(err => { // did not find group by that id, try to add to public group instead...
-      // console.log('GROUP ID NOT FOUND CHECK FOR PUBLIC');
-      Group.findOne({ name: "Public" }).then(group => { // i believe findOne will never fail out it just returns a null object
-        if (group) {
-          // console.log(group);
-          // console.log("PUBLIC GROUP FOUND, CONTINUING...");
-          newEvent.group = group;
-          newEvent.save().then(event => {
-            // console.log("EVENT SAVED, RETURNING...");
+   User.findOne({ email: newEvent.hostEmail }).then(host => {
+      if (!host) {
+         return res.status(404).json("Host not found");
+      }
+      newEvent.host.push(host);
+      Group.findById(req.body.groupId).then(group => { // standard event creation
+         newEvent.group = group;
+         newEvent.save().then(event => {
             res.json(event);
-          }).catch(err => res.send(err));
-        } else { // public group seed (if there's no public group yet)...
-          // console.log("PUBLIC GROUP NOT FOUND, CREATING PUBLIC USER TO OWN PUBLIC GROUP...");
-          const newUser = new User({ // create a 'public' user to own the public group...
-            username: "Public",
-            firstName: "Public",
-            lastName: "Public",
-            email: "Public",
-            password: "Public"
-          });
-          // console.log(newUser);
-          newUser.save().then(user => { // save public user...
-            // console.log('USER CREATED, CREATING PUBLIC GROUP...');
-            const newGroup = new Group({ // create the public group...
-              name: "Public",
-              description: "Public",
-              ownerId: user._id,
-              members: [],
-              events: []
-            });
-            // console.log(newGroup);
-            newGroup.save()
-              .then(group => { // save the public group...
-                // console.log('PUBLIC GROUP SAVED, CREATING EVENT...');
-                newEvent.group = group;
-                newEvent.save().then(event => {
-                  // console.log('PUBLIC EVENT CREATED, RETURNING...');
+         }).catch(err => res.send(err));
+      }).catch(err => { // did not find group by that id, try to add to public group instead...
+         // console.log('GROUP ID NOT FOUND CHECK FOR PUBLIC');
+         Group.findOne({ name: "Public" }).then(group => { // i believe findOne will never fail out it just returns a null object
+            if (group) {
+               // console.log(group);
+               // console.log("PUBLIC GROUP FOUND, CONTINUING...");
+               newEvent.group = group;
+               newEvent.save().then(event => {
+                  // console.log("EVENT SAVED, RETURNING...");
                   res.json(event);
-                }).catch(err => res.send(err));
-              });
-          });
-        }
-      }).catch(err => {
-        return res.status(400).json("Group not found");
+               }).catch(err => res.send(err));
+            } else { // public group seed (if there's no public group yet)...
+               // console.log("PUBLIC GROUP NOT FOUND, CREATING PUBLIC USER TO OWN PUBLIC GROUP...");
+               const newUser = new User({ // create a 'public' user to own the public group...
+                  username: "Public",
+                  firstName: "Public",
+                  lastName: "Public",
+                  email: "Public",
+                  password: "Public"
+               });
+               // console.log(newUser);
+               newUser.save().then(user => { // save public user...
+                  // console.log('USER CREATED, CREATING PUBLIC GROUP...');
+                  const newGroup = new Group({ // create the public group...
+                     name: "Public",
+                     description: "Public",
+                     ownerId: user._id,
+                     members: [],
+                     events: []
+                  });
+                  // console.log(newGroup);
+                  newGroup.save()
+                     .then(group => { // save the public group...
+                        // console.log('PUBLIC GROUP SAVED, CREATING EVENT...');
+                        newEvent.group = group;
+                        newEvent.save().then(event => {
+                           // console.log('PUBLIC EVENT CREATED, RETURNING...');
+                           res.json(event);
+                        }).catch(err => res.send(err));
+                     });
+               });
+            }
+         }).catch(err => {
+            return res.status(400).json("Group not found");
+         });
       });
-    });
-  });
+   });
 });
 
 
 router.post("/create_with_picture", (req, res) => {
-    singleUpload(req, res, (error) => {
-        if(error){
-            return res.status(404).json(error);
-        }else{
+   singleUpload(req, res, (error) => {
+      if (error) {
+         return res.status(404).json(error);
+      } else {
 
-            // Event.findOne({name: req.body.name}).then(event => {
-            //     if(event){
-            //         return res.status(400).json({error: "Event Name taken"});
-            //     }
-            // })
+         // Event.findOne({name: req.body.name}).then(event => {
+         //     if(event){
+         //         return res.status(400).json({error: "Event Name taken"});
+         //     }
+         // })
 
-            const {errors, isValid} = validateEventInput(req.body)
-            if (!isValid) {
-                return res.status(400).json(errors);
+         const { errors, isValid } = validateEventInput(req.body)
+         if (!isValid) {
+            return res.status(400).json(errors);
+         }
+
+         const newEvent = new Event({
+            coverPictureKey: req.file.key,
+            pinId: req.body.pinId,
+            address: req.body.address,
+            city: req.body.city,
+            hostEmail: req.body.hostEmail,
+            title: req.body.title,
+            description: req.body.description,
+            mapLat: req.body.mapLat,
+            mapLng: req.body.mapLng,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate,
+         })
+
+
+         User.findOne({ email: newEvent.hostEmail }).then(host => {
+            if (!host) {
+               return res.status(404).json("Host not found");
             }
+            newEvent.host.push(host);
+            Group.findById(req.body.groupId).then(group => {
+               newEvent.group = group;
+               newEvent.save().then(event => {
+                  res.json(event);
+               }).catch(err => res.send(err));
+            }).catch(err => res.send(err));
 
-            const newEvent = new Event({
-                coverPictureKey: req.file.key,
-                pinId: req.body.pinId,
-                address: req.body.address,
-                city: req.body.city,
-                hostEmail: req.body.hostEmail,
-                title: req.body.title,
-                description: req.body.description,
-                mapLat: req.body.mapLat,
-                mapLng: req.body.mapLng,
-                startDate: req.body.startDate,
-                endDate: req.body.endDate,
-            })
-
-
-            User.findOne({email: newEvent.hostEmail}).then(host=> {
-              if(!host){
-                 return res.status(404).json("Host not found");
-              }
-              newEvent.host.push(host);
-              Group.findById(req.body.groupId).then( group => {
-                 newEvent.group = group;
-                 newEvent.save().then(event => {
-                    res.json(event);
-                 }).catch(err => res.send(err));
-              }).catch(err => res.send(err));
-
-           })
-        }
-    })
+         })
+      }
+   })
 
 })
 
@@ -545,111 +344,93 @@ router.post("/create_with_picture", (req, res) => {
 
 //returns the updated event with host info and attendees info if there are any
 router.patch("/:eventId", (req, res) => {
+   const { errors, isValid } = validateEventInput(req.body)
 
-    const {errors, isValid} = validateEventInput(req.body)
+   if (!isValid) {
+      return res.status(400).json(errors);
+   }
 
-    if (!isValid) {
-        return res.status(400).json(errors);
-    }
+   Event.findById(req.params.eventId).populate('host').populate('group', 'name').then(event => {
+      if (event) {
 
-    Event.findById(req.params.eventId).populate('host').populate('group', 'name').then( event => {
-        if(event){
-
-            Event.findOneAndUpdate({title: event.title}, {
-                address: req.body.address,
-                city: req.body.city,
-                hostEmail: req.body.hostEmail,
-                title: req.body.title,
-                description: req.body.description,
-                mapLat: req.body.mapLat,
-                mapLng: req.body.mapLng,
-                startTime: req.body.startTime,
-                endTime: req.body.endTime,
-                startDate: req.body.startDate,
-                endDate: req.body.endDate
-            },
-            {new: true}, (error, event) => {
-                if (error){
-                    res.status(400).json(error);
-                  }else{
-                    Group.findById(req.body.groupId).then( group => {event.group = group; event.save();}).then(
-                     User.findOne({email: event.hostEmail}).then(host=> {
-                           if(!host){
-                              return res.status(404).json("Host not found");
-                           }
-
-                           const hostInfo = {
-                              id: host.id,
-                              username: host.username,
-                              email: host.email,
-                              firstName: host.firstName,
-                              lastName: host.lastName
-                           }
-
-                           if (event.attendeesEmail){
-                              User.find({email: {$in: event.attendeesEmail}}, {_id: 1, username: 1, firstName: 1, lastName: 1, email: 1})
-                              .then(attendees => {
-                                 event.attendees = attendees;
-                                 res.json(event);
-                              })
-                           }else{
-                              res.json(event)
-                           }
+         Event.findOneAndUpdate({ title: event.title }, {
+            address: req.body.address,
+            city: req.body.city,
+            hostEmail: req.body.hostEmail,
+            title: req.body.title,
+            description: req.body.description,
+            mapLat: req.body.mapLat,
+            mapLng: req.body.mapLng,
+            startTime: req.body.startTime,
+            endTime: req.body.endTime,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate
+         },
+            { new: true }, (error, event) => {
+               if (error) {
+                  res.status(400).json(error);
+               } else {
+                  Group.findById(req.body.groupId).then(group => { event.group = group; event.save(); }).then(
+                     User.findOne({ email: event.hostEmail }).then(host => {
+                        if (!host) {
+                           return res.status(404).json("Host not found");
+                        }
+                        res.json(event);
                      })
-                    ).catch(err=> res.status(400).json(err))
-                }
+                  ).catch(err => res.status(400).json(err))
+               }
             })
-        } else{
-            return res.status(404).json("event not found");
-        }
-    })
+      } else {
+         return res.status(404).json("event not found");
+      }
+   })
 })
 
 //deletes and event based on its id
 //throws and error if the event does not exist
 router.delete("/delete/:eventId", (req, res) => {
-  Event.findById(req.params.eventId).then(event => {
-    if (event) {
-      if (event.coverPictureKey) {
-        deleteImage(event.coverPictureKey);
+   Event.findById(req.params.eventId).then(event => {
+      if (event) {
+         if (event.coverPictureKey) {
+            deleteImage(event.coverPictureKey);
+         }
+
+         if (event.eventPicturesKeys) {
+            const obj = [];
+            event.eventPicturesKeys.map(imgKey => {
+               obj.push({ Key: imgKey });
+            });
+
+            deleteImages(obj);
+         }
+
+
+         Event.findByIdAndDelete(req.params.eventId, (err, obj) => {
+            if (err) {
+               return res.status(400).json(err);
+            } else {
+               return res.json({ id: req.params.eventId });
+            }
+         });
+      } else {
+         return res.status(404).json("Event not found");
+
       }
-
-      if (event.eventPicturesKeys) {
-        const obj = [];
-        event.eventPicturesKeys.map(imgKey => {
-          obj.push({ Key: imgKey });
-        });
-
-        deleteImages(obj);
-      }
-
-
-      Event.findByIdAndDelete(req.params.eventId, (err, obj) => {
-        if (err) {
-          return res.status(400).json(err);
-        } else {
-          return res.json({ id: req.params.eventId });
-        }
-      });
-    } else {
-      return res.status(404).json("Event not found");
-
-    }
-  });
+   });
 });
 
 // Returns all events
 // To save space, these events don't host info or attendee info
 // When a user selects a specific event, we can use a get :id request to get more info
 router.get('/', (req, res) => {
-  Event.find({}).populate('host').populate('group', 'name').exec((err, events) => {
-    let result = {};
-    Object.values(events).forEach((event, i) => {
-      result[event._id] = event;
-    });
+   Event.find({}).populate('host').populate('group', 'name').exec((err, events) => {
+      let result = {};
+      Object.values(events).forEach((event, i) => {
+         result[event._id] = event;
+      });
 
-    return res.json(result);
-  });
+      return res.json(result);
+   });
 });
 
 
@@ -658,66 +439,20 @@ router.get('/', (req, res) => {
 //if there are attendees, returns the host's info and each attendees info
 //if there are no attendees, returns only the hosts info
 router.get("/:eventId", (req, res) => {
-  Event.findById(req.params.eventId).then(event => {
-    if (!event) {
-      return res.status(404).json("Event not found");
-    }
-
-    User.findOne({ email: event.hostEmail }).then(host => {
-      if (!host) {
-        return res.status(404).json("Host not found");
+   Event.findById(req.params.eventId).then(event => {
+      if (!event) {
+         return res.status(404).json("Event not found");
       }
 
-      const hostInfo = {
-        id: host.id,
-        username: host.username,
-        email: host.email,
-        firstName: host.firstName,
-        lastName: host.lastName
-      };
+      User.findOne({ email: event.hostEmail }).then(host => {
+         if (!host) {
+            return res.status(404).json("Host not found");
+         }
 
-      if (event.attendeesEmail) {
-        User.find({ email: { $in: event.attendeesEmail } }, { _id: 1, username: 1, firstName: 1, lastName: 1, email: 1 })
-          .then(attendees => {
-            res.json({
-              id: event.id,
-              title: event.title,
-              city: event.city,
-              address: event.address,
-              description: event.description,
-              mapLat: event.mapLat,
-              mapLng: event.mapLng,
-              host: hostInfo,
-              attendees: attendees,
-              startDate: event.startDate,
-              startTime: event.startTime,
-              endTime: event.endTime,
-              endDate: event.endDate,
-              eventPicturesKeys: event.eventPicturesKeys,
-              coverPictureKey: event.coverPictureKey
-            });
-          });
-      } else {
-        res.json({
-          id: event.id,
-          title: event.title,
-          city: event.city,
-          address: event.address,
-          description: event.description,
-          mapLat: event.mapLat,
-          mapLng: event.mapLng,
-          host: hostInfo,
-          startDate: event.startDate,
-          startTime: event.startTime,
-          endTime: event.endTime,
-          endDate: event.endDate,
-          eventPicturesKeys: event.eventPicturesKeys,
-          coverPictureKey: event.coverPictureKey
-        });
-      }
+         res.json(event);
 
-    }).catch(err => res.send(err));
-  }).catch(err => res.send(err));
+      }).catch(err => res.send(err));
+   }).catch(err => res.send(err));
 
 });
 

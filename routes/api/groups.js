@@ -8,7 +8,7 @@ const validateGroupInput = require('../../validation/group');
 const validateGroupMembers = require('../../validation/group-members');
 const validateGroupEvents = require('../../validation/group-events');
 
-//images 
+//images
 const upload = require('../../services/post_image');
 const singleUpload = upload.single('image');
 const deleteImage = require("../../services/delete_image");
@@ -54,7 +54,7 @@ router.post('/create', (req, res) => {
 });
 
 router.post('/create_with_picture', (req, res) => {
- 
+
     singleUpload(req, res, (error) => {
       if(error){
         return res.status(404).json(error);
@@ -89,7 +89,7 @@ router.post('/create_with_picture', (req, res) => {
                 });
 
                 newGroup.save().then(group => {
-                  user.groupsJoined.push(newGroup); 
+                  user.groupsJoined.push(newGroup);
                   user.save();
                   return res.json(group);
                 });
@@ -97,7 +97,7 @@ router.post('/create_with_picture', (req, res) => {
             }).catch(err => res.send(err));
       }
       })
-  })     
+  })
 
 
 
@@ -177,7 +177,7 @@ router.patch('/:groupId', (req, res) => {
           if (!isValid) {
             return res.status(400).json(errors);
           }
-          
+
           if(group.bannerPictureKey){
             deleteImage(group.bannerPictureKey)
           }
@@ -189,15 +189,15 @@ router.patch('/:groupId', (req, res) => {
             if (error) {
               return res.status(400).json(error);
             } else {
-              res.json(group);   
-    
+              res.json(group);
+
             }
           })
         }
-      }) 
-    } 
+      })
+    }
   })
- 
+
 })
 
 
@@ -300,7 +300,7 @@ router.post('/join_request', (req, res) => { // post because we are posting a gr
         errors.join = 'Join request pending';
         return res.status(400).json(errors);
       }
-      group.groupJoinRequests.push(user);
+      group.groupJoinRequests.push(user._id);
       group.save().then(group => {
         res.json({group, user});
       });

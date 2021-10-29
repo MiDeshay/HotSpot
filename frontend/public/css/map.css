@@ -6,15 +6,22 @@ div#map {
 .gm-style-iw.gm-style-iw-c {
   /* background-color: var(--color2); */
   /* color: var(--color2light); */
-  /* overflow: hidden; */
+  overflow-x: hidden;
 
-  width: 30rem;
+  /* width: 40rem; */
   font-size: 0.9rem;
   font-weight: 400;
-  height: 25rem;
 
   max-width: 100vw;
   max-height: 100vh;
+}
+
+div.gm-style-iw.gm-style-iw-c {
+  max-width: 100vw;
+}
+
+.gm-style-iw-d {
+  overflow-x: hidden;
 }
 
 .dialog {
@@ -46,3 +53,44 @@ div#map {
   height: 12rem;
   width: 28rem;
 }
+
+.info-window > div.event-text {
+  display: flex;
+  justify-content: space-between;
+  width: 75%;
+}
+
+.info-window > div.event-text > div.label {
+  margin-right: 1rem;
+}
+
+ul.details-labels {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+}
+
+ul.details-details {
+  display: flex;
+  flex-direction: column;
+}
+
+div.details-columns {
+  display: flex;
+  line-height: 1.5rem;
+}
+
+div.details-columns > ul {
+  width: 100%;
+}
+
+.event-details.form-modal {
+  width: 30rem;
+  min-width: 20%;
+  max-width: 100%;
+  background-color: white;
+}
+
+/* .event-details.form-modal > div {
+  margin: 1rem;
+} */

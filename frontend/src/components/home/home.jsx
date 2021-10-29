@@ -2,12 +2,13 @@ import React from 'react';
 import { Loader } from "@googlemaps/js-api-loader";
 //import { mapsKey } from '../../config/keys';
 import Modal from '../modals/modal';
+import { BiTrash } from 'react-icons/bi';
 const mapsKey = process.env.REACT_APP_MAPS_API_KEY;
 
 
 
-export default class Home extends React.Component{
-   constructor(props){
+export default class Home extends React.Component {
+   constructor(props) {
       super(props)
 
       // The map and collection of related objects/collection.
@@ -52,10 +53,12 @@ export default class Home extends React.Component{
       this.clearMarkers = this.clearMarkers.bind(this);
       this.addEvent = this.addEvent.bind(this);
       this.initMarkerWindow = this.initMarkerWindow.bind(this);
+      this.renderDestroyWarning = this.renderDestroyWarning.bind(this);
+      this.screenClick = this.screenClick.bind(this);
    }
 
    // Google maps loader
-   componentDidMount(){
+   componentDidMount() {
       this.props.fetchAllImages()
       this.loader = new Loader({
          apiKey: mapsKey,
@@ -82,12 +85,12 @@ export default class Home extends React.Component{
             // Do error handling
          });
 
-         this.props.fetchUsers()
+      this.props.fetchUsers()
 
    }
 
    componentDidUpdate() {
-      if (this.state.currentEvents !== this.props.events){
+      if (this.state.currentEvents !== this.props.events) {
          this.drop();
          this.eventsLoaded = true;
          this.setState({
@@ -99,7 +102,7 @@ export default class Home extends React.Component{
 
    getLocation() {
       if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition( pos => {
+         navigator.geolocation.getCurrentPosition(pos => {
             this.setState({
                center: {
                   lat: pos.coords.latitude,
@@ -108,15 +111,15 @@ export default class Home extends React.Component{
             })
             this.map.setCenter(this.state.center)
          },
-         err => {
-            this.setState({
-               center: {
-                  lat: 37.7749,
-                  lng: -122.4194,
-               }
+            err => {
+               this.setState({
+                  center: {
+                     lat: 37.7749,
+                     lng: -122.4194,
+                  }
+               })
+               this.map.setCenter(this.state.center);
             })
-            this.map.setCenter(this.state.center);
-         })
       }
    }
 
@@ -132,15 +135,19 @@ export default class Home extends React.Component{
    // Uses this.state.currentEvents to determine whether to draw a new marker or not.
    // Iterates through events prop, if an event is found to not be in state.currentEvents,
    // add a new marker with that event's details.
-   drop(){
+   drop() {
       const events = this.props.events;
       for (let event in events) {
          let i = 0;
          let userGroups = this.props.user.groupsJoined;
 
-        if (!this.state.currentEvents[event] && events[event] && (userGroups.includes(events[event].group._id) || events[event].group.name === "Public")){ // added "Public" name to filter
+         if (
+            !this.state.currentEvents[event] &&
+            events[event] &&
+            (userGroups.includes(events[event].group._id) || events[event].group.name === "Public")
+         ) { // added "Public" name to filter
             const pin = events[event];
-            this.addMarkerWithTimeout(pin, i*20);
+            this.addMarkerWithTimeout(pin, i * 20);
             i++;
          }
       }
@@ -168,38 +175,47 @@ export default class Home extends React.Component{
    initMarkerWindow(marker) {
       let eventId = marker.eventDetails._id;
       let joinButton = `<button id='event-respond' class='button'>Join</button>`;
-      let leaveButton = `<button id='event-respond' class='button'>Leave</button>`;
+      let leaveButton = `<button id='event-respond' class='button red'>Leave</button>`;
 
       const images = this.props.images
-      const {coverPictureKey} = this.props.events[eventId]
+      const { coverPictureKey } = this.props.events[eventId]
 
 
 
-      const eventPicture = coverPictureKey ? `<img src=${images[coverPictureKey]} class='event-picture'/>`: ""
+      const eventPicture = coverPictureKey ? `<img src=${images[coverPictureKey]} class='event-picture'/>` : ""
 
       marker.addListener("click", () => {
          let start = this.formatTime(marker.eventDetails.startTime);
          let end = this.formatTime(marker.eventDetails.endTime);
+         let { description, title } = marker.eventDetails;
+         if (description.length > 20) { description = description.slice(0, 50).concat('...') }
+         //  if (title.length > 20) {title = title.slice(0, 20)}
          this.infoWindow.setContent(
-            `<div class='info-window'> `+
-               `<div class='event-header'>`+
-                  // `<div>${eventPicture}</div>`+
-                  `<h1 class='event-title'>${marker.eventDetails.title}</h1>` +
-               `</div>` +
-               `<p class='event-text'>${marker.eventDetails.description}</p>` +
-               `<p class='event-text'>${marker.eventDetails.address}</p>` +
-               `<p class='event-text'>${marker.eventDetails.city}</p>` +
-               `<p class='event-text'>Begin: ${marker.eventDetails.startDate} AT ${start}</p>` +
-               `<p class='event-text'>End: ${marker.eventDetails.endDate} UNTIL ${end}</p>` +
-               `<div class='event-buttons'> ` +
-                  (marker.eventDetails.hostEmail !== this.props.user.email ? 
-                     (this.props.events[eventId].attendeesEmail.includes(this.props.user.email)? leaveButton : joinButton )
-                     :
-                     `<button id='event-edit' class='button'>Edit</button>` +
-                     `<button id='event-delete' class='button'>Delete</button>`
-                  ) +
-               `</div>` +
-               `<a id='event-details' href='details'>More Info</a>`   +
+            `<div class='info-window'> ` +
+            // `<div>${eventPicture}</div>`+
+            `<div class="modal-header-pad"><div class='modal-header'><h2 class='event-title'>${title}</h2></div></div>` +
+            `<div class='modal-body-pad'><div class='modal-body'>` +
+            `<div class='event-text'>${description}</div>` +
+            `</div></div>` +
+            `<div class='modal-body-pad'><div class='modal-body'>` +
+            `<div class='details-columns'><ul class='details-labels'><li>Address:</li>` +
+            `<li>City:</li>` +
+            `<li>Begin:</li>` +
+            `<li>End:</li></ul>` +
+            `<ul class='details-details'><li>${marker.eventDetails.city}</li>` +
+            `<li>${marker.eventDetails.address}</li>` +
+            `<li'>${marker.eventDetails.startDate} AT ${start}</li>` +
+            `<li>${marker.eventDetails.endDate} UNTIL ${end}</li></ul></div>` +
+            `</div></div>` +
+            `<div class='modal-footer'><div class='event-buttons'> ` +
+            `<a id='event-details' href='details' class='button flat'>More Info</a>` +
+            (marker.eventDetails.hostEmail !== this.props.user.email ?
+               (this.props.events[eventId].attendeesEmail.includes(this.props.user.id) ? leaveButton : joinButton)
+               :
+               `<button id='event-edit' class='button'>Edit</button>` +
+               `<button id='event-delete' class='button red'>Delete</button>`
+            ) +
+            `</div></div>` +
             '</div>'
          );
 
@@ -210,13 +226,15 @@ export default class Home extends React.Component{
          this.google.maps.event.addListener(this.infoWindow, "domready", () => {
             let deleteButton = document.getElementById('event-delete');
             if (deleteButton) deleteButton.onclick = () => {
-               this.props.deleteEvent(eventId)
-               this.markers[eventId].setMap(null);
-               delete this.markers[eventId];
+               //  this.props.deleteEvent(eventId)
+               //  this.markers[eventId].setMap(null);
+               //  delete this.markers[eventId];
+               this.selectedEvent = eventId;
+               this.props.openModal('destroy-event-warning');
             }
 
             let editButton = document.getElementById('event-edit');
-            if (editButton) editButton.onclick=() => {
+            if (editButton) editButton.onclick = () => {
                this.selectedEvent = {
                   event: marker.eventDetails,
                   marker: this.markers[eventId],
@@ -226,18 +244,18 @@ export default class Home extends React.Component{
             }
 
             let respondButton = document.getElementById('event-respond');
-            if (respondButton) respondButton.onclick=() => {
-               if (respondButton.innerHTML === 'Join'){
-                  this.props.joinEvent(eventId, {email: this.props.user.email});
+            if (respondButton) respondButton.onclick = () => {
+               if (respondButton.innerHTML === 'Join') {
+                  this.props.joinEvent(eventId, { userId: this.props.user.id });
                   respondButton.innerHTML = 'Leave';
                } else {
-                  this.props.declineEvent(eventId, {email: this.props.user.email});
+                  this.props.declineEvent(eventId, { userId: this.props.user.id });
                   respondButton.innerHTML = 'Join';
                }
             }
 
             let eventDetails = document.getElementById('event-details');
-            if (eventDetails) eventDetails.onclick=(e) => {
+            if (eventDetails) eventDetails.onclick = (e) => {
                e.preventDefault();
                this.selectedEvent = marker.eventDetails._id;
                this.props.openEventDetails();
@@ -248,16 +266,53 @@ export default class Home extends React.Component{
             anchor: marker,
             map: this.map,
             shouldFocus: false,
-          });
+         });
       })
    }
 
-   formatTime(time){
-      let hours = parseInt(time.slice(0,2));
-      let amPm = (hours >= 12)? "PM" : "AM"; 
+   screenClick(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.props.closeModal();
+   }
+
+   renderDestroyWarning() {
+      let eventId = this.selectedEvent;
+      if (this.props.modal !== 'destroy-event-warning') { return null; }
+      let { updateGroupMembers, group, currentUser, closeModal } = this.props;
+      return (
+         <div className="modal-container">
+            <div className="modal-screen" onClick={this.screenClick} />
+            <div className="form-modal animated fadeInTop red-border">
+               <div className="modal-header-pad">
+                  <div className="modal-header">
+                     <h2>WARNING</h2>
+                     <button className="button close" onClick={closeModal}>𐄂</button>
+                  </div>
+               </div>
+               <div className="modal-body-pad">
+                  <div className="modal-body">Are you sure you want to delete this event? This is a destructive operation and cannot be reversed!</div>
+               </div>
+               <div className="modal-footer">
+                  <button className="button" onClick={closeModal}>Cancel</button>
+                  <button className="button red" onClick={() => {
+                     this.props.deleteEvent(eventId)
+                     this.markers[eventId].setMap(null);
+                     delete this.markers[eventId];
+                     closeModal();
+                  }}><BiTrash /> Delete Event</button>
+               </div>
+            </div>
+         </div>
+      )
+   }
+
+   formatTime(time) {
+      let hours = parseInt(time.slice(0, 2));
+      let amPm = (hours >= 12) ? "PM" : "AM";
       hours = (hours % 12) ? hours % 12 : 12;
-      let minutes = time.slice(2); 
-      return `${hours}${minutes} ${amPm}`; 
+      let minutes = time.slice(2);
+      return `${hours}${minutes} ${amPm}`;
    }
 
    clearMarkers() {
@@ -267,11 +322,12 @@ export default class Home extends React.Component{
       this.markers = {};
    }
 
-   render(){
+   render() {
 
 
       return (
          <div id='map'>
+            {this.renderDestroyWarning()}
             <Modal pos={this.mousePos} geocoder={this.geocoder} event={this.selectedEvent} />
          </div>
       )
