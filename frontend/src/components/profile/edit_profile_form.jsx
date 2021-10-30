@@ -6,9 +6,9 @@ class EditProfileForm extends React.Component {
   constructor(props) {
     super(props);
     if (this.props.user) {
-      this.state = Object.assign({},this.props.user, {errors: this.props.errors})
+      this.state = Object.assign({},this.props.user, {errors: this.props.errors}, {profilePictureKey: ""})
     }
-    if (this.props.user.profilePictureKey){
+    if (this.props.user && this.props.user.profilePictureKey){
       this.state.previewImage = this.props.images[this.props.user.profilePictureKey]
     }
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,6 +29,19 @@ class EditProfileForm extends React.Component {
     this.setState({file: file})
 
 
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if (this.props.user && !prevProps.user) {
+      let nextState={};
+      nextState.firstName = this.props.user.firstName;
+      nextState.lastName = this.props.user.lastName;
+      nextState.profilePictureKey = this.props.user.profilePictureKey;
+      nextState.username = this.props.user.username;
+      nextState.email = this.props.user.email;
+
+      this.setState(nextState);
+  }
   }
 
   update(field) {
@@ -104,8 +117,8 @@ class EditProfileForm extends React.Component {
 
   render() {
     let { user } = this.props;
-    const {previewImage} = this.state;
     if (!this.state) {return null};
+    const {previewImage} = this.state;
 
     const profilePic = previewImage ? <img id="profile-image" src={previewImage}/> : <img id="profile-image" src="../images/default-user-icon-8.jpeg"/>
     return (

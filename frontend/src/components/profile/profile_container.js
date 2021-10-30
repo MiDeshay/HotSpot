@@ -4,7 +4,6 @@ import { fetchUser, updateUser, deleteUser } from "../../actions/user_actions";
 import {fetchAllImages} from "../../actions/image_actions"
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps);
   return ({
   isAuth: state.session.isAuthenticated,
   currentUser: state.entities.users[state.session.user.id],

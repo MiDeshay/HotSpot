@@ -17,7 +17,6 @@ class GroupSearch extends React.Component {
   }
 
   updateInput(field) {
-    console.log(this.state.searchTerm);
     return (e) => {
       e.preventDefault();
       this.setState({[field]: e.currentTarget.value});

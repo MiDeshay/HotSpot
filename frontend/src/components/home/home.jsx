@@ -188,7 +188,7 @@ export default class Home extends React.Component{
          let end = this.formatTime(marker.eventDetails.endTime);
          let {description, title} = marker.eventDetails;
         if (description.length > 20) { description = description.slice(0, 50).concat('...') }
-         console.log(description);
+       
         //  if (title.length > 20) {title = title.slice(0, 20)}
          this.infoWindow.setContent(
             `<div class='info-window'> `+
@@ -278,7 +278,6 @@ export default class Home extends React.Component{
 
   renderDestroyWarning() {
     let eventId = this.selectedEvent;
-    console.log('destroying')
     if (this.props.modal !== 'destroy-event-warning') { return null; }
     let { updateGroupMembers, group, currentUser, closeModal } = this.props;
     return (

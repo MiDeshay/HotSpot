@@ -8,7 +8,6 @@ module.exports = function validateSignupInput(data) {
    data.lastName = validText(data.lastName) ? data.lastName : '';
    data.email = validText(data.email) ? data.email : '';
 
-   console.log(Validator.isEmail(data.email+''));
 
    if (!Validator.isLength(data.firstName, { min: 1, max: 60 })) {
       errors.firstName = 'First Name must be between 1 and 60 characters';

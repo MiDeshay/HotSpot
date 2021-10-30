@@ -15,6 +15,7 @@ class Splash extends React.Component {
          password: "123456"
       }
       this.props.login(user);
+      setTimeout(() => this.props.history.push("/home"), 200)
    }
 
   render() {

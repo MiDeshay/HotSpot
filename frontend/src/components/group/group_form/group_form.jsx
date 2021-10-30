@@ -37,7 +37,9 @@ class GroupForm extends React.Component {
     // if (this.props.formType === "Edit Group" && !this.props.group) {
     //   this.props.fetchGroup(this.state.name);
     // }
-    this.props.fetchGroup(this.props.match.params.groupName);
+    if(this.props.formType === "Edit Group"){
+      this.props.fetchGroup(this.props.match.params.groupName);
+    }
   }
 
 
@@ -61,7 +63,11 @@ class GroupForm extends React.Component {
     }
 
     if (this.state.isSubmitted && Object.keys(this.state.errors).length <= 0) {
+      if(prevState.name){
         setTimeout(() => this.props.history.push(`/groups/${prevState.name}`), 200);
+      } else{
+        setTimeout(() => this.props.history.push(`/groups/${this.state.name}`), 200);
+      }
     }
 
     // if (this.props.formType === "Create Group") {
@@ -145,10 +151,10 @@ class GroupForm extends React.Component {
       if (this.props.formType === 'Edit Group') {
         group.groupId = this.props.group.id;
       }
-      this.setState({isSubmitted: true})
       this.props.action(group)
       // this.props.history.push(`/groups/${this.state.name}`);
     }
+    this.setState({isSubmitted: true})
 
   }
 

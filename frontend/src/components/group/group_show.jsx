@@ -64,7 +64,7 @@ class GroupShow extends React.Component {
   renderJoinRequests() {
     let { users, currentUser, group, joinRequestAction } = this.props;
     if (currentUser.id !== group.ownerId) { return null }
-    console.log(group.groupJoinRequests);
+ 
     return (
       <div className="group-container">
         <div className={`group-header ${group.groupJoinRequests.length > 0 ? 'has-requests' : 'no-requests'}`}>Join Requests:</div>
@@ -112,7 +112,7 @@ class GroupShow extends React.Component {
           </div>
           <div className="modal-footer">
             <button className="button" onClick={closeModal}>Cancel</button>
-            <button className="button red" onClick={() => { deleteGroup({ groupId: group.id, ownerId: currentUser.id })}}><BiTrash /> Destroy Group</button>
+            <button className="button red" onClick={() => { deleteGroup({ groupId: group.id, ownerId: currentUser.id });  this.props.history.push("/home")}}><BiTrash /> Destroy Group</button>
             </div>
         </div>
       </div>
